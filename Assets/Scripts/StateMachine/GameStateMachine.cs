@@ -16,9 +16,9 @@ namespace Solar2048.StateMachine
         public IObservable<State> OnStateChanged => _onStateChanged;
         public State? CurrentState => _currentState;
 
-        public GameStateMachine(BuildingsManager buildingsManager, MessageBroker messageBroker)
+        public GameStateMachine(BuildingsManager buildingsManager, CardSpawner cardSpawner, MessageBroker messageBroker)
         {
-            _roundState = new RoundState(buildingsManager);
+            _roundState = new RoundState(buildingsManager, cardSpawner);
             _initializeGameState = new InitializeGameState(this, messageBroker);
         }
 

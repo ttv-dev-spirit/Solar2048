@@ -15,4 +15,4 @@ MonoBehaviour:
   _buildingSettings:
   - BuildingType: 1
     Image: {fileID: 21300000, guid: b1f7fe8d095042f4293fcf6a4e6d4b2e, type: 3}
-  _buildingPrefab: {fileID: 1270100740478228851, guid: de35242128932ae46812acde0edf8e38, type: 3}
+    Name: Wind Turbine

@@ -18,6 +18,12 @@ namespace Solar2048
         [SerializeField]
         private BuildingBehaviour _buildingPrefab = null!;
 
+        [SerializeField]
+        private Card _cardPrefab = null!;
+
+        [SerializeField]
+        private Hand _hand = null!;
+
         public override void InstallBindings()
         {
             BindSingles();
@@ -25,6 +31,7 @@ namespace Solar2048
             BindSettings();
             Container.BindFactory<BuildingBehaviour, BuildingBehaviour.Factory>()
                 .FromComponentInNewPrefab(_buildingPrefab);
+            Container.BindFactory<BuildingType, Card, Card.Factory>().FromComponentInNewPrefab(_cardPrefab);
         }
 
         private void BindSingles()
@@ -34,6 +41,8 @@ namespace Solar2048
             Container.Bind<MessageBroker>().AsSingle();
             Container.Bind<BuildingsManager>().AsSingle();
             Container.Bind<BuildingsFactory>().AsSingle();
+            Container.Bind<Hand>().FromInstance(_hand);
+            Container.Bind<CardSpawner>().AsSingle();
         }
 
         private void BindGameObjects()
