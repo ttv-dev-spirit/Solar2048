@@ -10,11 +10,6 @@ namespace Solar2048.Buildings
         [SerializeField]
         private BuildingSettings[] _buildingSettings = null!;
 
-        [SerializeField]
-        private BuildingBehaviour _buildingPrefab = null!;
-
-        public BuildingBehaviour BuildingPrefab => _buildingPrefab;
-
         public BuildingSettings GetBuildingSettingsFor(BuildingType buildingType) =>
             _buildingSettings.First(setting => setting.BuildingType == buildingType);
     }

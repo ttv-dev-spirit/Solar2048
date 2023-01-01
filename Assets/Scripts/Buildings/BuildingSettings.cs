@@ -8,6 +8,6 @@ namespace Solar2048.Buildings
     public sealed class BuildingSettings
     {
         public BuildingType BuildingType;
-        public Sprite Image;
+        public Sprite Image = null!;
     }
 }

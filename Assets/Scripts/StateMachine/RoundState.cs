@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Solar2048.Buildings;
+using UnityEngine;
 
 namespace Solar2048.StateMachine
 {
@@ -14,7 +15,7 @@ namespace Solar2048.StateMachine
 
         protected override void OnEnter()
         {
-            _buildingsManager.AddNewBuildingTo(BuildingType.WindTurbine, 0, 0);
+            _buildingsManager.AddNewBuildingTo(BuildingType.WindTurbine, new Vector2Int(3, 3));
         }
 
         protected override void OnExit()

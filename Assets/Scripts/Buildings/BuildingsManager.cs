@@ -1,23 +1,24 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Solar2048.Buildings
 {
     public sealed class BuildingsManager
     {
         private readonly List<Building> _buildings = new();
-        private readonly BuildingFactory _buildingFactory;
+        private readonly BuildingsFactory _buildingsFactory;
 
-        public BuildingsManager(BuildingFactory buildingFactory)
+        public BuildingsManager(BuildingsFactory buildingsFactory)
         {
-            _buildingFactory = buildingFactory;
+            _buildingsFactory = buildingsFactory;
         }
 
-        public void AddNewBuildingTo(BuildingType buildingType, int x, int y)
+        public void AddNewBuildingTo(BuildingType buildingType, Vector2Int position)
         {
-            Building building = _buildingFactory.CreateBuilding(buildingType);
+            Building building = _buildingsFactory.Create(buildingType);
             _buildings.Add(building);
-            building.SetPosition(x, y);
+            building.SetPosition(position);
         }
     }
 }
