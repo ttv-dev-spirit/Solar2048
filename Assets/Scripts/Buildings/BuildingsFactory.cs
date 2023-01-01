@@ -8,11 +8,13 @@ namespace Solar2048.Buildings
     {
         private readonly BuildingFactorySettings _settings;
         private readonly BuildingBehaviour.Factory _buildingBehaviourFactory;
+        private readonly GameMap _gameMap;
 
         public BuildingsFactory(BuildingFactorySettings buildingFactorySettings,
-            BuildingBehaviour.Factory buildingBehaviourFactory)
+            BuildingBehaviour.Factory buildingBehaviourFactory, GameMap gameMap)
         {
             _settings = buildingFactorySettings;
+            _gameMap = gameMap;
             _buildingBehaviourFactory = buildingBehaviourFactory;
         }
 
@@ -21,7 +23,7 @@ namespace Solar2048.Buildings
             BuildingSettings buildingSettings = _settings.GetBuildingSettingsFor(buildingType);
             BuildingBehaviour buildingBehaviour = _buildingBehaviourFactory.Create();
             buildingBehaviour.SetImage(buildingSettings.Image);
-            return new WindTurbine(buildingSettings, buildingBehaviour);
+            return new Building(buildingSettings, buildingBehaviour, _gameMap);
         }
     }
 }

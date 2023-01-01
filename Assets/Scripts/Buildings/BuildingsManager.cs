@@ -9,6 +9,8 @@ namespace Solar2048.Buildings
 
         private readonly List<Building> _buildings = new();
 
+        public IReadOnlyList<Building> Buildings => _buildings;
+
         public BuildingsManager(BuildingsFactory buildingsFactory)
         {
             _buildingsFactory = buildingsFactory;

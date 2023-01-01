@@ -46,6 +46,7 @@ namespace Solar2048
             {
                 _hand.RemoveCard(selectedCard);
             }
+            _gameMap.RecalculateStats();
         }
     }
 }

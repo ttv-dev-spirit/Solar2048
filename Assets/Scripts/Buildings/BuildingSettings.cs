@@ -10,5 +10,7 @@ namespace Solar2048.Buildings
         public BuildingType BuildingType;
         public Sprite Image = null!;
         public string Name = null!;
+        public BuildingWorkCondition[]? WorkConditions;
+        public BuildingEffect[]? BuildingEffects;
     }
 }

@@ -6,7 +6,7 @@ namespace Solar2048.Buildings
         None = 0,
         WindTurbine = 1,
         SolarPanel = 2,
-        RainCapture = 3,
+        WaterCollector = 3,
         Greenhouse = 4,
         Tent = 5,
         Battery = 6,

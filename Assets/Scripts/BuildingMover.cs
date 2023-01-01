@@ -32,6 +32,7 @@ namespace Solar2048
                     MoveBuildingsDown();
                     break;
             }
+            _gameMap.RecalculateStats();
         }
 
         private void MoveBuildingsLeft()

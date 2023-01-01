@@ -4,27 +4,30 @@ using UnityEngine;
 
 namespace Solar2048.Buildings
 {
-    public abstract class Building
+    public sealed class Building
     {
-        private ReactiveProperty<int> _level = new(1);
-
         private readonly BuildingBehaviour _behaviour;
         private readonly BuildingSettings _buildingSettings;
+        private readonly GameMap _gameMap;
 
-        private Vector2Int _position;
+        private readonly ReactiveProperty<int> _level = new(1);
+
+        public BuildingType BuildingType => _buildingSettings.BuildingType;
+        public Vector2Int Position { get; private set; }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
 
-        protected Building(BuildingSettings buildingSettings, BuildingBehaviour behaviour)
+        public Building(BuildingSettings buildingSettings, BuildingBehaviour behaviour, GameMap gameMap)
         {
             _buildingSettings = buildingSettings;
             _behaviour = behaviour;
+            _gameMap = gameMap;
             behaviour.SubToLevel(Level);
         }
 
         public void SetPosition(Vector2Int position)
         {
-            _position = position;
+            Position = position;
             _behaviour.SetPosition(position);
         }
 
@@ -32,12 +35,45 @@ namespace Solar2048.Buildings
 
         public bool CanBeMerged(Building building)
         {
-            return GetType() == building.GetType() && Level.Value == building.Level.Value;
+            return BuildingType == building.BuildingType && Level.Value == building.Level.Value;
         }
 
         public void Destroy()
         {
             Object.Destroy(_behaviour.gameObject);
+        }
+
+        public bool AreConditionsMet()
+        {
+            var conditions = _buildingSettings.WorkConditions;
+            if (conditions == null)
+            {
+                return true;
+            }
+
+            foreach (BuildingWorkCondition buildingWorkCondition in conditions)
+            {
+                if (!buildingWorkCondition.IsConditionMet(_gameMap, this))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void ExecuteEffects()
+        {
+            var effects = _buildingSettings.BuildingEffects;
+            if (effects == null)
+            {
+                return;
+            }
+
+            foreach (BuildingEffect buildingEffect in effects)
+            {
+                buildingEffect.ExecuteEffect(_gameMap, this);
+            }
         }
     }
 }

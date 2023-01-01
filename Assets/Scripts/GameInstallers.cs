@@ -50,6 +50,7 @@ namespace Solar2048
             Container.Bind<Hand>().FromInstance(_hand);
             Container.Bind<CardSpawner>().AsSingle();
             Container.Bind<BuildingPlacer>().AsSingle().NonLazy();
+            Container.Bind<BuildingEffectsTrigger>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<InputSystem>().AsSingle();
             Container.Bind<BuildingMover>().AsSingle();
             Container.Bind<CheatHand>().FromInstance(_cheatHand);

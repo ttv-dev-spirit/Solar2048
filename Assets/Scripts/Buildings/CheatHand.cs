@@ -10,7 +10,7 @@ namespace Solar2048.Buildings
     {
         private Hand _hand = null!;
         private CardSpawner _cardSpawner = null!;
-        
+
         [SerializeField]
         private Transform _root = null!;
 
@@ -27,6 +27,9 @@ namespace Solar2048.Buildings
         private void Start()
         {
             AddCard(_cardSpawner.CreateCard(BuildingType.WindTurbine));
+            AddCard(_cardSpawner.CreateCard(BuildingType.SolarPanel));
+            AddCard(_cardSpawner.CreateCard(BuildingType.WaterCollector));
+            AddCard(_cardSpawner.CreateCard(BuildingType.Greenhouse));
         }
 
         private void SelectedCardHandler(Card? card)
@@ -35,6 +38,7 @@ namespace Solar2048.Buildings
             {
                 return;
             }
+
             UnselectCard();
         }
 
@@ -43,7 +47,7 @@ namespace Solar2048.Buildings
             card.transform.SetParent(_root);
             card.OnClicked.Subscribe(OnCardClicked);
         }
-        
+
         public void UnselectCard()
         {
             if (SelectedCard == null)
@@ -68,6 +72,5 @@ namespace Solar2048.Buildings
             SelectedCard = clickedCard;
             SelectedCard.Select();
         }
-
     }
 }

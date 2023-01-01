@@ -16,3 +16,26 @@ MonoBehaviour:
   - BuildingType: 1
     Image: {fileID: 21300000, guid: b1f7fe8d095042f4293fcf6a4e6d4b2e, type: 3}
     Name: Wind Turbine
+    WorkConditions: []
+    BuildingEffects:
+    - {fileID: 11400000, guid: cf96e0d4d701b1a4fb8e0f68e42ef225, type: 2}
+  - BuildingType: 2
+    Image: {fileID: 21300000, guid: ad9b986f3ff754e4e8718af26d58b392, type: 3}
+    Name: Solar Panel
+    WorkConditions: []
+    BuildingEffects:
+    - {fileID: 11400000, guid: cf96e0d4d701b1a4fb8e0f68e42ef225, type: 2}
+  - BuildingType: 3
+    Image: {fileID: 21300000, guid: 3b3cd3c10082ed84487985248d3c21e8, type: 3}
+    Name: Water Collector
+    WorkConditions: []
+    BuildingEffects:
+    - {fileID: 11400000, guid: cdfa2c27ef386774a804e6564e148884, type: 2}
+  - BuildingType: 4
+    Image: {fileID: 21300000, guid: 385c047c9ece8c444b644d1bb568b165, type: 3}
+    Name: Greenhouse
+    WorkConditions:
+    - {fileID: 11400000, guid: 5f09dc4accc24bd429aeda9dbcdce5e6, type: 2}
+    - {fileID: 11400000, guid: 3993e1c5d97522e48aece3929bc74785, type: 2}
+    BuildingEffects:
+    - {fileID: 11400000, guid: 2e94eec17787daa4dba38701b22462e6, type: 2}
