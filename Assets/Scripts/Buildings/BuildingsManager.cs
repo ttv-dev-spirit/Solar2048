@@ -6,12 +6,15 @@ namespace Solar2048.Buildings
 {
     public sealed class BuildingsManager
     {
-        private readonly List<Building> _buildings = new();
         private readonly BuildingsFactory _buildingsFactory;
+        private readonly GameField _gameField;
+        
+        private readonly List<Building> _buildings = new();
 
-        public BuildingsManager(BuildingsFactory buildingsFactory)
+        public BuildingsManager(BuildingsFactory buildingsFactory, GameField gameField)
         {
             _buildingsFactory = buildingsFactory;
+            _gameField = gameField;
         }
 
         public void AddNewBuildingTo(BuildingType buildingType, Vector2Int position)
@@ -19,6 +22,7 @@ namespace Solar2048.Buildings
             Building building = _buildingsFactory.Create(buildingType);
             _buildings.Add(building);
             building.SetPosition(position);
+            _gameField.RegisterBuilding(building, position);
         }
     }
 }

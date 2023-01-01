@@ -24,6 +24,9 @@ namespace Solar2048
         [SerializeField]
         private Hand _hand = null!;
 
+        [SerializeField]
+        private MoveController _moveController = null!;
+
         public override void InstallBindings()
         {
             BindSingles();
@@ -44,11 +47,13 @@ namespace Solar2048
             Container.Bind<Hand>().FromInstance(_hand);
             Container.Bind<CardSpawner>().AsSingle();
             Container.Bind<BuildingPlacer>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<InputSystem>().AsSingle();
         }
 
         private void BindGameObjects()
         {
             Container.Bind<GameFieldBehaviour>().FromInstance(_gameFieldBehaviour);
+            Container.Bind<MoveController>().FromInstance(_moveController);
         }
 
         private void BindSettings()
