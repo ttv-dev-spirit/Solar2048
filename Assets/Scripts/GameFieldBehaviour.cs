@@ -7,11 +7,17 @@ namespace Solar2048
     {
         public Vector3 PositionToWorld(Vector2Int position) => new Vector3(position.x, -position.y);
 
+        public Vector2Int GetFieldPosition(FieldSquare fieldSquare)
+        {
+            Vector3 position = fieldSquare.transform.position;
+            return new Vector2Int((int)position.x, -(int)position.y);
+        }
+
         public bool TryWorldToPosition(Vector3 wordPosition, out Vector2Int position)
         {
             var x = (int)wordPosition.x;
             int y = -(int)wordPosition.y;
-            if (IsInsideBounds(GameField.FIELD_SIZE))
+            if (!IsInsideBounds(GameField.FIELD_SIZE))
             {
                 position = Vector2Int.zero;
                 return false;

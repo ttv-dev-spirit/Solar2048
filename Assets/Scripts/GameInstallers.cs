@@ -43,6 +43,7 @@ namespace Solar2048
             Container.Bind<BuildingsFactory>().AsSingle();
             Container.Bind<Hand>().FromInstance(_hand);
             Container.Bind<CardSpawner>().AsSingle();
+            Container.Bind<BuildingPlacer>().AsSingle().NonLazy();
         }
 
         private void BindGameObjects()

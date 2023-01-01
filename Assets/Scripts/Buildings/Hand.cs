@@ -9,7 +9,7 @@ namespace Solar2048.Buildings
     {
         private readonly List<Card> _cards = new();
 
-        private Card? _selectedCard;
+        public Card? SelectedCard { get; private set; }
 
         public void AddCard(Card card)
         {
@@ -18,20 +18,31 @@ namespace Solar2048.Buildings
             card.OnClicked.Subscribe(OnCardClicked);
         }
 
+        public void RemoveCard(Card card)
+        {
+            if (SelectedCard == card)
+            {
+                SelectedCard = null;
+            }
+
+            _cards.Remove(card);
+            Destroy(card.gameObject);
+        }
+
         private void OnCardClicked(Card clickedCard)
         {
-            if (_selectedCard == clickedCard)
+            if (SelectedCard == clickedCard)
             {
                 return;
             }
 
-            if (_selectedCard != null)
+            if (SelectedCard != null)
             {
-                _selectedCard.Unselect();
+                SelectedCard.Unselect();
             }
 
-            _selectedCard = clickedCard;
-            _selectedCard.Select();
+            SelectedCard = clickedCard;
+            SelectedCard.Select();
         }
     }
 }
