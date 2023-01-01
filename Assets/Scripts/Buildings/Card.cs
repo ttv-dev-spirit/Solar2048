@@ -12,7 +12,7 @@ namespace Solar2048.Buildings
     public sealed class Card : MonoBehaviour, IPointerClickHandler
     {
         private BuildingType _buildingType;
-        private readonly Subject<Card> _onClicked=new();
+        private readonly Subject<Card> _onClicked = new();
 
         [SerializeField]
         private TMP_Text _buildingName = null!;
@@ -37,12 +37,8 @@ namespace Solar2048.Buildings
         }
 
         public void OnPointerClick(PointerEventData eventData)
-        { 
-            _onClicked.OnNext(this);
-        }
-
-        public class Factory : PlaceholderFactory<BuildingType, Card>
         {
+            _onClicked.OnNext(this);
         }
 
         public void Select()
@@ -53,6 +49,10 @@ namespace Solar2048.Buildings
         public void Unselect()
         {
             _selectionBorder.SetActive(false);
+        }
+
+        public class Factory : PlaceholderFactory<BuildingType, Card>
+        {
         }
     }
 }

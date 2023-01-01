@@ -25,6 +25,9 @@ namespace Solar2048
         private Hand _hand = null!;
 
         [SerializeField]
+        private CheatHand _cheatHand = null!;
+
+        [SerializeField]
         private MoveController _moveController = null!;
 
         public override void InstallBindings()
@@ -40,7 +43,7 @@ namespace Solar2048
         private void BindSingles()
         {
             Container.Bind<GameStateMachine>().AsSingle();
-            Container.Bind<GameField>().AsSingle();
+            Container.Bind<GameMap>().AsSingle();
             Container.Bind<MessageBroker>().AsSingle();
             Container.Bind<BuildingsManager>().AsSingle();
             Container.Bind<BuildingsFactory>().AsSingle();
@@ -48,6 +51,8 @@ namespace Solar2048
             Container.Bind<CardSpawner>().AsSingle();
             Container.Bind<BuildingPlacer>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<InputSystem>().AsSingle();
+            Container.Bind<BuildingMover>().AsSingle();
+            Container.Bind<CheatHand>().FromInstance(_cheatHand);
         }
 
         private void BindGameObjects()

@@ -7,9 +7,10 @@ namespace Solar2048.Buildings
 {
     public sealed class Hand : MonoBehaviour
     {
+        private readonly IReactiveProperty<Card?> _selectedCard = new ReactiveProperty<Card?>();
         private readonly List<Card> _cards = new();
 
-        public Card? SelectedCard { get; private set; }
+        public IReadOnlyReactiveProperty<Card?> SelectedCard => _selectedCard;
 
         public void AddCard(Card card)
         {
@@ -20,29 +21,37 @@ namespace Solar2048.Buildings
 
         public void RemoveCard(Card card)
         {
-            if (SelectedCard == card)
+            if (_selectedCard.Value == card)
             {
-                SelectedCard = null;
+                _selectedCard.Value = null;
             }
 
             _cards.Remove(card);
             Destroy(card.gameObject);
         }
 
-        private void OnCardClicked(Card clickedCard)
+        public void UnselectCard()
         {
-            if (SelectedCard == clickedCard)
+            if (_selectedCard.Value == null)
             {
                 return;
             }
 
-            if (SelectedCard != null)
+            _selectedCard.Value.Unselect();
+            _selectedCard.Value = null;
+        }
+
+        private void OnCardClicked(Card clickedCard)
+        {
+            if (_selectedCard.Value == clickedCard)
             {
-                SelectedCard.Unselect();
+                return;
             }
 
-            SelectedCard = clickedCard;
-            SelectedCard.Select();
+            UnselectCard();
+
+            _selectedCard.Value = clickedCard;
+            _selectedCard.Value.Select();
         }
     }
 }

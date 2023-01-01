@@ -7,9 +7,9 @@ namespace Solar2048
     {
         public Vector3 PositionToWorld(Vector2Int position) => new Vector3(position.x, -position.y);
 
-        public Vector2Int GetFieldPosition(FieldSquare fieldSquare)
+        public Vector2Int GetFieldPosition(FieldBehaviour fieldBehaviour)
         {
-            Vector3 position = fieldSquare.transform.position;
+            Vector3 position = fieldBehaviour.transform.position;
             return new Vector2Int((int)position.x, -(int)position.y);
         }
 
@@ -17,7 +17,7 @@ namespace Solar2048
         {
             var x = (int)wordPosition.x;
             int y = -(int)wordPosition.y;
-            if (!IsInsideBounds(GameField.FIELD_SIZE))
+            if (!IsInsideBounds(GameMap.FIELD_SIZE))
             {
                 position = Vector2Int.zero;
                 return false;

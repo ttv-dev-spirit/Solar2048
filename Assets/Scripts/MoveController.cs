@@ -8,7 +8,7 @@ namespace Solar2048
 {
     public sealed class MoveController : MonoBehaviour
     {
-        private GameField _gameField = null!;
+        private BuildingMover _buildingMover = null!;
 
         [SerializeField]
         private Button _moveLeft = null!;
@@ -23,9 +23,9 @@ namespace Solar2048
         private Button _moveDown = null!;
 
         [Inject]
-        private void Construct(GameField gameField)
+        private void Construct(BuildingMover buildingMover)
         {
-            _gameField = gameField;
+            _buildingMover = buildingMover;
         }
 
         private void Start()
@@ -38,22 +38,22 @@ namespace Solar2048
 
         private void MoveLeftClickHandler(Unit _)
         {
-            _gameField.MoveBuildings(MoveDirections.Left);
+            _buildingMover.MoveBuildings(MoveDirections.Left);
         }
 
         private void MoveRightClickHandler(Unit _)
         {
-            _gameField.MoveBuildings(MoveDirections.Right);
+            _buildingMover.MoveBuildings(MoveDirections.Right);
         }
 
         private void MoveUpClickHandler(Unit _)
         {
-            _gameField.MoveBuildings(MoveDirections.Up);
+            _buildingMover.MoveBuildings(MoveDirections.Up);
         }
 
         private void MoveDownClickHandler(Unit _)
         {
-            _gameField.MoveBuildings(MoveDirections.Down);
+            _buildingMover.MoveBuildings(MoveDirections.Down);
         }
     }
 }

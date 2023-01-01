@@ -6,14 +6,12 @@ namespace Solar2048
 {
     public sealed class BuildingMover
     {
-        private readonly Building?[,] _buildings;
-        private readonly int _fieldSize;
         private readonly BuildingsManager _buildingsManager;
+        private readonly GameMap _gameMap;
 
-        public BuildingMover(Building?[,] buildings, int fieldSize, BuildingsManager buildingsManager)
+        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager)
         {
-            _buildings = buildings;
-            _fieldSize = fieldSize;
+            _gameMap = gameMap;
             _buildingsManager = buildingsManager;
         }
 
@@ -38,7 +36,7 @@ namespace Solar2048
 
         private void MoveBuildingsLeft()
         {
-            for (var y = 0; y < _fieldSize; y++)
+            for (var y = 0; y < GameMap.FIELD_SIZE; y++)
             {
                 MoveRowLeft(y);
             }
@@ -46,7 +44,7 @@ namespace Solar2048
 
         private void MoveBuildingsRight()
         {
-            for (var y = 0; y < _fieldSize; y++)
+            for (var y = 0; y < GameMap.FIELD_SIZE; y++)
             {
                 MoveRowRight(y);
             }
@@ -54,7 +52,7 @@ namespace Solar2048
 
         private void MoveBuildingsUp()
         {
-            for (var x = 0; x < _fieldSize; x++)
+            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
                 MoveColumnUp(x);
             }
@@ -62,7 +60,7 @@ namespace Solar2048
 
         private void MoveBuildingsDown()
         {
-            for (var x = 0; x < _fieldSize; x++)
+            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
                 MoveColumnDown(x);
             }
@@ -70,122 +68,65 @@ namespace Solar2048
 
         private void MoveRowLeft(int row)
         {
-            for (var x = 1; x < _fieldSize; x++)
+            for (var x = 1; x < GameMap.FIELD_SIZE; x++)
             {
-                Building? building = _buildings[x, row];
-                if (building == null)
-                {
-                    continue;
-                }
-
-                Building? neighbourBuilding = _buildings[x - 1, row];
-                if (neighbourBuilding != null)
-                {
-                    if (!building.CanBeMerged(neighbourBuilding))
-                    {
-                        continue;
-                    }
-
-                    neighbourBuilding.UpLevel();
-                    _buildings[x, row] = null;
-                    _buildingsManager.RemoveBuilding(building);
-                    continue;
-                }
-
-                _buildings[x - 1, row] = building;
-                _buildings[x, row] = null;
-                building.SetPosition(new Vector2Int(x - 1, row));
+                MoveBuilding(new Vector2Int(x, row), new Vector2Int(x - 1, row));
             }
         }
 
         private void MoveRowRight(int row)
         {
-            for (var x = _fieldSize - 2; x >= 0; x--)
+            for (int x = GameMap.FIELD_SIZE - 2; x >= 0; x--)
             {
-                Building? building = _buildings[x, row];
-                if (building == null)
-                {
-                    continue;
-                }
-
-                Building? neighbourBuilding = _buildings[x + 1, row];
-                if (neighbourBuilding != null)
-                {
-                    if (!building.CanBeMerged(neighbourBuilding))
-                    {
-                        continue;
-                    }
-
-                    neighbourBuilding.UpLevel();
-                    _buildings[x, row] = null;
-                    _buildingsManager.RemoveBuilding(building);
-                    continue;
-                }
-
-                _buildings[x + 1, row] = building;
-                _buildings[x, row] = null;
-                building.SetPosition(new Vector2Int(x + 1, row));
+                MoveBuilding(new Vector2Int(x,row), new Vector2Int(x+1,row));
             }
         }
-
+        
         private void MoveColumnUp(int column)
         {
-            for (var y = 1; y < _fieldSize; y++)
+            for (var y = 1; y < GameMap.FIELD_SIZE; y++)
             {
-                Building? building = _buildings[column, y];
-                if (building == null)
-                {
-                    continue;
-                }
-
-                Building? neighbourBuilding = _buildings[column, y - 1];
-                if (neighbourBuilding != null)
-                {
-                    if (!building.CanBeMerged(neighbourBuilding))
-                    {
-                        continue;
-                    }
-
-                    neighbourBuilding.UpLevel();
-                    _buildings[column, y] = null;
-                    _buildingsManager.RemoveBuilding(building);
-                    continue;
-                }
-
-                _buildings[column, y - 1] = building;
-                _buildings[column, y] = null;
-                building.SetPosition(new Vector2Int(column, y - 1));
+                MoveBuilding(new Vector2Int(column, y), new Vector2Int(column,y-1));
             }
         }
-
+        
         private void MoveColumnDown(int column)
         {
-            for (var y = _fieldSize - 2; y >= 0; y--)
+            for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
             {
-                Building? building = _buildings[column, y];
-                if (building == null)
-                {
-                    continue;
-                }
-
-                Building? neighbourBuilding = _buildings[column, y + 1];
-                if (neighbourBuilding != null)
-                {
-                    if (!building.CanBeMerged(neighbourBuilding))
-                    {
-                        continue;
-                    }
-
-                    neighbourBuilding.UpLevel();
-                    _buildings[column, y] = null;
-                    _buildingsManager.RemoveBuilding(building);
-                    continue;
-                }
-
-                _buildings[column, y + 1] = building;
-                _buildings[column, y] = null;
-                building.SetPosition(new Vector2Int(column, y + 1));
+                MoveBuilding(new Vector2Int(column,y), new Vector2Int(column, y+1));
             }
+        }
+        
+        private void MoveBuilding(Vector2Int from, Vector2Int to)
+        {
+            Field fromField = _gameMap.GetField(from);
+            if (fromField.Building == null)
+            {
+                return;
+            }
+
+            Field toField = _gameMap.GetField(to);
+            if (toField.Building != null)
+            {
+                MergeBuilding(fromField, toField);
+                return;
+            }
+
+            toField.AddBuilding(fromField.Building);
+            fromField.RemoveBuilding();
+        }
+
+        private void MergeBuilding(Field fromField, Field toField)
+        {
+            if (!fromField.Building!.CanBeMerged(toField.Building!))
+            {
+                return;
+            }
+
+            toField.Building!.UpLevel();
+            _buildingsManager.RemoveBuilding(fromField.Building);
+            fromField.RemoveBuilding();
         }
     }
 }

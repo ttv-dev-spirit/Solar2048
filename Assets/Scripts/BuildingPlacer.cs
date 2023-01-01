@@ -7,33 +7,45 @@ namespace Solar2048
 {
     public sealed class BuildingPlacer
     {
-        private readonly GameField _gameField;
+        private readonly GameMap _gameMap;
         private readonly Hand _hand;
         private readonly BuildingsManager _buildingsManager;
+        private readonly CheatHand _cheatHand;
 
-        public BuildingPlacer(GameField gameField, Hand hand, BuildingsManager buildingsManager)
+        public BuildingPlacer(GameMap gameMap, Hand hand, BuildingsManager buildingsManager, CheatHand cheatHand)
         {
-            _gameField = gameField;
+            _gameMap = gameMap;
             _hand = hand;
             _buildingsManager = buildingsManager;
-            _gameField.OnFieldClicked.Subscribe(FieldClickedHandler);
+            _cheatHand = cheatHand;
+            _gameMap.OnFieldClicked.Subscribe(FieldClickedHandler);
         }
 
         private void FieldClickedHandler(Vector2Int position)
         {
-            Card? selectedCard = _hand.SelectedCard;
+            var isCheatCard = false;
+            Card? selectedCard = _hand.SelectedCard.Value;
             if (selectedCard == null)
             {
-                return;
+                selectedCard = _cheatHand.SelectedCard;
+                isCheatCard = true;
+                if (selectedCard == null)
+                {
+                    return;
+                }
             }
 
-            if (!_gameField.CanAddBuildingTo(position))
+            Field field = _gameMap.GetField(position);
+            if (field.Building != null)
             {
                 return;
             }
 
-            _buildingsManager.AddNewBuildingTo(selectedCard.BuildingType, position);
-            _hand.RemoveCard(selectedCard);
+            _buildingsManager.AddNewBuilding(selectedCard.BuildingType, field);
+            if (!isCheatCard)
+            {
+                _hand.RemoveCard(selectedCard);
+            }
         }
     }
 }

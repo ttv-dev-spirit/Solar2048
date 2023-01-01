@@ -17,5 +17,7 @@ namespace Solar2048.Buildings
             Card card = _cardFactory.Create(buildingType);
             _hand.AddCard(card);
         }
+
+        public Card CreateCard(BuildingType buildingType) => _cardFactory.Create(buildingType);
     }
 }
