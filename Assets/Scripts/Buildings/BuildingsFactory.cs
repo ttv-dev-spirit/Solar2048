@@ -9,7 +9,8 @@ namespace Solar2048.Buildings
         private readonly BuildingFactorySettings _settings;
         private readonly BuildingBehaviour.Factory _buildingBehaviourFactory;
 
-        public BuildingsFactory(BuildingFactorySettings buildingFactorySettings, BuildingBehaviour.Factory buildingBehaviourFactory)
+        public BuildingsFactory(BuildingFactorySettings buildingFactorySettings,
+            BuildingBehaviour.Factory buildingBehaviourFactory)
         {
             _settings = buildingFactorySettings;
             _buildingBehaviourFactory = buildingBehaviourFactory;

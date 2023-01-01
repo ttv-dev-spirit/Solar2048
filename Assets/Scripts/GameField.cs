@@ -12,18 +12,19 @@ namespace Solar2048
         public const int FIELD_SIZE = 4;
 
         private readonly GameFieldBehaviour _gameFieldBehaviour;
-        private readonly BuildingMover _buildingMover;
 
         private readonly Subject<Vector2Int> _onFieldClicked = new();
         private readonly FieldSquare[,] _field = new FieldSquare[FIELD_SIZE, FIELD_SIZE];
         private readonly Building?[,] _buildings = new Building[FIELD_SIZE, FIELD_SIZE];
+
+        private BuildingMover _buildingMover;
+        private BuildingsManager _buildingsManager; 
 
         public IObservable<Vector2Int> OnFieldClicked => _onFieldClicked;
 
         public GameField(GameFieldBehaviour gameFieldBehaviour)
         {
             _gameFieldBehaviour = gameFieldBehaviour;
-            _buildingMover = new BuildingMover(_buildings, FIELD_SIZE);
         }
 
         public void RegisterSquare(FieldSquare fieldSquare)
@@ -40,7 +41,7 @@ namespace Solar2048
         {
             _buildings[position.x, position.y] = building;
         }
-        
+
         public void MoveBuildings(MoveDirections direction) => _buildingMover.MoveBuildings(direction);
 
         public bool CanAddBuildingTo(Vector2Int position)
@@ -68,5 +69,11 @@ namespace Solar2048
         private bool IsInsideBounds(Vector2Int position) =>
             position.x >= 0 && position.x < FIELD_SIZE && position.y >= 0 && position.y < FIELD_SIZE;
 
+        // HACK (Stas): This is the shit.
+        public void InjectManager(BuildingsManager buildingsManager)
+        {
+            _buildingsManager = buildingsManager;
+            _buildingMover = new BuildingMover(_buildings, FIELD_SIZE, buildingsManager);
+        }
     }
 }

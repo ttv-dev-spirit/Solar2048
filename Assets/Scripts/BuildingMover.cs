@@ -8,11 +8,13 @@ namespace Solar2048
     {
         private readonly Building?[,] _buildings;
         private readonly int _fieldSize;
+        private readonly BuildingsManager _buildingsManager;
 
-        public BuildingMover(Building?[,] buildings, int fieldSize)
+        public BuildingMover(Building?[,] buildings, int fieldSize, BuildingsManager buildingsManager)
         {
             _buildings = buildings;
             _fieldSize = fieldSize;
+            _buildingsManager = buildingsManager;
         }
 
         public void MoveBuildings(MoveDirections directions)
@@ -76,8 +78,17 @@ namespace Solar2048
                     continue;
                 }
 
-                if (_buildings[x - 1, row] != null)
+                Building? neighbourBuilding = _buildings[x - 1, row];
+                if (neighbourBuilding != null)
                 {
+                    if (!building.CanBeMerged(neighbourBuilding))
+                    {
+                        continue;
+                    }
+
+                    neighbourBuilding.UpLevel();
+                    _buildings[x, row] = null;
+                    _buildingsManager.RemoveBuilding(building);
                     continue;
                 }
 
@@ -97,8 +108,17 @@ namespace Solar2048
                     continue;
                 }
 
-                if (_buildings[x + 1, row] != null)
+                Building? neighbourBuilding = _buildings[x + 1, row];
+                if (neighbourBuilding != null)
                 {
+                    if (!building.CanBeMerged(neighbourBuilding))
+                    {
+                        continue;
+                    }
+
+                    neighbourBuilding.UpLevel();
+                    _buildings[x, row] = null;
+                    _buildingsManager.RemoveBuilding(building);
                     continue;
                 }
 
@@ -118,8 +138,17 @@ namespace Solar2048
                     continue;
                 }
 
-                if (_buildings[column, y - 1] != null)
+                Building? neighbourBuilding = _buildings[column, y - 1];
+                if (neighbourBuilding != null)
                 {
+                    if (!building.CanBeMerged(neighbourBuilding))
+                    {
+                        continue;
+                    }
+
+                    neighbourBuilding.UpLevel();
+                    _buildings[column, y] = null;
+                    _buildingsManager.RemoveBuilding(building);
                     continue;
                 }
 
@@ -139,8 +168,17 @@ namespace Solar2048
                     continue;
                 }
 
-                if (_buildings[column, y + 1] != null)
+                Building? neighbourBuilding = _buildings[column, y + 1];
+                if (neighbourBuilding != null)
                 {
+                    if (!building.CanBeMerged(neighbourBuilding))
+                    {
+                        continue;
+                    }
+
+                    neighbourBuilding.UpLevel();
+                    _buildings[column, y] = null;
+                    _buildingsManager.RemoveBuilding(building);
                     continue;
                 }
 

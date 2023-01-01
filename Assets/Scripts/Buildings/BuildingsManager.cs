@@ -15,6 +15,7 @@ namespace Solar2048.Buildings
         {
             _buildingsFactory = buildingsFactory;
             _gameField = gameField;
+            _gameField.InjectManager(this);
         }
 
         public void AddNewBuildingTo(BuildingType buildingType, Vector2Int position)
@@ -23,6 +24,12 @@ namespace Solar2048.Buildings
             _buildings.Add(building);
             building.SetPosition(position);
             _gameField.RegisterBuilding(building, position);
+        }
+
+        public void RemoveBuilding(Building building)
+        {
+            _buildings.Remove(building);
+            building.Destroy();
         }
     }
 }
