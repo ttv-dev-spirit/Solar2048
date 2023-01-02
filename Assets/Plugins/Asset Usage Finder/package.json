@@ -1,0 +1,8 @@
+  
+{
+	"name": "com.john.assetfinder",
+	"displayName": "Asset Usage Finder",
+	"version": "1.1.0",
+	"description": "Find Asset Usages for Unity",
+	"unity": "2019.3" 
+}

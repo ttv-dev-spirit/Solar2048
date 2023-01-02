@@ -1,23 +1,5 @@
 {
   "dependencies": {
-    "com.john.assetfinder": {
-      "version": "file:C:/StreamProjects/common_packages/Assets/Asset Usage Finder",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
-    "com.mathijsbakker.extenject": {
-      "version": "file:C:/StreamProjects/common_packages/Assets/Zenject",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
-    "com.neuecc.unirx": {
-      "version": "file:C:/StreamProjects/common_packages/Assets/UniRx",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.unity.2d.animation": {
       "version": "7.0.8",
       "depth": 1,
