@@ -37,6 +37,7 @@ namespace Solar2048
             Assert.IsTrue(Building == null);
             Building = building;
             building.SetPosition(Position);
+            Debug.Log($"Building added to {Position}");
         }
 
         public void RemoveBuilding()
@@ -47,6 +48,7 @@ namespace Solar2048
             }
 
             Building = null;
+            Debug.Log($"Building removed from {Position}");
         }
 
         public void ResetStats()

@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using Solar2048.Buildings;
-using UnityEngine;
 
 namespace Solar2048
 {
@@ -32,6 +31,7 @@ namespace Solar2048
                     MoveBuildingsDown();
                     break;
             }
+
             _gameMap.RecalculateStats();
         }
 
@@ -39,7 +39,10 @@ namespace Solar2048
         {
             for (var y = 0; y < GameMap.FIELD_SIZE; y++)
             {
-                MoveRowLeft(y);
+                for (var x = 1; x < GameMap.FIELD_SIZE; x++)
+                {
+                    MoveBuildingLeftAndMerge(x, y);
+                }
             }
         }
 
@@ -47,7 +50,10 @@ namespace Solar2048
         {
             for (var y = 0; y < GameMap.FIELD_SIZE; y++)
             {
-                MoveRowRight(y);
+                for (int x = GameMap.FIELD_SIZE - 2; x >= 0; x--)
+                {
+                    MoveBuildingRightAndMerge(x, y);
+                }
             }
         }
 
@@ -55,7 +61,10 @@ namespace Solar2048
         {
             for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
-                MoveColumnUp(x);
+                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
+                {
+                    MoveBuildingUpAndMerge(x, y);
+                }
             }
         }
 
@@ -63,59 +72,195 @@ namespace Solar2048
         {
             for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
-                MoveColumnDown(x);
+                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
+                {
+                    MoveBuildingDownAndMerge(x, y);
+                }
             }
         }
 
-        private void MoveRowLeft(int row)
+        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
         {
-            for (var x = 1; x < GameMap.FIELD_SIZE; x++)
-            {
-                MoveBuilding(new Vector2Int(x, row), new Vector2Int(x - 1, row));
-            }
-        }
-
-        private void MoveRowRight(int row)
-        {
-            for (int x = GameMap.FIELD_SIZE - 2; x >= 0; x--)
-            {
-                MoveBuilding(new Vector2Int(x,row), new Vector2Int(x+1,row));
-            }
-        }
-        
-        private void MoveColumnUp(int column)
-        {
-            for (var y = 1; y < GameMap.FIELD_SIZE; y++)
-            {
-                MoveBuilding(new Vector2Int(column, y), new Vector2Int(column,y-1));
-            }
-        }
-        
-        private void MoveColumnDown(int column)
-        {
-            for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
-            {
-                MoveBuilding(new Vector2Int(column,y), new Vector2Int(column, y+1));
-            }
-        }
-        
-        private void MoveBuilding(Vector2Int from, Vector2Int to)
-        {
-            Field fromField = _gameMap.GetField(from);
+            Field fromField = _gameMap.GetField(xFrom, yFrom);
             if (fromField.Building == null)
             {
                 return;
             }
 
-            Field toField = _gameMap.GetField(to);
-            if (toField.Building != null)
+            if (MergeDown(fromField, out Field? lastEmpty))
             {
-                MergeBuilding(fromField, toField);
                 return;
             }
 
-            toField.AddBuilding(fromField.Building);
+            if (lastEmpty == null)
+            {
+                return;
+            }
+
+            lastEmpty.AddBuilding(fromField.Building!);
             fromField.RemoveBuilding();
+        }
+
+        private void MoveBuildingUpAndMerge(int xFrom, int yFrom)
+        {
+            Field fromField = _gameMap.GetField(xFrom, yFrom);
+            if (fromField.Building == null)
+            {
+                return;
+            }
+
+            if (MergeUp(fromField, out Field? lastEmpty))
+            {
+                return;
+            }
+
+            if (lastEmpty == null)
+            {
+                return;
+            }
+
+            lastEmpty.AddBuilding(fromField.Building!);
+            fromField.RemoveBuilding();
+        }
+
+        private void MoveBuildingLeftAndMerge(int xFrom, int yFrom)
+        {
+            Field fromField = _gameMap.GetField(xFrom, yFrom);
+            if (fromField.Building == null)
+            {
+                return;
+            }
+
+            if (MergeLeft(fromField, out Field? lastEmpty))
+            {
+                return;
+            }
+
+            if (lastEmpty == null)
+            {
+                return;
+            }
+
+            lastEmpty.AddBuilding(fromField.Building!);
+            fromField.RemoveBuilding();
+        }
+
+        private void MoveBuildingRightAndMerge(int xFrom, int yFrom)
+        {
+            Field fromField = _gameMap.GetField(xFrom, yFrom);
+            if (fromField.Building == null)
+            {
+                return;
+            }
+
+            if (MergeRight(fromField, out Field? lastEmpty))
+            {
+                return;
+            }
+
+            if (lastEmpty == null)
+            {
+                return;
+            }
+
+            lastEmpty.AddBuilding(fromField.Building!);
+            fromField.RemoveBuilding();
+        }
+
+        private bool MergeDown(Field fromField, out Field? lastEmpty)
+        {
+            lastEmpty = null;
+            for (int y = fromField.Position.y + 1; y < GameMap.FIELD_SIZE; y++)
+            {
+                Field toField = _gameMap.GetField(fromField.Position.x, y);
+                if (toField.Building == null)
+                {
+                    lastEmpty = toField;
+                    continue;
+                }
+
+                if (toField.Building.CanBeMerged(fromField.Building!))
+                {
+                    MergeBuilding(fromField, toField);
+                    return true;
+                }
+
+                break;
+            }
+
+            return false;
+        }
+
+        private bool MergeUp(Field fromField, out Field? lastEmpty)
+        {
+            lastEmpty = null;
+            for (int y = fromField.Position.y - 1; y >= 0; y--)
+            {
+                Field toField = _gameMap.GetField(fromField.Position.x, y);
+                if (toField.Building == null)
+                {
+                    lastEmpty = toField;
+                    continue;
+                }
+
+                if (toField.Building.CanBeMerged(fromField.Building!))
+                {
+                    MergeBuilding(fromField, toField);
+                    return true;
+                }
+
+                break;
+            }
+
+            return false;
+        }
+
+        private bool MergeLeft(Field fromField, out Field? lastEmpty)
+        {
+            lastEmpty = null;
+            for (int x = fromField.Position.x - 1; x >= 0; x--)
+            {
+                Field toField = _gameMap.GetField(x, fromField.Position.y);
+                if (toField.Building == null)
+                {
+                    lastEmpty = toField;
+                    continue;
+                }
+
+                if (toField.Building.CanBeMerged(fromField.Building!))
+                {
+                    MergeBuilding(fromField, toField);
+                    return true;
+                }
+
+                break;
+            }
+
+            return false;
+        }
+
+        private bool MergeRight(Field fromField, out Field? lastEmpty)
+        {
+            lastEmpty = null;
+            for (int x = fromField.Position.x + 1; x < GameMap.FIELD_SIZE; x++)
+            {
+                Field toField = _gameMap.GetField(x, fromField.Position.y);
+                if (toField.Building == null)
+                {
+                    lastEmpty = toField;
+                    continue;
+                }
+
+                if (toField.Building.CanBeMerged(fromField.Building!))
+                {
+                    MergeBuilding(fromField, toField);
+                    return true;
+                }
+
+                break;
+            }
+
+            return false;
         }
 
         private void MergeBuilding(Field fromField, Field toField)
