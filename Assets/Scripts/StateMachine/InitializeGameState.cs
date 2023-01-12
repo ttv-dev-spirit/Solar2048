@@ -5,18 +5,18 @@ namespace Solar2048.StateMachine
 {
     public sealed class InitializeGameState : State
     {
-        private readonly MessageBroker _messageBroker;
+        private readonly IMessagePublisher _messagePublisher;
         private readonly GameStateMachine _gameStateMachine;
 
-        public InitializeGameState(GameStateMachine gameStateMachine, MessageBroker messageBroker)
+        public InitializeGameState(GameStateMachine gameStateMachine, IMessagePublisher messagePublisher)
         {
-            _messageBroker = messageBroker;
+            _messagePublisher = messagePublisher;
             _gameStateMachine = gameStateMachine;
         }
 
         protected override void OnEnter()
         {
-            _messageBroker.Publish(new NewGameMessage());
+            _messagePublisher.Publish(new NewGameMessage());
             _gameStateMachine.Round();
         }
 

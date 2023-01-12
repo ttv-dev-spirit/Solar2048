@@ -45,7 +45,7 @@ namespace Solar2048
 
         private bool TryTriggerEffects(Building building)
         {
-            if (!building.AreConditionsMet())
+            if (!building.CheckConditionsMet())
             {
                 return false;
             }

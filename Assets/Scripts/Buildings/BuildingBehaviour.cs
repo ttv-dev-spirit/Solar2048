@@ -8,11 +8,13 @@ namespace Solar2048.Buildings
 {
     public sealed class BuildingBehaviour : MonoBehaviour
     {
-        private const string LEVEL_TEXT = "level ";
         private GameFieldBehaviour _gameFieldBehaviour = null!;
 
         [SerializeField]
         private SpriteRenderer _image = null!;
+
+        [SerializeField]
+        private GameObject _conditionsMetBorder = null!;
 
         [SerializeField]
         private TMP_Text _level = null!;
@@ -30,12 +32,14 @@ namespace Solar2048.Buildings
             transform.position = _gameFieldBehaviour.PositionToWorld(position);
         }
 
-        public void SubToLevel(IReadOnlyReactiveProperty<int> level)
+        public void Sub(IReadOnlyReactiveProperty<int> level, IReadOnlyReactiveProperty<bool> areConditionsMet)
         {
             level.Subscribe(OnLevelChanged);
+            areConditionsMet.Subscribe(OnConditionsMetChanged);
         }
 
-        private void OnLevelChanged(int level) => _level.text = LEVEL_TEXT + level;
+        private void OnLevelChanged(int level) => _level.text = level.ToString();
+        private void OnConditionsMetChanged(bool areConditionsMet) => _conditionsMetBorder.SetActive(areConditionsMet);
 
         public class Factory : PlaceholderFactory<BuildingBehaviour>
         {

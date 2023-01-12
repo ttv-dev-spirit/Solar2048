@@ -14,7 +14,7 @@ namespace Solar2048.Buildings
         public override bool IsConditionMet(GameMap gameMap, Building building)
         {
             Field field = gameMap.GetField(building.Position);
-            return field.Energy.Value >= _value;
+            return field.Energy.Value >= _value * Mathf.Pow(2, building.Level.Value - 1);
         }
     }
 }

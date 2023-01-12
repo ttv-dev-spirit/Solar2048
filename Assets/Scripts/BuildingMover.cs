@@ -7,11 +7,13 @@ namespace Solar2048
     {
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
+        private readonly ScoreCounter _scoreCounter;
 
-        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager)
+        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager, ScoreCounter scoreCounter)
         {
             _gameMap = gameMap;
             _buildingsManager = buildingsManager;
+            _scoreCounter = scoreCounter;
         }
 
         public void MoveBuildings(MoveDirections directions)
@@ -273,6 +275,7 @@ namespace Solar2048
             toField.Building!.UpLevel();
             _buildingsManager.RemoveBuilding(fromField.Building);
             fromField.RemoveBuilding();
+            _scoreCounter.AddMergeScore(toField.Building.Level.Value);
         }
     }
 }

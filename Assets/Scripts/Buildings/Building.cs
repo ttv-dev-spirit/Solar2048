@@ -11,18 +11,20 @@ namespace Solar2048.Buildings
         private readonly GameMap _gameMap;
 
         private readonly ReactiveProperty<int> _level = new(1);
+        private readonly ReactiveProperty<bool> _areConditionsMet = new();
 
         public BuildingType BuildingType => _buildingSettings.BuildingType;
         public Vector2Int Position { get; private set; }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
+        public IReadOnlyReactiveProperty<bool> AreConditionsMet => _areConditionsMet;
 
         public Building(BuildingSettings buildingSettings, BuildingBehaviour behaviour, GameMap gameMap)
         {
             _buildingSettings = buildingSettings;
             _behaviour = behaviour;
             _gameMap = gameMap;
-            behaviour.SubToLevel(Level);
+            behaviour.Sub(Level, AreConditionsMet);
         }
 
         public void SetPosition(Vector2Int position)
@@ -43,11 +45,12 @@ namespace Solar2048.Buildings
             Object.Destroy(_behaviour.gameObject);
         }
 
-        public bool AreConditionsMet()
+        public bool CheckConditionsMet()
         {
             var conditions = _buildingSettings.WorkConditions;
             if (conditions == null)
             {
+                _areConditionsMet.Value = true;
                 return true;
             }
 
@@ -55,10 +58,12 @@ namespace Solar2048.Buildings
             {
                 if (!buildingWorkCondition.IsConditionMet(_gameMap, this))
                 {
+                    _areConditionsMet.Value = false;
                     return false;
                 }
             }
 
+            _areConditionsMet.Value = true;
             return true;
         }
 
