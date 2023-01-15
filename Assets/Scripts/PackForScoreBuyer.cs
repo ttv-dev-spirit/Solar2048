@@ -12,6 +12,7 @@ namespace Solar2048
         private readonly ReactiveProperty<bool> _isEnoughPointsForPack = new();
 
         public IReadOnlyReactiveProperty<bool> IsEnoughPointsForPack => _isEnoughPointsForPack;
+        public int NextPackCost => _packBuyingSettings.PackCost;
 
         public PackForScoreBuyer(PackBuyingSettings packBuyingSettings, ScoreCounter scoreCounter, UIManager uiManager)
         {

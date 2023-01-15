@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5962f0e691245cf906adff267b83b72, type: 3}
   m_Name: pack_generator_settings
   m_EditorClassIdentifier: 
-  _cardsInPack: 1
+  _cardsInPack: 3
