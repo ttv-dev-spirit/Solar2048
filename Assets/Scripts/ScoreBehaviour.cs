@@ -14,7 +14,7 @@ namespace Solar2048
         [Inject]
         private void Construct(ScoreCounter scoreCounter)
         {
-            scoreCounter.Score.Subscribe(OnScoreChanged);
+            scoreCounter.TotalScore.Subscribe(OnScoreChanged);
         }
 
         private void OnScoreChanged(int score) => _score.text = score.ToString();

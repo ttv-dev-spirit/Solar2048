@@ -21,12 +21,14 @@ namespace Solar2048
 
         [SerializeField]
         private Card _cardPrefab = null!;
+        [SerializeField]
+        private BuildingImage _buildingImagePrefab = null!;
 
         [SerializeField]
         private Hand _hand = null!;
 
         [SerializeField]
-        private CheatHand _cheatHand = null!;
+        private MouseOverObserver _mouseOverObserver = null!;
 
         [SerializeField]
         private MoveController _moveController = null!;
@@ -36,6 +38,12 @@ namespace Solar2048
 
         [SerializeField]
         private PackGeneratorSettings _packGeneratorSettings = null!;
+
+        [SerializeField]
+        private UIManagerSettings _uiManagerSettings = null!;
+
+        [SerializeField]
+        private PackBuyingSettings _packBuyingSettings = null!;
 
         public override void InstallBindings()
         {
@@ -50,6 +58,7 @@ namespace Solar2048
             Container.BindFactory<BuildingBehaviour, BuildingBehaviour.Factory>()
                 .FromComponentInNewPrefab(_buildingPrefab);
             Container.BindFactory<BuildingType, Card, Card.Factory>().FromComponentInNewPrefab(_cardPrefab);
+            Container.BindFactory<BuildingType, BuildingImage, BuildingImage.Factory>().FromComponentInNewPrefab(_buildingImagePrefab);
             Container.BindFactory<List<BuildingType>, Pack, Pack.Factory>();
         }
 
@@ -66,16 +75,18 @@ namespace Solar2048
             Container.Bind<BuildingEffectsTrigger>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<InputSystem>().AsSingle();
             Container.Bind<BuildingMover>().AsSingle();
-            Container.Bind<CheatHand>().FromInstance(_cheatHand);
             Container.Bind<ScoreCounter>().AsSingle();
             Container.BindInterfacesAndSelfTo<PackGenerator>().AsSingle();
             Container.BindInterfacesAndSelfTo<BuildingsPackProvider>().AsSingle();
+            Container.Bind<UIManager>().AsSingle();
+            Container.Bind<PackForScoreBuyer>().AsSingle();
         }
 
         private void BindGameObjects()
         {
             Container.Bind<GameFieldBehaviour>().FromInstance(_gameFieldBehaviour);
             Container.Bind<MoveController>().FromInstance(_moveController);
+            Container.Bind<MouseOverObserver>().FromInstance(_mouseOverObserver);
         }
 
         private void BindSettings()
@@ -83,6 +94,8 @@ namespace Solar2048
             Container.Bind<BuildingFactorySettings>().FromInstance(_buildingFactorySettings);
             Container.Bind<ScoreSettings>().FromInstance(_scoreSettings);
             Container.Bind<PackGeneratorSettings>().FromInstance(_packGeneratorSettings);
+            Container.Bind<UIManagerSettings>().FromInstance(_uiManagerSettings);
+            Container.Bind<PackBuyingSettings>().FromInstance(_packBuyingSettings);
         }
     }
 }

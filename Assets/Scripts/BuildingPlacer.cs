@@ -10,14 +10,12 @@ namespace Solar2048
         private readonly GameMap _gameMap;
         private readonly Hand _hand;
         private readonly BuildingsManager _buildingsManager;
-        private readonly CheatHand _cheatHand;
 
-        public BuildingPlacer(GameMap gameMap, Hand hand, BuildingsManager buildingsManager, CheatHand cheatHand)
+        public BuildingPlacer(GameMap gameMap, Hand hand, BuildingsManager buildingsManager)
         {
             _gameMap = gameMap;
             _hand = hand;
             _buildingsManager = buildingsManager;
-            _cheatHand = cheatHand;
             _gameMap.OnFieldClicked.Subscribe(FieldClickedHandler);
         }
 
@@ -27,7 +25,6 @@ namespace Solar2048
             Card? selectedCard = _hand.SelectedCard.Value;
             if (selectedCard == null)
             {
-                selectedCard = _cheatHand.SelectedCard;
                 isCheatCard = true;
                 if (selectedCard == null)
                 {

@@ -18,11 +18,12 @@ namespace Solar2048.StateMachine
 
         public GameStateMachine(CardSpawner cardSpawner, BuildingMover buildingMover,
             InputSystem inputSystem,
-            IMessagePublisher messagePublisher)
+            IMessagePublisher messagePublisher,
+            UIManager uiManager)
         {
             _roundState = new RoundState(cardSpawner);
             _roundState.AddInputHandler(new BuildingsMoveHandler(buildingMover));
-            _initializeGameState = new InitializeGameState(this, messagePublisher);
+            _initializeGameState = new InitializeGameState(this, messagePublisher, uiManager);
             inputSystem.OnHandleInput.Subscribe(HandleInput);
         }
 
