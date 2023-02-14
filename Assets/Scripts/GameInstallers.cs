@@ -1,7 +1,14 @@
 #nullable enable
 using System.Collections.Generic;
 using Solar2048.Buildings;
+using Solar2048.Buildings.Effect;
+using Solar2048.Buildings.UI;
+using Solar2048.Cards;
+using Solar2048.Map;
+using Solar2048.Packs;
+using Solar2048.Score;
 using Solar2048.StateMachine;
+using Solar2048.UI;
 using UniRx;
 using UnityEngine;
 using Zenject;

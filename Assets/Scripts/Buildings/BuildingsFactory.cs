@@ -1,4 +1,6 @@
 ﻿#nullable enable
+using Solar2048.Buildings.UI;
+using Solar2048.Map;
 using UnityEngine;
 using Zenject;
 

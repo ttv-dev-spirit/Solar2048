@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using Solar2048.Map;
 
 namespace Solar2048.Buildings
 {
