@@ -1,23 +1,36 @@
 ﻿#nullable enable
+using System;
 using Solar2048.Buildings;
+using Solar2048.StateMachine;
+using UniRx;
 
 namespace Solar2048
 {
-    public sealed class BuildingMover
+    public sealed class BuildingMover : IActivatable
     {
+        private Subject<Unit> _onMoved = new();
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
         private readonly ScoreCounter _scoreCounter;
+
+        public bool IsActive { get; private set; }
+        public IObservable<Unit> OnMoved => _onMoved;
 
         public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager, ScoreCounter scoreCounter)
         {
             _gameMap = gameMap;
             _buildingsManager = buildingsManager;
             _scoreCounter = scoreCounter;
+            IsActive = false;
         }
 
         public void MoveBuildings(MoveDirections directions)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             switch (directions)
             {
                 case MoveDirections.Left:
@@ -35,7 +48,11 @@ namespace Solar2048
             }
 
             _gameMap.RecalculateStats();
+            _onMoved.OnNext(Unit.Default);
         }
+
+        public void Activate() => IsActive = true;
+        public void Deactivate() => IsActive = false;
 
         private void MoveBuildingsLeft()
         {

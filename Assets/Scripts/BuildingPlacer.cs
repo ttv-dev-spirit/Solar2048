@@ -9,23 +9,21 @@ namespace Solar2048
     {
         private readonly GameMap _gameMap;
         private readonly Hand _hand;
-        private readonly BuildingsManager _buildingsManager;
+        private readonly CardPlayer _cardPlayer;
 
-        public BuildingPlacer(GameMap gameMap, Hand hand, BuildingsManager buildingsManager)
+        public BuildingPlacer(GameMap gameMap, Hand hand, CardPlayer cardPlayer)
         {
             _gameMap = gameMap;
             _hand = hand;
-            _buildingsManager = buildingsManager;
+            _cardPlayer = cardPlayer;
             _gameMap.OnFieldClicked.Subscribe(FieldClickedHandler);
         }
 
         private void FieldClickedHandler(Vector2Int position)
         {
-            var isCheatCard = false;
             Card? selectedCard = _hand.SelectedCard.Value;
             if (selectedCard == null)
             {
-                isCheatCard = true;
                 if (selectedCard == null)
                 {
                     return;
@@ -38,12 +36,12 @@ namespace Solar2048
                 return;
             }
 
-            _buildingsManager.AddNewBuilding(selectedCard.BuildingType, field);
-            if (!isCheatCard)
+            if (!_cardPlayer.IsActive)
             {
-                _hand.RemoveCard(selectedCard);
+                return;
             }
-            _gameMap.RecalculateStats();
+
+            _cardPlayer.PlayCardFromHandTo(selectedCard, field);
         }
     }
 }

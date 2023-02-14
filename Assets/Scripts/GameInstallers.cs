@@ -21,6 +21,7 @@ namespace Solar2048
 
         [SerializeField]
         private Card _cardPrefab = null!;
+
         [SerializeField]
         private BuildingImage _buildingImagePrefab = null!;
 
@@ -58,7 +59,8 @@ namespace Solar2048
             Container.BindFactory<BuildingBehaviour, BuildingBehaviour.Factory>()
                 .FromComponentInNewPrefab(_buildingPrefab);
             Container.BindFactory<BuildingType, Card, Card.Factory>().FromComponentInNewPrefab(_cardPrefab);
-            Container.BindFactory<BuildingType, BuildingImage, BuildingImage.Factory>().FromComponentInNewPrefab(_buildingImagePrefab);
+            Container.BindFactory<BuildingType, BuildingImage, BuildingImage.Factory>()
+                .FromComponentInNewPrefab(_buildingImagePrefab);
             Container.BindFactory<List<BuildingType>, Pack, Pack.Factory>();
         }
 
@@ -80,6 +82,7 @@ namespace Solar2048
             Container.BindInterfacesAndSelfTo<BuildingsPackProvider>().AsSingle();
             Container.Bind<UIManager>().AsSingle();
             Container.Bind<PackForScoreBuyer>().AsSingle();
+            Container.Bind<CardPlayer>().AsSingle();
         }
 
         private void BindGameObjects()

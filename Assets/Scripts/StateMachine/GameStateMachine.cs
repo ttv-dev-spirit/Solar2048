@@ -9,7 +9,7 @@ namespace Solar2048.StateMachine
     {
         private readonly Subject<State> _onStateChanged = new();
         private readonly InitializeGameState _initializeGameState;
-        private readonly RoundState _roundState;
+        private readonly GameRoundState _gameRoundState;
 
         private State? _currentState;
 
@@ -19,16 +19,17 @@ namespace Solar2048.StateMachine
         public GameStateMachine(CardSpawner cardSpawner, BuildingMover buildingMover,
             InputSystem inputSystem,
             IMessagePublisher messagePublisher,
-            UIManager uiManager)
+            UIManager uiManager,
+            CardPlayer cardPlayer)
         {
-            _roundState = new RoundState(cardSpawner);
-            _roundState.AddInputHandler(new BuildingsMoveHandler(buildingMover));
+            _gameRoundState = new GameRoundState(cardSpawner, cardPlayer, buildingMover);
+            _gameRoundState.AddInputHandler(new BuildingsMoveHandler(buildingMover));
             _initializeGameState = new InitializeGameState(this, messagePublisher, uiManager);
             inputSystem.OnHandleInput.Subscribe(HandleInput);
         }
 
         public void Initialize() => ChangeState(_initializeGameState);
-        public void Round() => ChangeState(_roundState);
+        public void Round() => ChangeState(_gameRoundState);
 
         private void ChangeState(State state)
         {
