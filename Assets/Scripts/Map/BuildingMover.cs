@@ -24,25 +24,25 @@ namespace Solar2048.Map
             IsActive = false;
         }
 
-        public void MoveBuildings(MoveDirections directions)
+        public void MoveBuildings(MoveDirection direction)
         {
             if (!IsActive)
             {
                 return;
             }
 
-            switch (directions)
+            switch (direction)
             {
-                case MoveDirections.Left:
+                case MoveDirection.Left:
                     MoveBuildingsLeft();
                     break;
-                case MoveDirections.Right:
+                case MoveDirection.Right:
                     MoveBuildingsRight();
                     break;
-                case MoveDirections.Up:
+                case MoveDirection.Up:
                     MoveBuildingsUp();
                     break;
-                case MoveDirections.Down:
+                case MoveDirection.Down:
                     MoveBuildingsDown();
                     break;
             }

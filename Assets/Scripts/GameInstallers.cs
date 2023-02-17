@@ -8,6 +8,7 @@ using Solar2048.Map;
 using Solar2048.Packs;
 using Solar2048.Score;
 using Solar2048.StateMachine;
+using Solar2048.StateMachine.States;
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
@@ -90,6 +91,7 @@ namespace Solar2048
             Container.Bind<UIManager>().AsSingle();
             Container.Bind<PackForScoreBuyer>().AsSingle();
             Container.Bind<CardPlayer>().AsSingle();
+            Container.Bind<DirectionRoller>().AsSingle();
         }
 
         private void BindGameObjects()

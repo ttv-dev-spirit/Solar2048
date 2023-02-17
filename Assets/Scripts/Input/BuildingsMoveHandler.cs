@@ -17,22 +17,22 @@ namespace Solar2048.Input
         {
             if (UnityEngine.Input.GetKeyDown(KeyCode.W) || UnityEngine.Input.GetKeyDown(KeyCode.UpArrow))
             {
-                _buildingMover.MoveBuildings(MoveDirections.Up);
+                _buildingMover.MoveBuildings(MoveDirection.Up);
             }
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.S) || UnityEngine.Input.GetKeyDown(KeyCode.DownArrow))
             {
-                _buildingMover.MoveBuildings(MoveDirections.Down);
+                _buildingMover.MoveBuildings(MoveDirection.Down);
             }
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.A) || UnityEngine.Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                _buildingMover.MoveBuildings(MoveDirections.Left);
+                _buildingMover.MoveBuildings(MoveDirection.Left);
             }
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.D) || UnityEngine.Input.GetKeyDown(KeyCode.RightArrow))
             {
-                _buildingMover.MoveBuildings(MoveDirections.Right);
+                _buildingMover.MoveBuildings(MoveDirection.Right);
             }
         }
     }

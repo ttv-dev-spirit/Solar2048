@@ -38,22 +38,22 @@ namespace Solar2048.Map
 
         private void MoveLeftClickHandler(Unit _)
         {
-            _buildingMover.MoveBuildings(MoveDirections.Left);
+            _buildingMover.MoveBuildings(MoveDirection.Left);
         }
 
         private void MoveRightClickHandler(Unit _)
         {
-            _buildingMover.MoveBuildings(MoveDirections.Right);
+            _buildingMover.MoveBuildings(MoveDirection.Right);
         }
 
         private void MoveUpClickHandler(Unit _)
         {
-            _buildingMover.MoveBuildings(MoveDirections.Up);
+            _buildingMover.MoveBuildings(MoveDirection.Up);
         }
 
         private void MoveDownClickHandler(Unit _)
         {
-            _buildingMover.MoveBuildings(MoveDirections.Down);
+            _buildingMover.MoveBuildings(MoveDirection.Down);
         }
     }
 }

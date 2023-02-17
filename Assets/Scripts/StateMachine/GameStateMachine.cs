@@ -25,10 +25,10 @@ namespace Solar2048.StateMachine
             InputSystem inputSystem,
             IMessagePublisher messagePublisher,
             UIManager uiManager,
-            CardPlayer cardPlayer)
+            CardPlayer cardPlayer,
+            DirectionRoller directionRoller)
         {
-            _gameRoundState = new GameRoundState(cardSpawner, cardPlayer, buildingMover);
-            _gameRoundState.AddInputHandler(new BuildingsMoveHandler(buildingMover));
+            _gameRoundState = new GameRoundState(cardSpawner, cardPlayer, buildingMover, directionRoller);
             _initializeGameState = new InitializeGameState(this, messagePublisher, uiManager);
             inputSystem.OnHandleInput.Subscribe(HandleInput);
         }

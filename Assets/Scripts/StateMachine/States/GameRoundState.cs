@@ -14,15 +14,17 @@ namespace Solar2048.StateMachine.States
         private readonly ReactiveProperty<int> _cardsPlayedCounter = new();
         private readonly CardSpawner _cardSpawner;
         private readonly State _playCardState;
-        private readonly State _moveState;
+        private readonly BotMoveState _moveState;
 
         public IReadOnlyReactiveProperty<State?> CurrentState => _currentState;
         public IReadOnlyReactiveProperty<int> CardsPlayedCounter => _cardsPlayedCounter;
+        public MoveDirection NextDirection => _moveState.NextDirection;
 
-        public GameRoundState(CardSpawner cardSpawner, CardPlayer cardPlayer, BuildingMover buildingMover)
+        public GameRoundState(CardSpawner cardSpawner, CardPlayer cardPlayer, BuildingMover buildingMover,
+            DirectionRoller directionRoller)
         {
             _cardSpawner = cardSpawner;
-            _moveState = new MoveState(buildingMover);
+            _moveState = new BotMoveState(buildingMover, directionRoller);
             _playCardState = new PlayCardState(cardPlayer);
             _moveState.OnStateExit.Subscribe(OnMoveStateExitHandler);
             _playCardState.OnStateExit.Subscribe(OnPlayCardStateExitHandler);
@@ -40,6 +42,8 @@ namespace Solar2048.StateMachine.States
         private void OnMoveStateExitHandler(State _)
         {
             _cardsPlayedCounter.Value = 0;
+            _moveState.RollNextDirection();
+
             EnterState(_playCardState);
         }
 
@@ -58,6 +62,8 @@ namespace Solar2048.StateMachine.States
         protected override void OnEnter()
         {
             _cardsPlayedCounter.Value = 0;
+            _moveState.RollNextDirection();
+
             EnterState(_playCardState);
         }
 

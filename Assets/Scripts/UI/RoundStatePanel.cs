@@ -22,7 +22,7 @@ namespace Solar2048.UI
         private ActivatableSkinController[] _cardPlayCounters = null!;
 
         [SerializeField]
-        private ActivatableSkinController _movePanel = null!;
+        private NextMovePanel _movePanel = null!;
 
         [Inject]
         private void Construct(GameStateMachine stateMachine)
@@ -59,6 +59,7 @@ namespace Solar2048.UI
         private void UpdatePanel()
         {
             Assert.IsNotNull(_gameRoundState);
+            _movePanel.SetDirection(_gameRoundState!.NextDirection);
             if (_gameRoundState!.CurrentState.Value is MoveState)
             {
                 ShowMoveState();
