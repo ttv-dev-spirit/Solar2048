@@ -18,6 +18,7 @@ namespace Solar2048
 {
     public sealed class GameInstallers : MonoInstaller
     {
+        
         [SerializeField]
         private BuildingFactorySettings _buildingFactorySettings = null!;
 
