@@ -16,6 +16,7 @@ using Zenject;
 
 namespace Solar2048
 {
+    
     public sealed class GameInstallers : MonoInstaller
     {
         

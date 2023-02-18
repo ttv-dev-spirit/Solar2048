@@ -9,7 +9,6 @@ namespace Solar2048.StateMachine.States
         public MoveDirection Roll()
         {
             int result = Random.Range(0, 4);
-            Debug.Log(result);
             return (MoveDirection)result;
         }
     }
