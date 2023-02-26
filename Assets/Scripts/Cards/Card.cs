@@ -28,7 +28,7 @@ namespace Solar2048.Cards
         public IObservable<Card> OnClicked => _onClicked;
 
         [Inject]
-        private void Construct(BuildingType buildingType, BuildingFactorySettings buildingFactorySettings)
+        private void Construct(BuildingType buildingType, IBuildingSettingsContainer buildingFactorySettings)
         {
             _buildingType = buildingType;
             BuildingSettings buildingSettings = buildingFactorySettings.GetBuildingSettingsFor(_buildingType);

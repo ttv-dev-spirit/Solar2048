@@ -9,9 +9,9 @@ namespace Solar2048.Map
     {
         private readonly GameMap _gameMap;
         private readonly Hand _hand;
-        private readonly CardPlayer _cardPlayer;
+        private readonly ICardPlayer _cardPlayer;
 
-        public BuildingPlacer(GameMap gameMap, Hand hand, CardPlayer cardPlayer)
+        public BuildingPlacer(GameMap gameMap, Hand hand, ICardPlayer cardPlayer)
         {
             _gameMap = gameMap;
             _hand = hand;
@@ -32,11 +32,6 @@ namespace Solar2048.Map
 
             Field field = _gameMap.GetField(position);
             if (field.Building != null)
-            {
-                return;
-            }
-
-            if (!_cardPlayer.IsActive)
             {
                 return;
             }

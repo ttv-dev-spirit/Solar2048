@@ -5,12 +5,13 @@ using UnityEngine;
 
 namespace Solar2048.Cards
 {
-    public sealed class Hand : MonoBehaviour
+    public sealed class Hand : MonoBehaviour, ICardContainer
     {
         private readonly IReactiveProperty<Card?> _selectedCard = new ReactiveProperty<Card?>();
         private readonly List<Card> _cards = new();
 
         public IReadOnlyReactiveProperty<Card?> SelectedCard => _selectedCard;
+        public IReadOnlyList<Card> Cards => _cards;
 
         public void AddCard(Card card)
         {
@@ -27,7 +28,7 @@ namespace Solar2048.Cards
             }
 
             _cards.Remove(card);
-            Destroy(card.gameObject);
+            DestroyImmediate(card.gameObject);
         }
 
         public void UnselectCard()
