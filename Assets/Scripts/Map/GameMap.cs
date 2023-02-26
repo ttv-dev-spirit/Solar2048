@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using Solar2048.StateMachine.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -17,15 +18,21 @@ namespace Solar2048.Map
         public IObservable<Vector2Int> OnFieldClicked => _onFieldClicked;
         public IObservable<Unit> OnTriggerBuildingsEffects => _onTriggerBuildingEffects;
 
-        public void RegisterSquare(FieldBehaviour fieldBehaviour)
+        public GameMap(IMessageReceiver messageReceiver)
+        {
+            CreateFields();
+            messageReceiver.Receive<NewGameMessage>().Subscribe(ResetMap);
+        }
+
+        public void RegisterFieldBehaviour(FieldBehaviour fieldBehaviour)
         {
             Vector3 position = fieldBehaviour.transform.position;
             var x = (int)position.x;
             int y = -(int)position.y;
-            Assert.IsTrue(_map[x, y] == null);
-            var field = new Field(fieldBehaviour, new Vector2Int(x, y));
+            Field field = GetField(x, y);
+            fieldBehaviour.BindField(field);
             _map[x, y] = field;
-            field.OnClicked.Subscribe(FieldClickedHandler);
+            fieldBehaviour.OnClicked.Subscribe(FieldClickedHandler);
         }
 
         public bool CanAddBuildingTo(Vector2Int position)
@@ -47,6 +54,28 @@ namespace Solar2048.Map
         public Field GetField(Vector2Int position) => _map[position.x, position.y];
         public Field GetField(int x, int y) => _map[x, y];
 
+        private void CreateFields()
+        {
+            for (int x = 0; x < FIELD_SIZE; x++)
+            {
+                for (int y = 0; y < FIELD_SIZE; y++)
+                {
+                    _map[x, y] = new Field(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        private void ResetMap(NewGameMessage _)
+        {
+            for (int y = 0; y < FIELD_SIZE; y++)
+            {
+                for (int x = 0; x < FIELD_SIZE; x++)
+                {
+                    _map[x, y].Reset();
+                }
+            }
+        }
+
         private void ResetStats()
         {
             for (int y = 0; y < FIELD_SIZE; y++)
@@ -58,7 +87,8 @@ namespace Solar2048.Map
             }
         }
 
-        private void FieldClickedHandler(Field field) => _onFieldClicked.OnNext(field.Position);
+        private void FieldClickedHandler(FieldBehaviour fieldBehaviour) =>
+            _onFieldClicked.OnNext(fieldBehaviour.Field.Position);
 
         private bool IsInsideBounds(Vector2Int position) =>
             position.x is >= 0 and < FIELD_SIZE && position.y is >= 0 and < FIELD_SIZE;

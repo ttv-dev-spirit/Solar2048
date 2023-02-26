@@ -10,9 +10,7 @@ namespace Solar2048.Map
 {
     public sealed class FieldBehaviour : MonoBehaviour, IPointerClickHandler
     {
-        private readonly Subject<Unit> _onClicked = new();
-
-        private GameFieldBehaviour _gameFieldBehaviour = null!;
+        private readonly Subject<FieldBehaviour> _onClicked = new();
 
         [SerializeField]
         private StatDrawer _energy = null!;
@@ -23,22 +21,23 @@ namespace Solar2048.Map
         [SerializeField]
         private StatDrawer _food = null!;
 
-        public IObservable<Unit> OnClicked => _onClicked;
+        public Field Field { get; private set; } = null!;
+        public IObservable<FieldBehaviour> OnClicked => _onClicked;
 
         [Inject]
-        private void Construct(GameMap gameMap, GameFieldBehaviour gameFieldBehaviour)
+        private void Construct(GameMap gameMap)
         {
-            gameMap.RegisterSquare(this);
-            _gameFieldBehaviour = gameFieldBehaviour;
+            gameMap.RegisterFieldBehaviour(this);
         }
 
-        public void SetFieldStats(ref FieldStats fieldStats)
+        public void BindField(Field field)
         {
-            _energy.Subscribe(fieldStats.Energy);
-            _water.Subscribe(fieldStats.Water);
-            _food.Subscribe(fieldStats.Food);
+            Field = field;
+            _energy.Subscribe(field.Energy);
+            _water.Subscribe(field.Water);
+            _food.Subscribe(field.Food);
         }
 
-        public void OnPointerClick(PointerEventData eventData) => _onClicked.OnNext(Unit.Default);
+        public void OnPointerClick(PointerEventData eventData) => _onClicked.OnNext(this);
     }
 }

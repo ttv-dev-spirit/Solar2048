@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using Solar2048.Buildings.WorkConditions;
 using Solar2048.Map;
 using UniRx;
 
@@ -21,36 +22,72 @@ namespace Solar2048.Buildings.Effect
         {
             var buildings = _buildingsManager.Buildings;
             var triggeredBuilding = new List<Building>();
-            var anythingTriggered = true;
-            while (buildings.Count != triggeredBuilding.Count && anythingTriggered)
+            while (buildings.Count != triggeredBuilding.Count
+                   && TriggerBuildings(buildings, triggeredBuilding))
             {
-                anythingTriggered = false;
-                foreach (Building building in buildings)
+            }
+
+            foreach (Building building in buildings)
+            {
+                building.SetConditionsMet(triggeredBuilding.Contains(building));
+            }
+        }
+
+        private bool TriggerBuildings(IReadOnlyList<Building> buildings, List<Building> triggeredBuilding)
+        {
+            var anythingTriggered = false;
+            foreach (Building building in buildings)
+            {
+                if (triggeredBuilding.Contains(building))
                 {
-                    if (triggeredBuilding.Contains(building))
-                    {
-                        continue;
-                    }
-
-                    if (!TryTriggerEffects(building))
-                    {
-                        continue;
-                    }
-
-                    anythingTriggered = true;
-                    triggeredBuilding.Add(building);
+                    continue;
                 }
+
+                if (!TryTriggerEffects(building))
+                {
+                    continue;
+                }
+
+                anythingTriggered = true;
+                triggeredBuilding.Add(building);
+            }
+
+            return anythingTriggered;
+        }
+
+        private bool CheckConditionsMet(Building building)
+        {
+            var conditions = building.WorkConditions;
+
+            foreach (BuildingWorkCondition buildingWorkCondition in conditions)
+            {
+                if (!buildingWorkCondition.IsConditionMet(_gameMap, building))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void ExecuteEffects(Building building)
+        {
+            var effects = building.BuildingEffects;
+
+            foreach (BuildingEffect buildingEffect in effects)
+            {
+                buildingEffect.ExecuteEffect(_gameMap, building);
             }
         }
 
         private bool TryTriggerEffects(Building building)
         {
-            if (!building.CheckConditionsMet())
+            if (!CheckConditionsMet(building))
             {
                 return false;
             }
 
-            building.ExecuteEffects();
+            ExecuteEffects(building);
             return true;
         }
     }
