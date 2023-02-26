@@ -15,7 +15,6 @@ namespace Solar2048.Buildings
         private readonly Subject<Unit> _onPositionChanged = new();
         private readonly Subject<Building> _onDestroy = new();
         private readonly BuildingSettings _buildingSettings;
-        private readonly GameMap _gameMap;
         private readonly ReactiveProperty<bool> _areConditionsMet = new();
 
         private readonly ReactiveProperty<int> _level = new(1);
@@ -30,10 +29,9 @@ namespace Solar2048.Buildings
         public IEnumerable<BuildingEffect> BuildingEffects => _buildingSettings.BuildingEffects;
         public IReadOnlyReactiveProperty<bool> AreConditionsMet => _areConditionsMet;
 
-        public Building(BuildingSettings buildingSettings, GameMap gameMap)
+        public Building(BuildingSettings buildingSettings)
         {
             _buildingSettings = buildingSettings;
-            _gameMap = gameMap;
         }
 
         public void SetPosition(Vector2Int position)
