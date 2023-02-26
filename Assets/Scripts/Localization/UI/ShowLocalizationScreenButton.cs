@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using Solar2048.UI;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,9 +16,10 @@ namespace Solar2048.Localization.UI
         private Button _button = null!;
 
         [Inject]
-        private void Construct(UIManager uiManager)
+        private void Construct(UIManager uiManager, LocalizationController localizationController)
         {
             _uiManager = uiManager;
+            localizationController.IsInitialized.Subscribe(UpdateButtonStatus);
         }
 
         private void Awake()
@@ -28,6 +30,11 @@ namespace Solar2048.Localization.UI
         private void OnClickedHandler()
         {
             _uiManager.GetScreen<ILocalizationScreen>().Show();
+        }
+
+        private void UpdateButtonStatus(bool isActive)
+        {
+            _button.interactable = isActive;
         }
     }
 }
