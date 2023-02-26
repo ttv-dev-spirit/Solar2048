@@ -92,7 +92,7 @@ namespace Solar2048
             Container.BindInterfacesAndSelfTo<BuildingsPackProvider>().AsSingle();
             Container.Bind<UIManager>().AsSingle();
             Container.Bind<PackForScoreBuyer>().AsSingle();
-            Container.Bind<CardPlayer>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CardPlayer>().AsSingle();
             Container.Bind<DirectionRoller>().AsSingle();
         }
 
@@ -105,7 +105,7 @@ namespace Solar2048
 
         private void BindSettings()
         {
-            Container.Bind<BuildingFactorySettings>().FromInstance(_buildingFactorySettings);
+            Container.BindInterfacesAndSelfTo<BuildingFactorySettings>().FromInstance(_buildingFactorySettings);
             Container.Bind<ScoreSettings>().FromInstance(_scoreSettings);
             Container.Bind<PackGeneratorSettings>().FromInstance(_packGeneratorSettings);
             Container.Bind<UIManagerSettings>().FromInstance(_uiManagerSettings);

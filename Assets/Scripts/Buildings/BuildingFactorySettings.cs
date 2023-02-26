@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Solar2048.Buildings
 {
     [CreateAssetMenu(menuName = "Configs/Building Factory Settings", fileName = "building_factory_settings", order = 0)]
-    public sealed class BuildingFactorySettings : ScriptableObject
+    public sealed class BuildingFactorySettings : ScriptableObject, IBuildingSettingsContainer
     {
         [SerializeField]
         private BuildingSettings[] _buildingSettings = null!;

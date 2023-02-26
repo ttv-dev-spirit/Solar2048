@@ -6,7 +6,7 @@ using UniRx;
 
 namespace Solar2048.Cards
 {
-    public sealed class CardPlayer : IActivatable
+    public sealed class CardPlayer : IActivatable, ICardPlayer
     {
         private readonly Subject<Unit> _onCardPlayed = new();
         private readonly Hand _hand;
@@ -26,6 +26,11 @@ namespace Solar2048.Cards
 
         public void PlayCardFromHandTo(Card card, Field field)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+            
             _hand.RemoveCard(card);
             _buildingsManager.AddNewBuilding(card.BuildingType, field);
             _gameMap.RecalculateStats();
