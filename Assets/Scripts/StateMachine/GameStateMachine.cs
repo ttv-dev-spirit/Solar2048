@@ -1,40 +1,32 @@
 #nullable enable
 using System;
-using Solar2048.Buildings;
-using Solar2048.Cards;
-using Solar2048.Input;
-using Solar2048.Map;
 using Solar2048.StateMachine.States;
-using Solar2048.UI;
 using UniRx;
 
 namespace Solar2048.StateMachine
 {
     public sealed class GameStateMachine
     {
-        private readonly Subject<State> _onStateChanged = new();
         private readonly InitializeGameState _initializeGameState;
         private readonly GameRoundState _gameRoundState;
+        private readonly Subject<State> _onStateChanged = new();
 
         private State? _currentState;
 
         public IObservable<State> OnStateChanged => _onStateChanged;
         public State? CurrentState => _currentState;
 
-        public GameStateMachine(CardSpawner cardSpawner, BuildingMover buildingMover,
+        public GameStateMachine(
             InputSystem inputSystem,
-            IMessagePublisher messagePublisher,
-            UIManager uiManager,
-            CardPlayer cardPlayer,
-            DirectionRoller directionRoller)
+            GameStateFactory gameStateFactory)
         {
-            _gameRoundState = new GameRoundState(cardSpawner, cardPlayer, buildingMover, directionRoller);
-            _initializeGameState = new InitializeGameState(this, messagePublisher, uiManager);
+            _initializeGameState = gameStateFactory.InitializeGameState;
+            _gameRoundState = gameStateFactory.GameRoundState;
             inputSystem.OnHandleInput.Subscribe(HandleInput);
+            _initializeGameState.OnStateExit.Subscribe(OnInitializeFinished);
         }
 
         public void Initialize() => ChangeState(_initializeGameState);
-        public void Round() => ChangeState(_gameRoundState);
 
         private void ChangeState(State state)
         {
@@ -47,6 +39,13 @@ namespace Solar2048.StateMachine
         private void HandleInput(Unit _)
         {
             _currentState?.HandleInput();
+        }
+
+        private void OnInitializeFinished(State _)
+        {
+            // HACK (Stas): This is stupid, used to prevent infinite cycle InitializeGameState.Exit => OnInitializedFinished() => ChangeState() => _currentState?.Exit ...I need a better way for state to exit once.
+            _currentState = null;
+            ChangeState(_gameRoundState);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿#nullable enable
+using System;
 using Solar2048.Buildings;
 using Solar2048.Cards;
 using Solar2048.Map;
 using UniRx;
+using Zenject;
 
 namespace Solar2048.StateMachine.States
 {
@@ -15,19 +17,17 @@ namespace Solar2048.StateMachine.States
         private readonly CardSpawner _cardSpawner;
         private readonly State _playCardState;
         private readonly BotMoveState _moveState;
+        private readonly CompositeDisposable _subs = new();
 
         public IReadOnlyReactiveProperty<State?> CurrentState => _currentState;
         public IReadOnlyReactiveProperty<int> CardsPlayedCounter => _cardsPlayedCounter;
         public MoveDirection NextDirection => _moveState.NextDirection;
 
-        public GameRoundState(CardSpawner cardSpawner, CardPlayer cardPlayer, BuildingMover buildingMover,
-            DirectionRoller directionRoller)
+        public GameRoundState(CardSpawner cardSpawner, TurnStateFactory turnStateFactory)
         {
             _cardSpawner = cardSpawner;
-            _moveState = new BotMoveState(buildingMover, directionRoller);
-            _playCardState = new PlayCardState(cardPlayer);
-            _moveState.OnStateExit.Subscribe(OnMoveStateExitHandler);
-            _playCardState.OnStateExit.Subscribe(OnPlayCardStateExitHandler);
+            _moveState = turnStateFactory.BotMoveState;
+            _playCardState = turnStateFactory.PlayCardState;
             Test();
         }
 
@@ -61,6 +61,8 @@ namespace Solar2048.StateMachine.States
 
         protected override void OnEnter()
         {
+            _moveState.OnStateExit.Subscribe(OnMoveStateExitHandler).AddTo(_subs);
+            _playCardState.OnStateExit.Subscribe(OnPlayCardStateExitHandler).AddTo(_subs);
             _cardsPlayedCounter.Value = 0;
             _moveState.RollNextDirection();
 
@@ -69,12 +71,17 @@ namespace Solar2048.StateMachine.States
 
         protected override void OnExit()
         {
+            _subs.Clear();
         }
 
         private void EnterState(State state)
         {
             _currentState.Value = state;
             state.Enter();
+        }
+
+        public class Factory : PlaceholderFactory<GameRoundState>
+        {
         }
     }
 }
