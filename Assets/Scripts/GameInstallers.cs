@@ -16,10 +16,8 @@ using Zenject;
 
 namespace Solar2048
 {
-    
     public sealed class GameInstallers : MonoInstaller
     {
-        
         [SerializeField]
         private BuildingFactorySettings _buildingFactorySettings = null!;
 
@@ -62,6 +60,8 @@ namespace Solar2048
             BindGameObjects();
             BindSettings();
             BindFactories();
+            BindGameStates();
+            BindTurnStates();
         }
 
         private void BindFactories()
@@ -110,6 +110,26 @@ namespace Solar2048
             Container.Bind<PackGeneratorSettings>().FromInstance(_packGeneratorSettings);
             Container.Bind<UIManagerSettings>().FromInstance(_uiManagerSettings);
             Container.Bind<PackBuyingSettings>().FromInstance(_packBuyingSettings);
+        }
+
+        private void BindGameStates()
+        {
+            Container.Bind<GameStateFactory>().AsSingle();
+
+            Container.BindFactory<InitializeGameState, InitializeGameState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<GameRoundState, GameRoundState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+        }
+
+        private void BindTurnStates()
+        {
+            Container.Bind<TurnStateFactory>().AsSingle();
+
+            Container.BindFactory<BotMoveState, BotMoveState.Factory>()
+                .WhenInjectedInto<TurnStateFactory>();
+            Container.BindFactory<PlayCardState, PlayCardState.Factory>()
+                .WhenInjectedInto<TurnStateFactory>();
         }
     }
 }

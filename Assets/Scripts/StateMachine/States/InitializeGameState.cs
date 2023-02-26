@@ -1,22 +1,20 @@
 ﻿#nullable enable
-using Solar2048.Buildings;
 using Solar2048.StateMachine.Messages;
 using Solar2048.UI;
 using UniRx;
+using Zenject;
 
 namespace Solar2048.StateMachine.States
 {
     public sealed class InitializeGameState : State
     {
         private readonly IMessagePublisher _messagePublisher;
-        private readonly GameStateMachine _gameStateMachine;
         private readonly UIManager _uiManager;
 
-        public InitializeGameState(GameStateMachine gameStateMachine, IMessagePublisher messagePublisher,
+        public InitializeGameState(IMessagePublisher messagePublisher,
             UIManager uiManager)
         {
             _messagePublisher = messagePublisher;
-            _gameStateMachine = gameStateMachine;
             _uiManager = uiManager;
         }
 
@@ -24,10 +22,14 @@ namespace Solar2048.StateMachine.States
         {
             _uiManager.HideAll();
             _messagePublisher.Publish(new NewGameMessage());
-            _gameStateMachine.Round();
+            Exit();
         }
 
         protected override void OnExit()
+        {
+        }
+
+        public class Factory : PlaceholderFactory<InitializeGameState>
         {
         }
     }

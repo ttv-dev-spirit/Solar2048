@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Solar2048.Map;
+using Zenject;
 
 namespace Solar2048.StateMachine.States
 {
@@ -7,7 +8,7 @@ namespace Solar2048.StateMachine.States
     {
         private readonly BuildingMover _buildingMover;
         private readonly DirectionRoller _directionRoller;
-        
+
         public MoveDirection NextDirection { get; private set; }
 
         public BotMoveState(BuildingMover buildingMover, DirectionRoller directionRoller)
@@ -31,6 +32,10 @@ namespace Solar2048.StateMachine.States
         protected override void OnExit()
         {
             _buildingMover.Deactivate();
+        }
+
+        public class Factory : PlaceholderFactory<BotMoveState>
+        {
         }
     }
 }

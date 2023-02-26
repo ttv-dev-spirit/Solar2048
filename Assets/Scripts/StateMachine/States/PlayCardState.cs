@@ -2,6 +2,7 @@
 using System;
 using Solar2048.Cards;
 using UniRx;
+using Zenject;
 
 namespace Solar2048.StateMachine.States
 {
@@ -30,6 +31,10 @@ namespace Solar2048.StateMachine.States
         private void CardPlayedHandler(Unit _)
         {
             Exit();
+        }
+
+        public class Factory : PlaceholderFactory<PlayCardState>
+        {
         }
     }
 }
