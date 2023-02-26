@@ -2,7 +2,6 @@
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Localization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -33,7 +32,7 @@ namespace Solar2048.Localization.UI
 
         protected override void OnShow()
         {
-            var availableLocales = _localizationController.AvailableLocales;
+            var availableLocales = _localizationController.AvailableLanguages;
             var buttons = _buttonsList.GetElements<LocalizationButton>(availableLocales.Count);
             for (var i = 0; i < availableLocales.Count; i++)
             {
@@ -48,7 +47,7 @@ namespace Solar2048.Localization.UI
             _subs.Clear();
         }
 
-        private void OnButtonClicked(Locale locale) => _localizationController.SelectLocale(locale);
+        private void OnButtonClicked(Language language) => _localizationController.SelectLanguage(language);
         private void OnCloseClickedHandler() => Hide();
     }
 }

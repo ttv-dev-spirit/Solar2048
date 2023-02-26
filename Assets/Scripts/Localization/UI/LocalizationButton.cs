@@ -2,7 +2,6 @@
 using System;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
@@ -10,29 +9,28 @@ namespace Solar2048.Localization.UI
 {
     public sealed class LocalizationButton : MonoBehaviour
     {
-        private Subject<Locale> _onClicked = new Subject<Locale>();
-        private Locale _locale = null!;
+        private Subject<Language> _onClicked = new();
+        private Language _language = null!;
 
         [SerializeField]
-        private Button _button;
+        private Button _button = null!;
 
         [SerializeField]
         private LocalizeStringEvent _localizeString = null!;
 
-        public IObservable<Locale> OnClicked => _onClicked;
+        public IObservable<Language> OnClicked => _onClicked;
 
         private void Awake()
         {
             _button.onClick.AddListener(ButtonClickedHandler);
         }
 
-        public void Show(Locale locale)
+        public void Show(Language language)
         {
-            _locale = locale;
-            Debug.Log(locale.LocaleName);
-            _localizeString.SetEntry(locale.LocaleName);
+            _language = language;
+            _localizeString.SetEntry(_language.Name);
         }
 
-        private void ButtonClickedHandler() => _onClicked.OnNext(_locale);
+        private void ButtonClickedHandler() => _onClicked.OnNext(_language);
     }
 }
