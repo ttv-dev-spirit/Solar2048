@@ -23,6 +23,18 @@ MonoBehaviour:
     m_Key: button.select_pack
     m_Metadata:
       m_Items: []
+  - m_Id: 3225086350942208
+    m_Key: ui.select_language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3230806517571584
+    m_Key: Russian (ru)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3230840994750464
+    m_Key: English (en)
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

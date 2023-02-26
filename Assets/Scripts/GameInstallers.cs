@@ -4,6 +4,7 @@ using Solar2048.Buildings;
 using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.UI;
 using Solar2048.Cards;
+using Solar2048.Localization;
 using Solar2048.Map;
 using Solar2048.Packs;
 using Solar2048.Score;
@@ -94,6 +95,7 @@ namespace Solar2048
             Container.Bind<PackForScoreBuyer>().AsSingle();
             Container.BindInterfacesAndSelfTo<CardPlayer>().AsSingle();
             Container.Bind<DirectionRoller>().AsSingle();
+            Container.Bind<LocalizationController>().AsSingle();
         }
 
         private void BindGameObjects()
