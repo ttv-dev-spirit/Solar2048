@@ -9,7 +9,7 @@ namespace Solar2048.StateMachine.States
     public sealed class PlayCardState : State
     {
         private readonly CardPlayer _cardPlayer;
-        private IDisposable _sub;
+        private IDisposable _sub = null!;
 
         public PlayCardState(CardPlayer cardPlayer)
         {

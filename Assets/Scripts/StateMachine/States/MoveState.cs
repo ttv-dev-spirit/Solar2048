@@ -9,8 +9,7 @@ namespace Solar2048.StateMachine.States
     public sealed class MoveState : State
     {
         private readonly BuildingMover _buildingMover;
-        private IDisposable _sub;
-
+        private IDisposable _sub = null!;
 
         public MoveState(BuildingMover buildingMover)
         {

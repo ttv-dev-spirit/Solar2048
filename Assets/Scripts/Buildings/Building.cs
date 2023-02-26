@@ -1,6 +1,6 @@
 ﻿#nullable enable
+using System;
 using Solar2048.Buildings.Effect;
-using Solar2048.Buildings.UI;
 using Solar2048.Buildings.WorkConditions;
 using Solar2048.Map;
 using UniRx;
@@ -10,7 +10,8 @@ namespace Solar2048.Buildings
 {
     public sealed class Building
     {
-        private readonly BuildingBehaviour _behaviour;
+        private readonly Subject<Unit> _onPositionChanged = new();
+        private readonly Subject<Building> _onDestroy = new();
         private readonly BuildingSettings _buildingSettings;
         private readonly GameMap _gameMap;
 
@@ -22,19 +23,19 @@ namespace Solar2048.Buildings
 
         public IReadOnlyReactiveProperty<int> Level => _level;
         public IReadOnlyReactiveProperty<bool> AreConditionsMet => _areConditionsMet;
+        public IObservable<Unit> OnPositionChanged => _onPositionChanged;
+        public IObservable<Building> OnDestroy => _onDestroy;
 
-        public Building(BuildingSettings buildingSettings, BuildingBehaviour behaviour, GameMap gameMap)
+        public Building(BuildingSettings buildingSettings, GameMap gameMap)
         {
             _buildingSettings = buildingSettings;
-            _behaviour = behaviour;
             _gameMap = gameMap;
-            behaviour.Sub(Level, AreConditionsMet);
         }
 
         public void SetPosition(Vector2Int position)
         {
             Position = position;
-            _behaviour.SetPosition(position);
+            _onPositionChanged.OnNext(Unit.Default);
         }
 
         public void UpLevel() => _level.Value++;
@@ -46,7 +47,7 @@ namespace Solar2048.Buildings
 
         public void Destroy()
         {
-            Object.Destroy(_behaviour.gameObject);
+            _onDestroy.OnNext(this);
         }
 
         public bool CheckConditionsMet()

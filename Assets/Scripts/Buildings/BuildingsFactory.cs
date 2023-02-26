@@ -1,11 +1,10 @@
 ﻿#nullable enable
 using Solar2048.Buildings.UI;
 using Solar2048.Map;
-using UnityEngine;
-using Zenject;
 
 namespace Solar2048.Buildings
 {
+    // TODO (Stas): Rework to DI
     public sealed class BuildingsFactory
     {
         private readonly IBuildingSettingsContainer _settings;
@@ -25,7 +24,9 @@ namespace Solar2048.Buildings
             BuildingSettings buildingSettings = _settings.GetBuildingSettingsFor(buildingType);
             BuildingBehaviour buildingBehaviour = _buildingBehaviourFactory.Create();
             buildingBehaviour.SetImage(buildingSettings.Image);
-            return new Building(buildingSettings, buildingBehaviour, _gameMap);
+            var building = new Building(buildingSettings, _gameMap);
+            buildingBehaviour.BindBuilding(building);
+            return building;
         }
     }
 }
