@@ -120,9 +120,11 @@ namespace Solar2048
         {
             Container.Bind<GameStateFactory>().AsSingle();
 
-            Container.BindFactory<InitializeGameState, InitializeGameState.Factory>()
+            Container.BindFactory<NewGameState, NewGameState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
             Container.BindFactory<GameRoundState, GameRoundState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<DisposeResourcesState, DisposeResourcesState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
         }
 

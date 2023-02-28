@@ -1,6 +1,4 @@
 ﻿#nullable enable
-using System;
-using Solar2048.AssetManagement;
 using Solar2048.StateMachine;
 using UnityEngine;
 using Zenject;
@@ -10,12 +8,10 @@ namespace Solar2048
     public sealed class GameStarter : MonoBehaviour
     {
         private GameStateMachine _gameStateMachine = null!;
-        private IAssetProvider _assetProvider = null!;
 
         [Inject]
-        private void Construct(GameStateMachine gameStateMachine, IAssetProvider assetProvider)
+        private void Construct(GameStateMachine gameStateMachine)
         {
-            _assetProvider = assetProvider;
             _gameStateMachine = gameStateMachine;
         }
 
@@ -26,7 +22,7 @@ namespace Solar2048
 
         private void OnDestroy()
         {
-            _assetProvider.CleanUp();
+            _gameStateMachine.Dispose();
         }
     }
 }
