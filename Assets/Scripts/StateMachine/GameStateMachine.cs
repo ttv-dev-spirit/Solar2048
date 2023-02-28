@@ -1,10 +1,12 @@
 #nullable enable
 using System;
+using JetBrains.Annotations;
 using Solar2048.StateMachine.States;
 using UniRx;
 
 namespace Solar2048.StateMachine
 {
+    [UsedImplicitly]
     public sealed class GameStateMachine
     {
         private readonly InitializeGameState _initializeGameState;
@@ -14,7 +16,6 @@ namespace Solar2048.StateMachine
         private State? _currentState;
 
         public IObservable<State> OnStateChanged => _onStateChanged;
-        public State? CurrentState => _currentState;
 
         public GameStateMachine(
             InputSystem inputSystem,
