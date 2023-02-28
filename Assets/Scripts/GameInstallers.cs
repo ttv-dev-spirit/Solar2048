@@ -1,5 +1,6 @@
 #nullable enable
 using System.Collections.Generic;
+using Solar2048.AssetManagement;
 using Solar2048.Buildings;
 using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.UI;
@@ -96,6 +97,7 @@ namespace Solar2048
             Container.BindInterfacesAndSelfTo<CardPlayer>().AsSingle();
             Container.Bind<DirectionRoller>().AsSingle();
             Container.Bind<LocalizationController>().AsSingle();
+            Container.BindInterfacesTo<AssetProvider>().AsSingle();
         }
 
         private void BindGameObjects()
