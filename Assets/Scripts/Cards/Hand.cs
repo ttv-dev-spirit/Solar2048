@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Solar2048.Cards
 {
-    public sealed class Hand : MonoBehaviour, ICardContainer
+    public sealed class Hand : MonoBehaviour, ICardContainer, IResetable
     {
         private readonly IReactiveProperty<Card?> _selectedCard = new ReactiveProperty<Card?>();
         private readonly List<Card> _cards = new();
@@ -31,6 +31,12 @@ namespace Solar2048.Cards
             DestroyImmediate(card.gameObject);
         }
 
+        public void Reset()
+        {
+            RemoveAllCards();
+            _selectedCard.Value = null;
+        }
+
         public void UnselectCard()
         {
             if (_selectedCard.Value == null)
@@ -54,5 +60,19 @@ namespace Solar2048.Cards
             _selectedCard.Value = clickedCard;
             _selectedCard.Value.Select();
         }
+
+        private void RemoveAllCards()
+        {
+            Card[] cardsToRemove = _cards.ToArray();
+            for (var i = 0; i < cardsToRemove.Length; i++)
+            {
+                RemoveCard(cardsToRemove[i]);
+            }
+        }
+    }
+
+    public interface IResetable
+    {
+        void Reset();
     }
 }

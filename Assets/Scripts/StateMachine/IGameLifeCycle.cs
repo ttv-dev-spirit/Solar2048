@@ -7,5 +7,8 @@ namespace Solar2048.StateMachine
         void Initialize();
         void ExitGame();
         void NewGame();
+        void MainMenu();
+        void Pause();
+        void Resume();
     }
 }
