@@ -7,10 +7,14 @@ using UniRx;
 namespace Solar2048.StateMachine
 {
     [UsedImplicitly]
-    public sealed class GameStateMachine
+    public sealed class GameStateMachine : IDisposable
     {
-        private readonly InitializeGameState _initializeGameState;
+        private readonly CompositeDisposable _subs = new();
+
+        private readonly NewGameState _newGameState;
         private readonly GameRoundState _gameRoundState;
+        private readonly DisposeResourcesState _disposeResourcesState;
+        private readonly InitializeGameState _initializeGameState;
         private readonly Subject<State> _onStateChanged = new();
 
         private State? _currentState;
@@ -21,13 +25,23 @@ namespace Solar2048.StateMachine
             InputSystem inputSystem,
             GameStateFactory gameStateFactory)
         {
-            _initializeGameState = gameStateFactory.InitializeGameState;
+            _newGameState = gameStateFactory.NewGameState;
             _gameRoundState = gameStateFactory.GameRoundState;
-            inputSystem.OnHandleInput.Subscribe(HandleInput);
-            _initializeGameState.OnStateExit.Subscribe(OnInitializeFinished);
+            _disposeResourcesState = gameStateFactory.DisposeResourcesState;
+            // _initializeGameState = gameStateFactory.InitializeGameState;
+            inputSystem.OnHandleInput.Subscribe(HandleInput).AddTo(_subs);
+            _newGameState.OnStateFinished.Subscribe(OnInitializeFinished).AddTo(_subs);
+            _disposeResourcesState.OnStateFinished.Subscribe(OnResourcesDisposed).AddTo(_subs);
         }
 
-        public void Initialize() => ChangeState(_initializeGameState);
+        public void Initialize() => ChangeState(_newGameState);
+
+        public void Dispose()
+        {
+            _currentState?.Exit();
+            _currentState = _disposeResourcesState;
+            _currentState.Enter();
+        }
 
         private void ChangeState(State state)
         {
@@ -37,16 +51,13 @@ namespace Solar2048.StateMachine
             _onStateChanged.OnNext(_currentState);
         }
 
-        private void HandleInput(Unit _)
-        {
-            _currentState?.HandleInput();
-        }
+        private void HandleInput(Unit _) => _currentState?.HandleInput();
+        private void OnInitializeFinished(State _) => ChangeState(_gameRoundState);
 
-        private void OnInitializeFinished(State _)
+        private void OnResourcesDisposed(State _)
         {
-            // HACK (Stas): This is stupid, used to prevent infinite cycle InitializeGameState.Exit => OnInitializedFinished() => ChangeState() => _currentState?.Exit ...I need a better way for state to exit once.
-            _currentState = null;
-            ChangeState(_gameRoundState);
+            _subs.Clear();
+            _onStateChanged.Dispose();
         }
     }
 }

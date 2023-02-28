@@ -10,10 +10,12 @@ namespace Solar2048.StateMachine.States
     {
         private readonly Subject<State> _onStateEnter = new();
         private readonly Subject<State> _onStateExit = new();
+        private readonly Subject<State> _onStateFinished = new();
         private readonly List<InputHandler> _inputHandlers = new();
 
         public IObservable<State> OnStateEnter => _onStateEnter;
         public IObservable<State> OnStateExit => _onStateExit;
+        public IObservable<State> OnStateFinished => _onStateFinished;
 
         public void Enter()
         {
@@ -25,6 +27,11 @@ namespace Solar2048.StateMachine.States
         {
             OnExit();
             _onStateExit.OnNext(this);
+        }
+
+        public void Finish()
+        {
+            _onStateFinished.OnNext(this);
         }
 
         public void AddInputHandler(InputHandler inputHandler)

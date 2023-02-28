@@ -5,13 +5,15 @@ namespace Solar2048.StateMachine
 {
     public sealed class GameStateFactory
     {
-        public readonly InitializeGameState InitializeGameState;
+        public readonly NewGameState NewGameState;
         public readonly GameRoundState GameRoundState;
+        public readonly DisposeResourcesState DisposeResourcesState;
 
-        public GameStateFactory(InitializeGameState.Factory initializeGameState, GameRoundState.Factory gameRoundState)
+        public GameStateFactory(NewGameState.Factory initializeGameState, GameRoundState.Factory gameRoundState, DisposeResourcesState.Factory disposeResources)
         {
-            InitializeGameState = initializeGameState.Create();
+            NewGameState = initializeGameState.Create();
             GameRoundState = gameRoundState.Create();
+            DisposeResourcesState = disposeResources.Create();
         }
     }
 }
