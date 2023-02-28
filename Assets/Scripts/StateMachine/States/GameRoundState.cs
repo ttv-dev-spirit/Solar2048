@@ -1,6 +1,4 @@
 ﻿#nullable enable
-using System;
-using Solar2048.Buildings;
 using Solar2048.Cards;
 using Solar2048.Map;
 using UniRx;
@@ -28,15 +26,6 @@ namespace Solar2048.StateMachine.States
             _cardSpawner = cardSpawner;
             _moveState = turnStateFactory.BotMoveState;
             _playCardState = turnStateFactory.PlayCardState;
-            Test();
-        }
-
-        private void Test()
-        {
-            _cardSpawner.AddCardToHand(BuildingType.WindTurbine);
-            _cardSpawner.AddCardToHand(BuildingType.WindTurbine);
-            _cardSpawner.AddCardToHand(BuildingType.WindTurbine);
-            _cardSpawner.AddCardToHand(BuildingType.WindTurbine);
         }
 
         private void OnMoveStateExitHandler(State _)

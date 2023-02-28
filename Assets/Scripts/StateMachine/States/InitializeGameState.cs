@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Solar2048.StateMachine.Cheats;
 using Solar2048.UI;
 using Zenject;
 
@@ -7,14 +8,17 @@ namespace Solar2048.StateMachine.States
     public sealed class InitializeGameState : State
     {
         private readonly UIManager _uiManager;
+        private CheatsContainer _cheatsContainer;
 
-        public InitializeGameState(UIManager uiManager)
+        public InitializeGameState(UIManager uiManager, CheatsContainer cheatsContainer)
         {
+            _cheatsContainer = cheatsContainer;
             _uiManager = uiManager;
         }
 
         protected override void OnEnter()
         {
+            _cheatsContainer.Activate();
             _uiManager.HideAll();
             Finish();
         }

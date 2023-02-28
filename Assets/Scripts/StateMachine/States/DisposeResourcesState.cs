@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Solar2048.AssetManagement;
+using Solar2048.StateMachine.Cheats;
 using Zenject;
 
 namespace Solar2048.StateMachine.States
@@ -7,14 +8,17 @@ namespace Solar2048.StateMachine.States
     public class DisposeResourcesState : State
     {
         private readonly IAssetProvider _assetProvider;
+        private readonly CheatsContainer _cheatsContainer;
 
-        public DisposeResourcesState(IAssetProvider assetProvider)
+        public DisposeResourcesState(IAssetProvider assetProvider, CheatsContainer cheatsContainer)
         {
             _assetProvider = assetProvider;
+            _cheatsContainer = cheatsContainer;
         }
 
         protected override void OnEnter()
         {
+            _cheatsContainer.Deactivate();
             _assetProvider.CleanUp();
             Finish();
         }

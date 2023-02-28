@@ -10,6 +10,7 @@ using Solar2048.Map;
 using Solar2048.Packs;
 using Solar2048.Score;
 using Solar2048.StateMachine;
+using Solar2048.StateMachine.Cheats;
 using Solar2048.StateMachine.States;
 using Solar2048.UI;
 using UniRx;
@@ -64,6 +65,7 @@ namespace Solar2048
             BindFactories();
             BindGameStates();
             BindTurnStates();
+            BindCheatFactories();
         }
 
         private void BindFactories()
@@ -99,6 +101,7 @@ namespace Solar2048
             Container.Bind<LocalizationController>().AsSingle();
             Container.BindInterfacesTo<AssetProvider>().AsSingle();
             Container.BindInterfacesTo<GameQuitter>().AsSingle();
+            Container.Bind<CheatsContainer>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -141,6 +144,12 @@ namespace Solar2048
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<PlayCardState, PlayCardState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
+        }
+
+        private void BindCheatFactories()
+        {
+            Container.BindFactory<CheatCardsSupplier, CheatCardsSupplier.Factory>()
+                .WhenInjectedInto<CheatsContainer>();
         }
     }
 }
