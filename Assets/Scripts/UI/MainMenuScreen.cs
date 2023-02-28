@@ -1,11 +1,11 @@
 ﻿#nullable enable
+using Solar2048.Localization.UI;
 using Solar2048.StateMachine;
-using Solar2048.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Solar2048.Localization.UI
+namespace Solar2048.UI
 {
     public sealed class MainMenuScreen : UIScreen, IMainMenuScreen
     {

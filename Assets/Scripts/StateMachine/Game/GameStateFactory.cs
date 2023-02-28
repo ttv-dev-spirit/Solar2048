@@ -1,7 +1,7 @@
 ﻿#nullable enable
-using Solar2048.StateMachine.States;
+using Solar2048.StateMachine.Game.States;
 
-namespace Solar2048.StateMachine
+namespace Solar2048.StateMachine.Game
 {
     public sealed class GameStateFactory
     {

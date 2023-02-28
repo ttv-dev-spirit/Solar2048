@@ -3,7 +3,7 @@ using System;
 using UniRx;
 using Zenject;
 
-namespace Solar2048.StateMachine
+namespace Solar2048.Input
 {
     public sealed class InputSystem : ITickable
     {

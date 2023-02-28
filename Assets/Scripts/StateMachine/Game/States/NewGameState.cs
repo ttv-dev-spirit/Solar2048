@@ -1,31 +1,44 @@
 ﻿#nullable enable
-using Solar2048.StateMachine.Messages;
-using Solar2048.UI;
-using UniRx;
+using System.Collections.Generic;
+using Solar2048.Buildings;
+using Solar2048.Cards;
+using Solar2048.Cheats;
+using Solar2048.Map;
+using Solar2048.Score;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Game.States
 {
     public sealed class NewGameState : State
     {
-        private readonly IMessagePublisher _messagePublisher;
-        private readonly UIManager _uiManager;
+        private List<IResetable> _toReset = new();
 
-        public NewGameState(IMessagePublisher messagePublisher,
-            UIManager uiManager)
+        public NewGameState(Hand hand, CheatsContainer cheatsContainer, GameMap gameMap,
+            ScoreCounter scoreCounter, BuildingsManager buildingsManager)
         {
-            _messagePublisher = messagePublisher;
-            _uiManager = uiManager;
+            _toReset.Add(scoreCounter);
+            _toReset.Add(hand);
+            _toReset.Add(buildingsManager);
+            _toReset.Add(gameMap);
+            _toReset.Add(cheatsContainer);
         }
 
         protected override void OnEnter()
         {
-            _messagePublisher.Publish(new NewGameMessage());
+            Reset();
             Finish();
         }
 
         protected override void OnExit()
         {
+        }
+
+        private void Reset()
+        {
+            foreach (IResetable resetable in _toReset)
+            {
+                resetable.Reset();
+            }
         }
 
         public class Factory : PlaceholderFactory<NewGameState>

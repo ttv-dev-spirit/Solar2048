@@ -1,5 +1,5 @@
 ﻿#nullable enable
-namespace Solar2048.StateMachine
+namespace Solar2048.Infrastructure
 {
     public interface IGameQuitter
     {

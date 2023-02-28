@@ -4,7 +4,7 @@ using Solar2048.Localization.UI;
 using Solar2048.UI;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Game.States
 {
     public sealed class MainMenuState : State
     {

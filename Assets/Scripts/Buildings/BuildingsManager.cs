@@ -1,10 +1,11 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using Solar2048.Cards;
 using Solar2048.Map;
 
 namespace Solar2048.Buildings
 {
-    public sealed class BuildingsManager
+    public sealed class BuildingsManager : IResetable
     {
         private readonly BuildingsFactory _buildingsFactory;
 
@@ -28,6 +29,15 @@ namespace Solar2048.Buildings
         {
             _buildings.Remove(building);
             building.Destroy();
+        }
+
+        public void Reset()
+        {
+            Building[] buildingsToDestroy = _buildings.ToArray();
+            for (var i = 0; i < buildingsToDestroy.Length; i++)
+            {
+                RemoveBuilding(buildingsToDestroy[i]);
+            }
         }
     }
 }

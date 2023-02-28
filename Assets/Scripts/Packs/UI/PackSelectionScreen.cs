@@ -1,13 +1,13 @@
 ﻿#nullable enable
 using Solar2048.Buildings;
-using Solar2048.Packs;
+using Solar2048.Cards;
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Solar2048.Cards
+namespace Solar2048.Packs.UI
 {
     public interface IPackSelectionScreen : IUIScreen
     {

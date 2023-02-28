@@ -3,7 +3,7 @@ using Solar2048.StateMachine;
 using UnityEngine;
 using Zenject;
 
-namespace Solar2048
+namespace Solar2048.Infrastructure
 {
     public sealed class GameStarter : MonoBehaviour
     {

@@ -4,7 +4,7 @@ using Solar2048.Map;
 using UniRx;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Turn.States
 {
     public sealed class MoveState : State
     {

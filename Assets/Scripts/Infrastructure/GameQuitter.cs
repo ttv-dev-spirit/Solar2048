@@ -1,7 +1,5 @@
 ﻿#nullable enable
-using UnityEngine;
-
-namespace Solar2048.StateMachine
+namespace Solar2048.Infrastructure
 {
     public sealed class GameQuitter : IGameQuitter
     {

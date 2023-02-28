@@ -1,12 +1,13 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
+using Solar2048.Cards;
 
-namespace Solar2048.StateMachine.Cheats
+namespace Solar2048.Cheats
 {
-    public sealed class CheatsContainer : IActivatable
+    public sealed class CheatsContainer : IActivatable, IResetable
     {
-        private readonly List<IActivatable> _cheats = new();
+        private readonly List<ICheat> _cheats = new();
 
         public bool IsActive { get; private set; }
 
@@ -17,7 +18,7 @@ namespace Solar2048.StateMachine.Cheats
 
         public void Activate()
         {
-            foreach (IActivatable cheat in _cheats)
+            foreach (ICheat cheat in _cheats)
             {
                 cheat.Activate();
             }
@@ -27,12 +28,20 @@ namespace Solar2048.StateMachine.Cheats
 
         public void Deactivate()
         {
-            foreach (IActivatable cheat in _cheats)
+            foreach (ICheat cheat in _cheats)
             {
                 cheat.Deactivate();
             }
 
             IsActive = false;
+        }
+
+        public void Reset()
+        {
+            foreach (ICheat cheat in _cheats)
+            {
+                cheat.Reset();
+            }
         }
     }
 }

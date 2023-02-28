@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Solar2048.StateMachine;
-using Solar2048.StateMachine.States;
+using Solar2048.StateMachine.Game.States;
+using Solar2048.StateMachine.Turn.States;
 using Solar2048.UI.Skins;
 using UniRx;
 using UnityEngine;
@@ -27,10 +28,10 @@ namespace Solar2048.UI
         [Inject]
         private void Construct(IStateMachine stateMachine)
         {
-            stateMachine.OnStateChanged.Subscribe(StateChangedHandler);
+            stateMachine.CurrentState.Subscribe(StateChangedHandler);
         }
 
-        private void StateChangedHandler(State state)
+        private void StateChangedHandler(State? state)
         {
             if (state is GameRoundState gameRoundState)
             {

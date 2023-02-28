@@ -1,24 +1,21 @@
 ﻿#nullable enable
-
 using Solar2048.Buildings;
 using Solar2048.Cards;
-using Solar2048.StateMachine.Messages;
-using Solar2048.StateMachine.States;
-using UniRx;
 using Zenject;
 
-namespace Solar2048.StateMachine.Cheats
+namespace Solar2048.Cheats
 {
-    public sealed class CheatCardsSupplier : IActivatable
+    public interface ICheat:IActivatable, IResetable{}
+    
+    public sealed class CheatCardsSupplier : ICheat
     {
         private readonly CardSpawner _cardSpawner;
 
         public bool IsActive { get; private set; }
 
-        public CheatCardsSupplier(CardSpawner cardSpawner, IMessageReceiver messageReceiver)
+        public CheatCardsSupplier(CardSpawner cardSpawner)
         {
             _cardSpawner = cardSpawner;
-            messageReceiver.Receive<NewGameMessage>().Subscribe(OnNewGame);
         }
 
         public void Activate()
@@ -31,7 +28,7 @@ namespace Solar2048.StateMachine.Cheats
             IsActive = false;
         }
 
-        private void OnNewGame(NewGameMessage _)
+        public void Reset()
         {
             _cardSpawner.AddCardToHand(BuildingType.SolarPanel);
             _cardSpawner.AddCardToHand(BuildingType.SolarPanel);

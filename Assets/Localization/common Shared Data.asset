@@ -47,6 +47,18 @@ MonoBehaviour:
     m_Key: ui.quit
     m_Metadata:
       m_Items: []
+  - m_Id: 3972036176207872
+    m_Key: ui.pause_menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3972133265956864
+    m_Key: ui.resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3972158876377088
+    m_Key: ui.restart
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

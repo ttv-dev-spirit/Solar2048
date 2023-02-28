@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Solar2048.Input;
 using UniRx;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine
 {
     public abstract class State
     {

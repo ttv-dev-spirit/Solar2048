@@ -4,7 +4,7 @@ using Solar2048.Cards;
 using UniRx;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Turn.States
 {
     public sealed class PlayCardState : State
     {
@@ -30,7 +30,7 @@ namespace Solar2048.StateMachine.States
 
         private void CardPlayedHandler(Unit _)
         {
-            Exit();
+            Finish();
         }
 
         public class Factory : PlaceholderFactory<PlayCardState>

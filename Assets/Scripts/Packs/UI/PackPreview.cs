@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using Solar2048.Buildings;
 using Solar2048.Buildings.UI;
-using Solar2048.Packs;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace Solar2048.Cards
+namespace Solar2048.Packs.UI
 {
     public sealed class PackPreview : MonoBehaviour, IPointerClickHandler
     {

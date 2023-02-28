@@ -1,10 +1,8 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.WorkConditions;
-using Solar2048.Map;
 using UniRx;
 using UnityEngine;
 

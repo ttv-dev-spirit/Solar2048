@@ -1,9 +1,9 @@
 ﻿#nullable enable
 using Solar2048.AssetManagement;
-using Solar2048.StateMachine.Cheats;
+using Solar2048.Cheats;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Game.States
 {
     public class DisposeResourcesState : State
     {

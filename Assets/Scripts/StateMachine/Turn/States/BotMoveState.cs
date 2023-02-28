@@ -2,7 +2,7 @@
 using Solar2048.Map;
 using Zenject;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.StateMachine.Turn.States
 {
     public sealed class BotMoveState : State
     {
@@ -26,7 +26,7 @@ namespace Solar2048.StateMachine.States
         {
             _buildingMover.Activate();
             _buildingMover.MoveBuildings(NextDirection);
-            Exit();
+            Finish();
         }
 
         protected override void OnExit()

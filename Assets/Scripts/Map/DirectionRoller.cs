@@ -1,8 +1,7 @@
 ﻿#nullable enable
-using Solar2048.Map;
 using UnityEngine;
 
-namespace Solar2048.StateMachine.States
+namespace Solar2048.Map
 {
     public sealed class DirectionRoller
     {

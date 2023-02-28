@@ -5,19 +5,23 @@ using Solar2048.Buildings;
 using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.UI;
 using Solar2048.Cards;
+using Solar2048.Cheats;
+using Solar2048.Input;
 using Solar2048.Localization;
 using Solar2048.Map;
 using Solar2048.Packs;
 using Solar2048.Score;
 using Solar2048.StateMachine;
-using Solar2048.StateMachine.Cheats;
-using Solar2048.StateMachine.States;
+using Solar2048.StateMachine.Game;
+using Solar2048.StateMachine.Game.States;
+using Solar2048.StateMachine.Turn;
+using Solar2048.StateMachine.Turn.States;
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Solar2048
+namespace Solar2048.Infrastructure
 {
     public sealed class GameInstallers : MonoInstaller
     {
@@ -143,6 +147,8 @@ namespace Solar2048
             Container.BindFactory<BotMoveState, BotMoveState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<PlayCardState, PlayCardState.Factory>()
+                .WhenInjectedInto<TurnStateFactory>();
+            Container.BindFactory<GamePauseState, GamePauseState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
         }
 
