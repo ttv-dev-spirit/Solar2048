@@ -35,6 +35,18 @@ MonoBehaviour:
     m_Key: English (en)
     m_Metadata:
       m_Items: []
+  - m_Id: 3950677744246784
+    m_Key: ui.main_menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3951037976240128
+    m_Key: ui.new_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3951061833441280
+    m_Key: ui.quit
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

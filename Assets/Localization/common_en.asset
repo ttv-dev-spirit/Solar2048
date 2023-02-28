@@ -38,6 +38,18 @@ MonoBehaviour:
     m_Localized: English
     m_Metadata:
       m_Items: []
+  - m_Id: 3950677744246784
+    m_Localized: Main menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3951037976240128
+    m_Localized: New Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3951061833441280
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

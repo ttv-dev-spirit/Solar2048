@@ -8,12 +8,18 @@ namespace Solar2048.StateMachine
         public readonly NewGameState NewGameState;
         public readonly GameRoundState GameRoundState;
         public readonly DisposeResourcesState DisposeResourcesState;
+        public readonly InitializeGameState InitializeGameState;
+        public readonly MainMenuState MainMenuState;
 
-        public GameStateFactory(NewGameState.Factory initializeGameState, GameRoundState.Factory gameRoundState, DisposeResourcesState.Factory disposeResources)
+        public GameStateFactory(NewGameState.Factory newGameState, GameRoundState.Factory gameRoundState,
+            DisposeResourcesState.Factory disposeResources, InitializeGameState.Factory initializeGameState,
+            MainMenuState.Factory mainMenuState)
         {
-            NewGameState = initializeGameState.Create();
+            NewGameState = newGameState.Create();
             GameRoundState = gameRoundState.Create();
             DisposeResourcesState = disposeResources.Create();
+            InitializeGameState = initializeGameState.Create();
+            MainMenuState = mainMenuState.Create();
         }
     }
 }

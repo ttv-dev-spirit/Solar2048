@@ -7,22 +7,22 @@ namespace Solar2048
 {
     public sealed class GameStarter : MonoBehaviour
     {
-        private GameStateMachine _gameStateMachine = null!;
+        private IGameLifeCycle _gameLifeCycle = null!;
 
         [Inject]
-        private void Construct(GameStateMachine gameStateMachine)
+        private void Construct(IGameLifeCycle gameStateMachine)
         {
-            _gameStateMachine = gameStateMachine;
+            _gameLifeCycle = gameStateMachine;
         }
 
         private void Start()
         {
-            _gameStateMachine.Initialize();
+            _gameLifeCycle.Initialize();
         }
 
         private void OnDestroy()
         {
-            _gameStateMachine.Dispose();
+            _gameLifeCycle.Dispose();
         }
     }
 }

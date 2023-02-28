@@ -6,16 +6,19 @@ using UniRx;
 
 namespace Solar2048.StateMachine
 {
+    // TODO (Stas): Extract state machine from GameLifeCycleController
     [UsedImplicitly]
-    public sealed class GameStateMachine : IDisposable
+    public sealed class GameStateMachine : IGameLifeCycle, IStateMachine
     {
         private readonly CompositeDisposable _subs = new();
 
+        private readonly Subject<State> _onStateChanged = new();
         private readonly NewGameState _newGameState;
         private readonly GameRoundState _gameRoundState;
         private readonly DisposeResourcesState _disposeResourcesState;
         private readonly InitializeGameState _initializeGameState;
-        private readonly Subject<State> _onStateChanged = new();
+        private readonly MainMenuState _mainMenuState;
+        private readonly IGameQuitter _gameQuitter;
 
         private State? _currentState;
 
@@ -23,25 +26,29 @@ namespace Solar2048.StateMachine
 
         public GameStateMachine(
             InputSystem inputSystem,
-            GameStateFactory gameStateFactory)
+            GameStateFactory gameStateFactory,
+            IGameQuitter gameQuitter)
         {
+            _gameQuitter = gameQuitter;
             _newGameState = gameStateFactory.NewGameState;
             _gameRoundState = gameStateFactory.GameRoundState;
             _disposeResourcesState = gameStateFactory.DisposeResourcesState;
-            // _initializeGameState = gameStateFactory.InitializeGameState;
+            _initializeGameState = gameStateFactory.InitializeGameState;
+            _mainMenuState = gameStateFactory.MainMenuState;
             inputSystem.OnHandleInput.Subscribe(HandleInput).AddTo(_subs);
-            _newGameState.OnStateFinished.Subscribe(OnInitializeFinished).AddTo(_subs);
-            _disposeResourcesState.OnStateFinished.Subscribe(OnResourcesDisposed).AddTo(_subs);
+            SubscribeToEvents();
         }
 
-        public void Initialize() => ChangeState(_newGameState);
+        public void Initialize() => ChangeState(_initializeGameState);
 
         public void Dispose()
         {
             _currentState?.Exit();
-            _currentState = _disposeResourcesState;
-            _currentState.Enter();
+            _disposeResourcesState.Enter();
         }
+
+        public void ExitGame() => _gameQuitter.QuitGame();
+        public void NewGame() => ChangeState(_newGameState);
 
         private void ChangeState(State state)
         {
@@ -52,12 +59,21 @@ namespace Solar2048.StateMachine
         }
 
         private void HandleInput(Unit _) => _currentState?.HandleInput();
-        private void OnInitializeFinished(State _) => ChangeState(_gameRoundState);
+        private void OnInitializeFinished(State _) => ChangeState(_mainMenuState);
+        private void OnNewGameStarted(State _) => ChangeState(_gameRoundState);
 
         private void OnResourcesDisposed(State _)
         {
             _subs.Clear();
             _onStateChanged.Dispose();
+        }
+
+        // TODO (Stas): Better way to finish states needed
+        private void SubscribeToEvents()
+        {
+            _initializeGameState.OnStateFinished.Subscribe(OnInitializeFinished).AddTo(_subs);
+            _newGameState.OnStateFinished.Subscribe(OnNewGameStarted).AddTo(_subs);
+            _disposeResourcesState.OnStateFinished.Subscribe(OnResourcesDisposed).AddTo(_subs);
         }
     }
 }

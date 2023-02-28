@@ -2,6 +2,7 @@
 
 using Solar2048.Localization.UI;
 using Solar2048.UI;
+using Zenject;
 
 namespace Solar2048.StateMachine.States
 {
@@ -9,7 +10,7 @@ namespace Solar2048.StateMachine.States
     {
         private readonly UIManager _uiManager;
 
-        private IMainMenuScreen _mainMenu;
+        private IMainMenuScreen _mainMenu = null!;
 
         public MainMenuState(UIManager uiManager)
         {
@@ -18,13 +19,17 @@ namespace Solar2048.StateMachine.States
 
         protected override void OnEnter()
         {
-            _mainMenu = _uiManager.GetScreen<MainMainMenuScreen>();
+            _mainMenu = _uiManager.GetScreen<MainMenuScreen>();
             _mainMenu.Show();
         }
 
         protected override void OnExit()
         {
             _mainMenu.Hide();
+        }
+
+        public class Factory : PlaceholderFactory<MainMenuState>
+        {
         }
     }
 }

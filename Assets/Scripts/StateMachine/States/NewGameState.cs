@@ -20,7 +20,6 @@ namespace Solar2048.StateMachine.States
 
         protected override void OnEnter()
         {
-            _uiManager.HideAll();
             _messagePublisher.Publish(new NewGameMessage());
             Finish();
         }

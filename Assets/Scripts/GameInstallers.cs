@@ -78,7 +78,7 @@ namespace Solar2048
 
         private void BindSingles()
         {
-            Container.Bind<GameStateMachine>().AsSingle();
+            Container.Bind(typeof(IGameLifeCycle), typeof(IStateMachine)).To<GameStateMachine>().AsSingle();
             Container.Bind<GameMap>().AsSingle();
             Container.BindInterfacesAndSelfTo<MessageBroker>().AsSingle();
             Container.Bind<BuildingsManager>().AsSingle();
@@ -98,6 +98,7 @@ namespace Solar2048
             Container.Bind<DirectionRoller>().AsSingle();
             Container.Bind<LocalizationController>().AsSingle();
             Container.BindInterfacesTo<AssetProvider>().AsSingle();
+            Container.BindInterfacesTo<GameQuitter>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -125,6 +126,10 @@ namespace Solar2048
             Container.BindFactory<GameRoundState, GameRoundState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
             Container.BindFactory<DisposeResourcesState, DisposeResourcesState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<InitializeGameState, InitializeGameState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<MainMenuState, MainMenuState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
         }
 

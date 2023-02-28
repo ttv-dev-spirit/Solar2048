@@ -25,7 +25,7 @@ namespace Solar2048.UI
         private NextMovePanel _movePanel = null!;
 
         [Inject]
-        private void Construct(GameStateMachine stateMachine)
+        private void Construct(IStateMachine stateMachine)
         {
             stateMachine.OnStateChanged.Subscribe(StateChangedHandler);
         }

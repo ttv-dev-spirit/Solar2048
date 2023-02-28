@@ -3,7 +3,6 @@ using System;
 using Solar2048.StateMachine.Messages;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Solar2048.Map
 {
