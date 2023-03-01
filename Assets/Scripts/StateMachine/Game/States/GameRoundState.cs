@@ -79,7 +79,7 @@ namespace Solar2048.StateMachine.Game.States
 
         public void Load(GameData gameData)
         {
-            _moveState.SetNextDirection(gameData.NextDirection);
+            _moveState.LoadNextDirection(gameData.NextDirection);
         }
 
         private void OnMoveStateFinished(State _)

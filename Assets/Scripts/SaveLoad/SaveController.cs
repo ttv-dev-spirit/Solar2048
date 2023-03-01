@@ -77,6 +77,11 @@ namespace Solar2048.SaveLoad
         // TODO (Stas): Seems too heavy.
         public bool IsSaveAvailable()
         {
+            if (!_dataToFileWriter.DoesFileExist())
+            {
+                return false;
+            }
+
             if (!_dataToFileWriter.TryReadData(out string data))
             {
                 return false;
