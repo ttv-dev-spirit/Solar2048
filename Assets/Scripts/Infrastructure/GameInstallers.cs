@@ -95,6 +95,8 @@ namespace Solar2048.Infrastructure
 
             Container.BindInterfacesAndSelfTo<StaticDataProvider>().AsSingle();
             Container.Bind<SaveController>().AsSingle();
+            Container.BindInterfacesTo<GameStateReseter>().AsSingle();
+            Container.Bind<DataToFileWriter>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -117,6 +119,8 @@ namespace Solar2048.Infrastructure
             Container.BindFactory<InitializeGameState, InitializeGameState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
             Container.BindFactory<MainMenuState, MainMenuState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<LoadGameState, LoadGameState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
         }
 

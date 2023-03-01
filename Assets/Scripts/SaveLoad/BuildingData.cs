@@ -1,11 +1,11 @@
 ﻿#nullable enable
+using System;
 using Solar2048.Buildings;
-using Unity.Properties;
 using UnityEngine;
 
 namespace Solar2048.SaveLoad
 {
-    [GeneratePropertyBag]
+    [Serializable]
     public class BuildingData
     {
         public BuildingType BuildingType;

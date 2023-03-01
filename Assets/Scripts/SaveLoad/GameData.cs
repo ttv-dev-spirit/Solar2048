@@ -6,7 +6,6 @@ using Unity.Properties;
 
 namespace Solar2048.SaveLoad
 {
-    [GeneratePropertyBag]
     public sealed class GameData
     {
         public int CurrentScore;

@@ -41,7 +41,6 @@ namespace Solar2048.Cards
         private async void SetCardImage(Card card)
         {
             BuildingSettings buildingSettings = _buildingSettingsProvider.GetBuildingSettingsFor(card.BuildingType);
-            Debug.Log($"{card.BuildingType.ToString()} = {buildingSettings.Image.AssetGUID}");
             var image = await _assetProvider.Load<Sprite>(buildingSettings.Image);
             card.SetImage(image);
         }

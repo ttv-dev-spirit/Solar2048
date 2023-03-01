@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Collections.Generic;
 using Solar2048.AssetManagement;
 using UnityEngine;
@@ -10,8 +11,14 @@ namespace Solar2048.SaveLoad
     {
         private readonly List<ISavable> _savables = new();
         private readonly List<ILoadable> _loadables = new();
+        private readonly DataToFileWriter _dataToFileWriter;
 
         private GameData _gameData = new();
+
+        public SaveController(DataToFileWriter dataToFileWriter)
+        {
+            _dataToFileWriter = dataToFileWriter;
+        }
 
         public void Register(object target)
         {
@@ -34,23 +41,58 @@ namespace Solar2048.SaveLoad
             }
 
             string? json = JsonUtility.ToJson(_gameData);
-            Debug.Log($"SAVE: \n {json}");
+            _dataToFileWriter.WriteData(json);
         }
 
-        public void LoadGame()
+        public bool LoadGame()
         {
+            if (!_dataToFileWriter.DoesFileExist())
+            {
+                return false;
+            }
+
+            if (!_dataToFileWriter.TryReadData(out string data))
+            {
+                return false;
+            }
+
+            try
+            {
+                _gameData = JsonUtility.FromJson<GameData>(data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                return false;
+            }
+
             foreach (ILoadable loadable in _loadables)
             {
                 loadable.Load(_gameData);
             }
+
+            return true;
         }
 
-        public void WriteDataToFile(GameData gameData)
+        // TODO (Stas): Seems too heavy.
+        public bool IsSaveAvailable()
         {
-        }
+            if (!_dataToFileWriter.TryReadData(out string data))
+            {
+                return false;
+            }
 
-        public void ReadDataFromFile()
-        {
+            try
+            {
+                JsonUtility.FromJson<GameData>(data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                return false;
+            }
+
+            return true;
         }
     }
 }

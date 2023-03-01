@@ -22,6 +22,7 @@ namespace Solar2048.StateMachine.Game
         private readonly DisposeResourcesState _disposeResourcesState;
         private readonly InitializeGameState _initializeGameState;
         private readonly MainMenuState _mainMenuState;
+        private readonly LoadGameState _loadGameState;
 
         public IReadOnlyReactiveProperty<State?> CurrentState => _currentState;
 
@@ -36,6 +37,7 @@ namespace Solar2048.StateMachine.Game
             _disposeResourcesState = gameStateFactory.DisposeResourcesState;
             _initializeGameState = gameStateFactory.InitializeGameState;
             _mainMenuState = gameStateFactory.MainMenuState;
+            _loadGameState = gameStateFactory.LoadGameState;
             inputSystem.OnHandleInput.Subscribe(HandleInput).AddTo(_subs);
             SubscribeToEvents();
         }
@@ -51,6 +53,7 @@ namespace Solar2048.StateMachine.Game
         public void ExitGame() => _gameQuitter.QuitGame();
         public void NewGame() => ChangeState(_newGameState);
         public void MainMenu() => ChangeState(_mainMenuState);
+        public void Load() => ChangeState(_loadGameState);
 
         public void Pause()
         {
@@ -75,6 +78,18 @@ namespace Solar2048.StateMachine.Game
         private void OnInitializeFinished(State _) => ChangeState(_mainMenuState);
         private void OnNewGameStarted(State _) => ChangeState(_gameRoundState);
 
+        private void OnLoadFinished(State _)
+        {
+            if (_loadGameState.IsLoaded)
+            {
+                ChangeState(_gameRoundState);
+            }
+            else
+            {
+                ChangeState(_newGameState);
+            }
+        }
+
         private void OnResourcesDisposed(State _)
         {
             _subs.Clear();
@@ -87,6 +102,7 @@ namespace Solar2048.StateMachine.Game
             _initializeGameState.OnStateFinished.Subscribe(OnInitializeFinished).AddTo(_subs);
             _newGameState.OnStateFinished.Subscribe(OnNewGameStarted).AddTo(_subs);
             _disposeResourcesState.OnStateFinished.Subscribe(OnResourcesDisposed).AddTo(_subs);
+            _loadGameState.OnStateFinished.Subscribe(OnLoadFinished).AddTo(_subs);
         }
     }
 }
