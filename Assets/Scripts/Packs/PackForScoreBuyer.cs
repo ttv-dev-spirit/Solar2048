@@ -1,5 +1,6 @@
 #nullable enable
 using Solar2048.Cards;
+using Solar2048.Packs.UI;
 using Solar2048.Score;
 using Solar2048.UI;
 using UniRx;

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.TestTools;
-
-public class BuildingPlacerTests
+namespace Tests
 {
+    public class BuildingPlacerTests
+    {
 
+    }
 }

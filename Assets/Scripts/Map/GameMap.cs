@@ -1,12 +1,12 @@
 ﻿#nullable enable
 using System;
-using Solar2048.StateMachine.Messages;
+using Solar2048.Cards;
 using UniRx;
 using UnityEngine;
 
 namespace Solar2048.Map
 {
-    public sealed class GameMap
+    public sealed class GameMap : IResetable
     {
         public const int FIELD_SIZE = 4;
 
@@ -17,10 +17,9 @@ namespace Solar2048.Map
         public IObservable<Vector2Int> OnFieldClicked => _onFieldClicked;
         public IObservable<Unit> OnTriggerBuildingsEffects => _onTriggerBuildingEffects;
 
-        public GameMap(IMessageReceiver messageReceiver)
+        public GameMap()
         {
             CreateFields();
-            messageReceiver.Receive<NewGameMessage>().Subscribe(ResetMap);
         }
 
         public void RegisterFieldBehaviour(FieldBehaviour fieldBehaviour)
@@ -53,6 +52,17 @@ namespace Solar2048.Map
         public Field GetField(Vector2Int position) => _map[position.x, position.y];
         public Field GetField(int x, int y) => _map[x, y];
 
+        public void Reset()
+        {
+            for (int y = 0; y < FIELD_SIZE; y++)
+            {
+                for (int x = 0; x < FIELD_SIZE; x++)
+                {
+                    _map[x, y].Reset();
+                }
+            }
+        }
+
         private void CreateFields()
         {
             for (int x = 0; x < FIELD_SIZE; x++)
@@ -60,17 +70,6 @@ namespace Solar2048.Map
                 for (int y = 0; y < FIELD_SIZE; y++)
                 {
                     _map[x, y] = new Field(new Vector2Int(x, y));
-                }
-            }
-        }
-
-        private void ResetMap(NewGameMessage _)
-        {
-            for (int y = 0; y < FIELD_SIZE; y++)
-            {
-                for (int x = 0; x < FIELD_SIZE; x++)
-                {
-                    _map[x, y].Reset();
                 }
             }
         }

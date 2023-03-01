@@ -1,11 +1,11 @@
 ﻿#nullable enable
-using Solar2048.StateMachine.Messages;
+using Solar2048.Cards;
 using UniRx;
 using UnityEngine;
 
 namespace Solar2048.Score
 {
-    public sealed class ScoreCounter
+    public sealed class ScoreCounter : IResetable
     {
         private readonly ReactiveProperty<int> _totalScore = new();
         private readonly ReactiveProperty<int> _currentScore = new();
@@ -14,10 +14,9 @@ namespace Solar2048.Score
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
         public IReadOnlyReactiveProperty<int> CurrentScore => _currentScore;
 
-        public ScoreCounter(ScoreSettings settings, IMessageReceiver messageReceiver)
+        public ScoreCounter(ScoreSettings settings)
         {
             _settings = settings;
-            messageReceiver.Receive<NewGameMessage>().Subscribe(OnNewGame);
         }
 
         public void AddMergeScore(int resultLevel)
@@ -32,7 +31,7 @@ namespace Solar2048.Score
             _currentScore.Value -= value;
         }
 
-        private void OnNewGame(NewGameMessage message)
+        public void Reset()
         {
             _totalScore.Value = 0;
             _currentScore.Value = 0;
