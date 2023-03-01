@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: solar_panel
   m_EditorClassIdentifier: 
   _buildingType: 2
-  _image: {fileID: 21300000, guid: ad9b986f3ff754e4e8718af26d58b392, type: 3}
-  _name: Solar panel
+  _image:
+    m_AssetGUID: 64b5e5b1f4e61334dad86afdd5689e14
+    m_SubObjectName: solar_panel
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 1
   _workConditions: []
   _buildingEffects:
   - {fileID: 11400000, guid: cf96e0d4d701b1a4fb8e0f68e42ef225, type: 2}

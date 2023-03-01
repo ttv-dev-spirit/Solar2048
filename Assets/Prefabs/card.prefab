@@ -545,7 +545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buildingName: {fileID: 4281872735454118308}
-  _buildingImage: {fileID: 8870342898839562897}
+  _image: {fileID: 8870342898839562897}
   _selectionBorder: {fileID: 2546523038306519670}
 --- !u!114 &8158992146094919829
 MonoBehaviour:

@@ -37,8 +37,6 @@ namespace Solar2048.Buildings.UI
             _building.OnDestroy.Subscribe(DestroyHandler);
         }
 
-        public void SetImage(Sprite image) => _image.sprite = image;
-
         private void UpdatePosition(Unit _)
             => transform.position = _gameFieldBehaviour.PositionToWorld(_building.Position);
 
@@ -54,5 +52,7 @@ namespace Solar2048.Buildings.UI
         public class Factory : PlaceholderFactory<BuildingBehaviour>
         {
         }
+
+        public void SetImage(Sprite image) => _image.sprite = image;
     }
 }

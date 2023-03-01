@@ -13,21 +13,13 @@ MonoBehaviour:
   m_Name: greenhouse
   m_EditorClassIdentifier: 
   _buildingType: 4
-  _image: {fileID: 21300000, guid: 385c047c9ece8c444b644d1bb568b165, type: 3}
-  _name: Greenhouse
+  _image:
+    m_AssetGUID: 64b5e5b1f4e61334dad86afdd5689e14
+    m_SubObjectName: greenhouse
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 1
   _workConditions:
   - {fileID: 11400000, guid: 3993e1c5d97522e48aece3929bc74785, type: 2}
   _buildingEffects:
   - {fileID: 11400000, guid: 2e94eec17787daa4dba38701b22462e6, type: 2}
-  _n:
-    m_TableReference:
-      m_TableCollectionName: GUID:9dd6cd8aadd534f42bd43c1df5b36688
-    m_TableEntryReference:
-      m_KeyId: 3950677744246784
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  references:
-    version: 2
-    RefIds: []

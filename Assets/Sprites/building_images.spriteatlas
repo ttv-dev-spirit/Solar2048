@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: building_images
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: ae5a302ebfecd5f46b012a1ea6441d4b, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 3b3cd3c10082ed84487985248d3c21e8: 21300000
+    - 385c047c9ece8c444b644d1bb568b165: 21300000
+    - b1f7fe8d095042f4293fcf6a4e6d4b2e: 21300000
+    - ad9b986f3ff754e4e8718af26d58b392: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 3b3cd3c10082ed84487985248d3c21e8, type: 3}
+  - {fileID: 21300000, guid: 385c047c9ece8c444b644d1bb568b165, type: 3}
+  - {fileID: 21300000, guid: b1f7fe8d095042f4293fcf6a4e6d4b2e, type: 3}
+  - {fileID: 21300000, guid: ad9b986f3ff754e4e8718af26d58b392, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - water_collector
+  - greenhouse
+  - wind_turbine
+  - solar_panel
+  m_RenderDataMap: {}
+  m_Tag: building_images
+  m_IsVariant: 0

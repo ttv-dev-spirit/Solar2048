@@ -16,19 +16,19 @@ namespace Solar2048.AssetManagement
 
         public async Task<T> Load<T>(AssetReference assetReference) where T : class
         {
-            if (_completedCache.TryGetValue(assetReference.AssetGUID, out var completedHandle))
+            if (_completedCache.TryGetValue(assetReference.RuntimeKey.ToString(), out AsyncOperationHandle completedHandle))
             {
                 return completedHandle.Result as T ?? throw new InvalidOperationException();
             }
 
             AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(assetReference);
             handle.Completed += OnHandleOnCompleted;
-            AddHandle(assetReference.AssetGUID, handle);
+            AddHandle(assetReference.RuntimeKey.ToString(), handle);
             return await handle.Task;
 
             void OnHandleOnCompleted(AsyncOperationHandle<T> asyncHandle)
             {
-                _completedCache[assetReference.AssetGUID] = asyncHandle;
+                _completedCache[assetReference.RuntimeKey.ToString()] = asyncHandle;
             }
         }
 
