@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: buildings_info Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: buildings_info
+  m_TableCollectionNameGuidString: 0327046e67a058a47a52431ce8df312c
+  m_Entries:
+  - m_Id: 219459706880
+    m_Key: SolarPanel.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 271699763200
+    m_Key: WindTurbine.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 305707180032
+    m_Key: Greenhouse.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 336510148608
+    m_Key: WaterCollector.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 369385103360
+    m_Key: SolarPanel.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411978260480
+    m_Key: WindTurbine.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1022329184256
+    m_Key: Greenhouse.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1046349963264
+    m_Key: WaterCollector.description
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6148570204304048128
+  references:
+    version: 2
+    RefIds:
+    - rid: 6148570204304048128
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1677644294478

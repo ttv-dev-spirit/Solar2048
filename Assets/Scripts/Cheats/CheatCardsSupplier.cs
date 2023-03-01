@@ -5,8 +5,6 @@ using Zenject;
 
 namespace Solar2048.Cheats
 {
-    public interface ICheat:IActivatable, IResetable{}
-    
     public sealed class CheatCardsSupplier : ICheat
     {
         private readonly CardSpawner _cardSpawner;
@@ -31,9 +29,10 @@ namespace Solar2048.Cheats
         public void Reset()
         {
             _cardSpawner.AddCardToHand(BuildingType.SolarPanel);
-            _cardSpawner.AddCardToHand(BuildingType.SolarPanel);
-            _cardSpawner.AddCardToHand(BuildingType.SolarPanel);
-            _cardSpawner.AddCardToHand(BuildingType.SolarPanel);
+            _cardSpawner.AddCardToHand(BuildingType.WindTurbine);
+            _cardSpawner.AddCardToHand(BuildingType.Greenhouse);
+            _cardSpawner.AddCardToHand(BuildingType.WaterCollector);
+            _cardSpawner.AddCardToHand(BuildingType.WaterCollector);
         }
 
         public class Factory : PlaceholderFactory<CheatCardsSupplier>

@@ -1,10 +1,10 @@
 ﻿#nullable enable
 using System;
 using Solar2048.Buildings;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using Zenject;
 
@@ -16,10 +16,10 @@ namespace Solar2048.Cards
         private readonly Subject<Card> _onClicked = new();
 
         [SerializeField]
-        private TMP_Text _buildingName = null!;
+        private LocalizeStringEvent _buildingName = null!;
 
         [SerializeField]
-        private Image _buildingImage = null!;
+        private Image _image = null!;
 
         [SerializeField]
         private GameObject _selectionBorder = null!;
@@ -28,14 +28,14 @@ namespace Solar2048.Cards
         public IObservable<Card> OnClicked => _onClicked;
 
         [Inject]
-        private void Construct(BuildingType buildingType, IBuildingSettingsContainer buildingFactorySettings)
+        private void Construct(BuildingType buildingType)
         {
             _buildingType = buildingType;
-            BuildingSettings buildingSettings = buildingFactorySettings.GetBuildingSettingsFor(_buildingType);
-            _buildingName.text = buildingSettings.Name;
-            _buildingImage.sprite = buildingSettings.Image;
+            _buildingName.SetEntry($"{buildingType.ToString()}.name");
             _selectionBorder.SetActive(false);
         }
+
+        public void SetImage(Sprite sprite) => _image.sprite = sprite;
 
         public void OnPointerClick(PointerEventData eventData)
         {

@@ -10,9 +10,9 @@ scopes = {
 	"last_search.B655092D" = "st:sc"
 	"OpenInspectorPreview.B655092D" = "0"
 	"currentGroup.B655092D" = "all"
-	"picker_window_position_offset.45F317DD" = "-121,6;201,2;320;550"
-	"picker_search_text.45F317DD" = "st: main"
-	"last_search.45F317DD" = "st: main"
+	"picker_window_position_offset.45F317DD" = "-656,8;142,8;320;550"
+	"picker_search_text.45F317DD" = "st: wi"
+	"last_search.45F317DD" = "st: wi"
 	"OpenInspectorPreview.45F317DD" = "0"
 	"currentGroup.45F317DD" = "all"
 }
@@ -71,6 +71,7 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"st:"
 ]
 searchItemFavorites = [
 ]

@@ -16,6 +16,7 @@ using Solar2048.StateMachine.Game;
 using Solar2048.StateMachine.Game.States;
 using Solar2048.StateMachine.Turn;
 using Solar2048.StateMachine.Turn.States;
+using Solar2048.StaticData;
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
@@ -25,9 +26,6 @@ namespace Solar2048.Infrastructure
 {
     public sealed class GameInstallers : MonoInstaller
     {
-        [SerializeField]
-        private BuildingFactorySettings _buildingFactorySettings = null!;
-
         [SerializeField]
         private GameFieldBehaviour _gameFieldBehaviour = null!;
 
@@ -49,23 +47,10 @@ namespace Solar2048.Infrastructure
         [SerializeField]
         private MoveController _moveController = null!;
 
-        [SerializeField]
-        private ScoreSettings _scoreSettings = null!;
-
-        [SerializeField]
-        private PackGeneratorSettings _packGeneratorSettings = null!;
-
-        [SerializeField]
-        private UIManagerSettings _uiManagerSettings = null!;
-
-        [SerializeField]
-        private PackBuyingSettings _packBuyingSettings = null!;
-
         public override void InstallBindings()
         {
             BindSingles();
             BindGameObjects();
-            BindSettings();
             BindFactories();
             BindGameStates();
             BindTurnStates();
@@ -106,6 +91,8 @@ namespace Solar2048.Infrastructure
             Container.BindInterfacesTo<AssetProvider>().AsSingle();
             Container.BindInterfacesTo<GameQuitter>().AsSingle();
             Container.Bind<CheatsContainer>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<StaticDataProvider>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -113,15 +100,6 @@ namespace Solar2048.Infrastructure
             Container.Bind<GameFieldBehaviour>().FromInstance(_gameFieldBehaviour);
             Container.Bind<MoveController>().FromInstance(_moveController);
             Container.Bind<MouseOverObserver>().FromInstance(_mouseOverObserver);
-        }
-
-        private void BindSettings()
-        {
-            Container.BindInterfacesAndSelfTo<BuildingFactorySettings>().FromInstance(_buildingFactorySettings);
-            Container.Bind<ScoreSettings>().FromInstance(_scoreSettings);
-            Container.Bind<PackGeneratorSettings>().FromInstance(_packGeneratorSettings);
-            Container.Bind<UIManagerSettings>().FromInstance(_uiManagerSettings);
-            Container.Bind<PackBuyingSettings>().FromInstance(_packBuyingSettings);
         }
 
         private void BindGameStates()

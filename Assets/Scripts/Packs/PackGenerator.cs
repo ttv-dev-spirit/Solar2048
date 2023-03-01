@@ -1,4 +1,6 @@
 #nullable enable
+using Solar2048.StaticData;
+
 namespace Solar2048.Packs
 {
     public sealed class PackGenerator : IPackGenerator
@@ -7,10 +9,10 @@ namespace Solar2048.Packs
         private readonly IBuildingsPackProvider _buildingsPackProvider;
         private readonly Pack.Factory _packFactory;
 
-        public PackGenerator(PackGeneratorSettings settings, IBuildingsPackProvider buildingsPackProvider,
+        public PackGenerator(StaticDataProvider staticDataProvider, IBuildingsPackProvider buildingsPackProvider,
             Pack.Factory packFactory)
         {
-            _settings = settings;
+            _settings = staticDataProvider.PackGeneratorSettings;
             _buildingsPackProvider = buildingsPackProvider;
             _packFactory = packFactory;
         }
