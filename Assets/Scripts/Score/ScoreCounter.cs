@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Solar2048.Cards;
+using Solar2048.StaticData;
 using UniRx;
 using UnityEngine;
 
@@ -14,9 +15,9 @@ namespace Solar2048.Score
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
         public IReadOnlyReactiveProperty<int> CurrentScore => _currentScore;
 
-        public ScoreCounter(ScoreSettings settings)
+        public ScoreCounter(StaticDataProvider staticDataProvider)
         {
-            _settings = settings;
+            _settings = staticDataProvider.ScoreSettings;
         }
 
         public void AddMergeScore(int resultLevel)

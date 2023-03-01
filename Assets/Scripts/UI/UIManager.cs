@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using Solar2048.StaticData;
 using UniRx;
 using UnityEngine;
 
@@ -16,9 +17,9 @@ namespace Solar2048.UI
         public IReadOnlyReactiveProperty<bool> IsMouseOver => _mouseOverObserver.IsMouseOver;
         public LayerMask LayerMask => _settings.LayerMask;
 
-        public UIManager(UIManagerSettings uiManagerSettings, MouseOverObserver mouseOverObserver)
+        public UIManager(StaticDataProvider staticDataProvider, MouseOverObserver mouseOverObserver)
         {
-            _settings = uiManagerSettings;
+            _settings = staticDataProvider.UIManagerSettings;
             _mouseOverObserver = mouseOverObserver;
         }
 

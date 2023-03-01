@@ -2,6 +2,7 @@
 using Solar2048.Cards;
 using Solar2048.Packs.UI;
 using Solar2048.Score;
+using Solar2048.StaticData;
 using Solar2048.UI;
 using UniRx;
 
@@ -17,9 +18,9 @@ namespace Solar2048.Packs
         public IReadOnlyReactiveProperty<bool> IsEnoughPointsForPack => _isEnoughPointsForPack;
         public int NextPackCost => _packBuyingSettings.PackCost;
 
-        public PackForScoreBuyer(PackBuyingSettings packBuyingSettings, ScoreCounter scoreCounter, UIManager uiManager)
+        public PackForScoreBuyer(StaticDataProvider staticDataProvider, ScoreCounter scoreCounter, UIManager uiManager)
         {
-            _packBuyingSettings = packBuyingSettings;
+            _packBuyingSettings = staticDataProvider.PackBuyingSettings;
             _scoreCounter = scoreCounter;
             _uiManager = uiManager;
             _scoreCounter.CurrentScore.Subscribe(ScoreUpdateHandler);
