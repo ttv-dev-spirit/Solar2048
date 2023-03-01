@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Solar2048.AssetManagement;
 using Solar2048.StateMachine;
 using Solar2048.StateMachine.Game.States;
 using Solar2048.StateMachine.Turn.States;

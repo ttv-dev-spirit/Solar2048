@@ -22,6 +22,11 @@ namespace Solar2048.StateMachine.Turn.States
             NextDirection = _directionRoller.Roll();
         }
 
+        public void SetNextDirection(MoveDirection nextDirection)
+        {
+            NextDirection = nextDirection;
+        }
+
         protected override void OnEnter()
         {
             _buildingMover.Activate();

@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using System;
-using Solar2048.Cards;
+using Solar2048.Infrastructure;
 using UniRx;
 using UnityEngine;
 
@@ -31,16 +31,6 @@ namespace Solar2048.Map
             fieldBehaviour.BindField(field);
             _map[x, y] = field;
             fieldBehaviour.OnClicked.Subscribe(FieldClickedHandler);
-        }
-
-        public bool CanAddBuildingTo(Vector2Int position)
-        {
-            if (!IsInsideBounds(position))
-            {
-                return false;
-            }
-
-            return _map[position.x, position.y].Building == null;
         }
 
         public void RecalculateStats()

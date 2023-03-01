@@ -10,6 +10,7 @@ using Solar2048.Input;
 using Solar2048.Localization;
 using Solar2048.Map;
 using Solar2048.Packs;
+using Solar2048.SaveLoad;
 using Solar2048.Score;
 using Solar2048.StateMachine;
 using Solar2048.StateMachine.Game;
@@ -93,6 +94,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<CheatsContainer>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<StaticDataProvider>().AsSingle();
+            Container.Bind<SaveController>().AsSingle();
         }
 
         private void BindGameObjects()
