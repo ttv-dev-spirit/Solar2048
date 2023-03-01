@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: buildings_info_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 0327046e67a058a47a52431ce8df312c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 219459706880
+    m_Localized: Solar Panel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 271699763200
+    m_Localized: Wind Turbine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 305707180032
+    m_Localized: Greenhouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 336510148608
+    m_Localized: Water Collector
+    m_Metadata:
+      m_Items: []
+  - m_Id: 369385103360
+    m_Localized: interesting description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 411978260480
+    m_Localized: interesting description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1022329184256
+    m_Localized: interesting description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1046349963264
+    m_Localized: interesting description
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

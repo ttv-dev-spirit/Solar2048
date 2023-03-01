@@ -5,6 +5,7 @@ using System.Linq;
 using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.WorkConditions;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace Solar2048.Buildings
 {
@@ -18,16 +19,12 @@ namespace Solar2048.Buildings
         private Sprite _image = null!;
 
         [SerializeField]
-        private string _name = null!;
-
-        [SerializeField]
         private BuildingWorkCondition[]? _workConditions;
 
         [SerializeField]
         private BuildingEffect[]? _buildingEffects;
 
         public BuildingType BuildingType => _buildingType;
-        public string Name => _name;
         public Sprite Image => _image;
 
         public IEnumerable<BuildingWorkCondition> WorkConditions =>

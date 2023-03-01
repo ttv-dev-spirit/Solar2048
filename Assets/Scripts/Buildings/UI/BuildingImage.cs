@@ -15,7 +15,7 @@ namespace Solar2048.Buildings.UI
         public BuildingType BuildingType => _buildingType;
 
         [Inject]
-        private void Construct(BuildingType buildingType, IBuildingSettingsContainer buildingFactorySettings)
+        private void Construct(BuildingType buildingType, IBuildingSettingsProvider buildingFactorySettings)
         {
             _buildingType = buildingType;
             BuildingSettings buildingSettings = buildingFactorySettings.GetBuildingSettingsFor(_buildingType);

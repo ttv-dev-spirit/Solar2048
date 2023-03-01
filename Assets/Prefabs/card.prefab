@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 4246393678206013081}
   - component: {fileID: 4246393678206013063}
   - component: {fileID: 4246393678206013062}
+  - component: {fileID: 4281872735454118308}
   m_Layer: 5
   m_Name: building name
   m_TagString: Untagged
@@ -440,6 +441,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4281872735454118308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246393678206013080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:0327046e67a058a47a52431ce8df312c
+    m_TableEntryReference:
+      m_KeyId: 271699763200
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4246393678206013062}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &4246393678730364309
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +517,7 @@ RectTransform:
   - {fileID: 4246393677109051587}
   - {fileID: 4246393678206013081}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -503,7 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 550011e08c7f420386e5a4920dc77940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingName: {fileID: 4246393678206013062}
+  _buildingName: {fileID: 4281872735454118308}
   _buildingImage: {fileID: 8870342898839562897}
   _selectionBorder: {fileID: 2546523038306519670}
 --- !u!114 &8158992146094919829

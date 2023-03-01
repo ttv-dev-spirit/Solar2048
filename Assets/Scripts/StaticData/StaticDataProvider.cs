@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Solar2048.StaticData
 {
     [UsedImplicitly]
-    public sealed class StaticDataProvider : IBuildingSettingsContainer
+    public sealed class StaticDataProvider : IBuildingSettingsProvider
     {
         private const string SCORE_SETTINGS_PATH = "Score/score_settings";
         private const string PACK_GENERATOR_SETTINGS_PATH = "Pack/pack_generator_settings";

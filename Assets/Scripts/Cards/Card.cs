@@ -5,6 +5,8 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 using Zenject;
 
@@ -16,7 +18,7 @@ namespace Solar2048.Cards
         private readonly Subject<Card> _onClicked = new();
 
         [SerializeField]
-        private TMP_Text _buildingName = null!;
+        private LocalizeStringEvent _buildingName = null!;
 
         [SerializeField]
         private Image _buildingImage = null!;
@@ -28,11 +30,11 @@ namespace Solar2048.Cards
         public IObservable<Card> OnClicked => _onClicked;
 
         [Inject]
-        private void Construct(BuildingType buildingType, IBuildingSettingsContainer buildingFactorySettings)
+        private void Construct(BuildingType buildingType, IBuildingSettingsProvider buildingSettingsProvider)
         {
             _buildingType = buildingType;
-            BuildingSettings buildingSettings = buildingFactorySettings.GetBuildingSettingsFor(_buildingType);
-            _buildingName.text = buildingSettings.Name;
+            BuildingSettings buildingSettings = buildingSettingsProvider.GetBuildingSettingsFor(_buildingType);
+            _buildingName.SetEntry($"{buildingType.ToString()}.name");
             _buildingImage.sprite = buildingSettings.Image;
             _selectionBorder.SetActive(false);
         }

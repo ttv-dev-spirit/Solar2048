@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 782
   m_ShowMode: 4
-  m_Title: Console
+  m_Title: Inspector
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 17
+  controlID: 40
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 85
+  controlID: 98
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 16
+  controlID: 148
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -337,7 +337,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 10720
+    ID: 1744
     splitterInitialOffset: 0
     currentActiveSplitter: -1
     realSizes:
@@ -404,7 +404,7 @@ MonoBehaviour:
       name: Solar2048
       fullName: Solar2048
       resultStatus: 1
-      duration: 0.1647568
+      duration: 0.1369787
       messages: 
       output: 
       stacktrace: 
@@ -420,7 +420,7 @@ MonoBehaviour:
       name: Tests.dll
       fullName: C:/StreamProjects/Solar2048/Library/ScriptAssemblies/Tests.dll
       resultStatus: 1
-      duration: 0.1067161
+      duration: 0.1013311
       messages: 
       output: 
       stacktrace: 
@@ -436,7 +436,7 @@ MonoBehaviour:
       name: Tests
       fullName: Tests
       resultStatus: 1
-      duration: 0.1057757
+      duration: 0.1005363
       messages: 
       output: 
       stacktrace: 
@@ -452,7 +452,7 @@ MonoBehaviour:
       name: FieldTests
       fullName: Tests.FieldTests
       resultStatus: 1
-      duration: 0.0813625
+      duration: 0.028261
       messages: 
       output: 
       stacktrace: 
@@ -468,7 +468,7 @@ MonoBehaviour:
       name: WhenAddBuilding_AndFieldIsEmpty_ThenBuildingHasFieldPosition
       fullName: Tests.FieldTests.WhenAddBuilding_AndFieldIsEmpty_ThenBuildingHasFieldPosition
       resultStatus: 1
-      duration: 0.0378119
+      duration: 0.0135227
       messages: 
       output: 
       stacktrace: 
@@ -485,7 +485,7 @@ MonoBehaviour:
       name: WhenRemoveBuilding_AndFieldHadBuilding_ThenFieldIsEmpty
       fullName: Tests.FieldTests.WhenRemoveBuilding_AndFieldHadBuilding_ThenFieldIsEmpty
       resultStatus: 1
-      duration: 0.0003239
+      duration: 0.000302
       messages: 
       output: 
       stacktrace: 
@@ -502,7 +502,7 @@ MonoBehaviour:
       name: HandTests
       fullName: Tests.HandTests
       resultStatus: 1
-      duration: 0.0088939
+      duration: 0.0046344
       messages: 
       output: 
       stacktrace: 
@@ -518,7 +518,7 @@ MonoBehaviour:
       name: WhenAddCard_AndHandIsEmpty_ThenOneCardInHand
       fullName: Tests.HandTests.WhenAddCard_AndHandIsEmpty_ThenOneCardInHand
       resultStatus: 1
-      duration: 0.0017081
+      duration: 0.0006857
       messages: 
       output: 
       stacktrace: 
@@ -535,7 +535,7 @@ MonoBehaviour:
       name: WhenRemoveCard_AndOneCardInHand_ThenHandIsEmpty
       fullName: Tests.HandTests.WhenRemoveCard_AndOneCardInHand_ThenHandIsEmpty
       resultStatus: 1
-      duration: 0.0005652
+      duration: 0.0003461
       messages: 
       output: 
       stacktrace: 
@@ -552,7 +552,7 @@ MonoBehaviour:
       name: LocalizationTests
       fullName: Tests.LocalizationTests
       resultStatus: 1
-      duration: 0.0132123
+      duration: 0.066321
       messages: 
       output: 
       stacktrace: 
@@ -568,7 +568,7 @@ MonoBehaviour:
       name: WhenSelectLocale_AndOtherLocaleWasSelectedInitially_ThenSelectedLocaleIsActive
       fullName: Tests.LocalizationTests.WhenSelectLocale_AndOtherLocaleWasSelectedInitially_ThenSelectedLocaleIsActive
       resultStatus: 1
-      duration: 0.0077345
+      duration: 0.0634519
       messages: 
       output: 
       stacktrace: 
@@ -680,10 +680,10 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: e0f2feff
+      scrollPos: {x: 0, y: 24.799988}
+      m_SelectedIDs: 58960000
       m_LastClickedID: 0
-      m_ExpandedIDs: dac7feff7acefeffbc03ffffbe03ffffbc0fffffb815ffffbc15ffffbe15ffffc015ffffc215ffffc415ffff385effff8482ffffca82ffff2c9bffff729fffff40a2ffff42a2ffff46a2ffff48a2ffffe0f4ffff86faffffc66f00006aa4000080a50000f0e10000fce1000042e30000
+      m_ExpandedIDs: 3eb6ffff84b6ffff1afbffff9c6c00004aa5000078a50000bca50000c4a50000e4a50000d2a6000004a700004aa70000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -747,7 +747,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 0
+  m_LastVerticalScrollValue: 702
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
@@ -799,23 +799,23 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Resources/Buildings
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Resources/Buildings
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\StreamProjects\Solar2048
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 130.20001}
-    m_SelectedIDs: 566e0000
-    m_LastClickedID: 28246
-    m_ExpandedIDs: 00000000486e00004a6e00004c6e00004e6e0000506e0000526e0000546e0000566e0000586e00005a6e0000
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 4c920000
+    m_LastClickedID: 37452
+    m_ExpandedIDs: 00000000326f0000346f0000366f0000386f00003a6f00003c6f0000426f0000446f0000986f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -843,7 +843,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000486e00004a6e00004c6e00004e6e0000506e0000526e0000546e0000566e0000586e00005a6e0000
+    m_ExpandedIDs: 00000000326f0000346f0000366f0000386f00003a6f00003c6f00003e6f0000406f0000426f0000446f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -871,7 +871,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: 388c0000f23900007c73020020c70000
+    m_ExpandedInstanceIDs: 388c0000f23900007c73020020c700008e6e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -887,7 +887,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 4}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -965,7 +965,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1

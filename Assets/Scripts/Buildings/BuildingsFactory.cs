@@ -6,10 +6,10 @@ namespace Solar2048.Buildings
     // TODO (Stas): Rework to DI
     public sealed class BuildingsFactory
     {
-        private readonly IBuildingSettingsContainer _settings;
+        private readonly IBuildingSettingsProvider _settings;
         private readonly BuildingBehaviour.Factory _buildingBehaviourFactory;
 
-        public BuildingsFactory(IBuildingSettingsContainer buildingFactorySettings,
+        public BuildingsFactory(IBuildingSettingsProvider buildingFactorySettings,
             BuildingBehaviour.Factory buildingBehaviourFactory)
         {
             _settings = buildingFactorySettings;
