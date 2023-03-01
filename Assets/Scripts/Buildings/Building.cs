@@ -42,6 +42,8 @@ namespace Solar2048.Buildings
 
         public void UpLevel() => _level.Value++;
 
+        public void SetLevel(int level) => _level.Value = level;
+
         public bool CanBeMerged(Building building)
         {
             return BuildingType == building.BuildingType && Level.Value == building.Level.Value;

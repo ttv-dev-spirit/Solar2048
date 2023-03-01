@@ -1,5 +1,7 @@
 ﻿#nullable enable
+using Solar2048.AssetManagement;
 using Solar2048.Map;
+using Solar2048.SaveLoad;
 using Solar2048.StateMachine.Turn;
 using Solar2048.StateMachine.Turn.States;
 using UniRx;
@@ -8,7 +10,7 @@ using Zenject;
 
 namespace Solar2048.StateMachine.Game.States
 {
-    public sealed class GameRoundState : State, IRoundLifeCycle, IStateMachine
+    public sealed class GameRoundState : State, IRoundLifeCycle, IStateMachine, ISavable, ILoadable
     {
         private const int NUMBER_OF_CARD_PLAYS_BEFORE_MOVE = 3;
 
@@ -17,6 +19,7 @@ namespace Solar2048.StateMachine.Game.States
         private readonly State _playCardState;
         private readonly BotMoveState _moveState;
         private readonly GamePauseState _gamePauseState;
+        private readonly SaveController _saveController;
         private readonly CompositeDisposable _subs = new();
 
         private State? _stateBeforePause;
@@ -25,11 +28,13 @@ namespace Solar2048.StateMachine.Game.States
         public IReadOnlyReactiveProperty<int> CardsPlayedCounter => _cardsPlayedCounter;
         public MoveDirection NextDirection => _moveState.NextDirection;
 
-        public GameRoundState(TurnStateFactory turnStateFactory)
+        public GameRoundState(TurnStateFactory turnStateFactory, SaveController saveController)
         {
+            _saveController = saveController;
             _moveState = turnStateFactory.BotMoveState;
             _playCardState = turnStateFactory.PlayCardState;
             _gamePauseState = turnStateFactory.GamePauseState;
+            _saveController.Register(this);
         }
 
         protected override void OnEnter()
@@ -37,6 +42,7 @@ namespace Solar2048.StateMachine.Game.States
             SubscribeToStateEvents();
             _cardsPlayedCounter.Value = 0;
             _moveState.RollNextDirection();
+            _saveController.SaveGame();
 
             ChangeState(_playCardState);
         }
@@ -66,11 +72,21 @@ namespace Solar2048.StateMachine.Game.States
             _stateBeforePause = null;
         }
 
+        public void Save(GameData gameData)
+        {
+            gameData.NextDirection = NextDirection;
+        }
+
+        public void Load(GameData gameData)
+        {
+            _moveState.LoadNextDirection(gameData.NextDirection);
+        }
+
         private void OnMoveStateFinished(State _)
         {
             _cardsPlayedCounter.Value = 0;
             _moveState.RollNextDirection();
-
+            _saveController.SaveGame();
             ChangeState(_playCardState);
         }
 

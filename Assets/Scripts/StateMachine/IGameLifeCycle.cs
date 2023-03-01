@@ -10,5 +10,6 @@ namespace Solar2048.StateMachine
         void MainMenu();
         void Pause();
         void Resume();
+        void Load();
     }
 }

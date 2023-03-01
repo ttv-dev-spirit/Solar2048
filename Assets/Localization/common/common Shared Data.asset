@@ -59,6 +59,10 @@ MonoBehaviour:
     m_Key: ui.restart
     m_Metadata:
       m_Items: []
+  - m_Id: 4359127976468480
+    m_Key: ui.continue
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

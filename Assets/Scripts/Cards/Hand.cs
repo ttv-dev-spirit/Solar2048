@@ -1,17 +1,28 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using System.Linq;
+using Solar2048.AssetManagement;
+using Solar2048.Infrastructure;
+using Solar2048.SaveLoad;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace Solar2048.Cards
 {
-    public sealed class Hand : MonoBehaviour, ICardContainer, IResetable
+    public sealed class Hand : MonoBehaviour, ICardContainer, IResetable, ISavable
     {
         private readonly IReactiveProperty<Card?> _selectedCard = new ReactiveProperty<Card?>();
         private readonly List<Card> _cards = new();
 
         public IReadOnlyReactiveProperty<Card?> SelectedCard => _selectedCard;
         public IReadOnlyList<Card> Cards => _cards;
+
+        [Inject]
+        public void Construct(SaveController saveController)
+        {
+            saveController.Register(this);
+        }
 
         public void AddCard(Card card)
         {
@@ -48,6 +59,11 @@ namespace Solar2048.Cards
             _selectedCard.Value = null;
         }
 
+        public void Save(GameData gameData)
+        {
+            gameData.Hand = _cards.Select(card => card.BuildingType).ToList();
+        }
+
         private void OnCardClicked(Card clickedCard)
         {
             if (_selectedCard.Value == clickedCard)
@@ -69,10 +85,5 @@ namespace Solar2048.Cards
                 RemoveCard(cardsToRemove[i]);
             }
         }
-    }
-
-    public interface IResetable
-    {
-        void Reset();
     }
 }

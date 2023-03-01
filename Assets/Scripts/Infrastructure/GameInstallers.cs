@@ -10,6 +10,7 @@ using Solar2048.Input;
 using Solar2048.Localization;
 using Solar2048.Map;
 using Solar2048.Packs;
+using Solar2048.SaveLoad;
 using Solar2048.Score;
 using Solar2048.StateMachine;
 using Solar2048.StateMachine.Game;
@@ -93,6 +94,9 @@ namespace Solar2048.Infrastructure
             Container.Bind<CheatsContainer>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<StaticDataProvider>().AsSingle();
+            Container.Bind<SaveController>().AsSingle();
+            Container.BindInterfacesTo<GameStateReseter>().AsSingle();
+            Container.Bind<DataToFileWriter>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -115,6 +119,8 @@ namespace Solar2048.Infrastructure
             Container.BindFactory<InitializeGameState, InitializeGameState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
             Container.BindFactory<MainMenuState, MainMenuState.Factory>()
+                .WhenInjectedInto<GameStateFactory>();
+            Container.BindFactory<LoadGameState, LoadGameState.Factory>()
                 .WhenInjectedInto<GameStateFactory>();
         }
 

@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System;
 using Solar2048.Buildings;
 using UniRx;
@@ -26,6 +27,8 @@ namespace Solar2048.Cards
 
         public BuildingType BuildingType => _buildingType;
         public IObservable<Card> OnClicked => _onClicked;
+
+        public Image Image => _image;
 
         [Inject]
         private void Construct(BuildingType buildingType)
