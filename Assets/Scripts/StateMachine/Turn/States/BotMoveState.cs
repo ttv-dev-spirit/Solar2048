@@ -7,16 +7,16 @@ namespace Solar2048.StateMachine.Turn.States
     public sealed class BotMoveState : State
     {
         private readonly BuildingMover _buildingMover;
-        private readonly DirectionRoller _directionRoller;
+        private readonly IDirectionRoller _windDirectionRoller;
 
         private bool _wasLoaded;
 
         public MoveDirection NextDirection { get; private set; }
 
-        public BotMoveState(BuildingMover buildingMover, DirectionRoller directionRoller)
+        public BotMoveState(BuildingMover buildingMover, WindDirectionRoller windDirectionRoller)
         {
             _buildingMover = buildingMover;
-            _directionRoller = directionRoller;
+            _windDirectionRoller = windDirectionRoller;
         }
 
         public void RollNextDirection()
@@ -28,7 +28,7 @@ namespace Solar2048.StateMachine.Turn.States
                 return;
             }
 
-            NextDirection = _directionRoller.Roll();
+            NextDirection = _windDirectionRoller.Roll();
         }
 
         public void LoadNextDirection(MoveDirection nextDirection)

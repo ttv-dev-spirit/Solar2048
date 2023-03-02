@@ -12,15 +12,6 @@ namespace Solar2048.Map
     {
         private readonly Subject<FieldBehaviour> _onClicked = new();
 
-        [SerializeField]
-        private StatDrawer _energy = null!;
-
-        [SerializeField]
-        private StatDrawer _water = null!;
-
-        [SerializeField]
-        private StatDrawer _food = null!;
-
         public Field Field { get; private set; } = null!;
         public IObservable<FieldBehaviour> OnClicked => _onClicked;
 
@@ -33,9 +24,6 @@ namespace Solar2048.Map
         public void BindField(Field field)
         {
             Field = field;
-            _energy.Subscribe(field.Energy);
-            _water.Subscribe(field.Water);
-            _food.Subscribe(field.Food);
         }
 
         public void OnPointerClick(PointerEventData eventData) => _onClicked.OnNext(this);

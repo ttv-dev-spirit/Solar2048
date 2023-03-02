@@ -66,6 +66,10 @@ MonoBehaviour:
     m_Localized: Continue
     m_Metadata:
       m_Items: []
+  - m_Id: 4742624591306752
+    m_Localized: Finish Cycle
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

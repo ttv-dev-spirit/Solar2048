@@ -11,8 +11,8 @@ scopes = {
 	"OpenInspectorPreview.B655092D" = "0"
 	"currentGroup.B655092D" = "all"
 	"picker_window_position_offset.45F317DD" = "-656,8;142,8;320;550"
-	"picker_search_text.45F317DD" = "st: cont"
-	"last_search.45F317DD" = "st: cont"
+	"picker_search_text.45F317DD" = "st: conf"
+	"last_search.45F317DD" = "st: conf"
 	"OpenInspectorPreview.45F317DD" = "0"
 	"currentGroup.45F317DD" = "all"
 }

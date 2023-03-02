@@ -56,7 +56,6 @@ namespace Solar2048.Infrastructure
             BindFactories();
             BindGameStates();
             BindTurnStates();
-            BindCheatFactories();
         }
 
         private void BindFactories()
@@ -89,6 +88,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<PackForScoreBuyer>().AsSingle();
             Container.BindInterfacesAndSelfTo<CardPlayer>().AsSingle();
             Container.Bind<DirectionRoller>().AsSingle();
+            Container.Bind<WindDirectionRoller>().AsSingle();
             Container.Bind<LocalizationController>().AsSingle();
             Container.BindInterfacesTo<AssetProvider>().AsSingle();
             Container.BindInterfacesTo<GameQuitter>().AsSingle();
@@ -99,6 +99,7 @@ namespace Solar2048.Infrastructure
             Container.BindInterfacesTo<GameStateReseter>().AsSingle();
             Container.Bind<DataToFileWriter>().AsSingle();
             Container.Bind(typeof(ICycleCounter), typeof(CycleCounter)).To<CycleCounter>().AsSingle();
+            Container.Bind<ConfirmTurnDispatcher>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -136,12 +137,8 @@ namespace Solar2048.Infrastructure
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<GamePauseState, GamePauseState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
-        }
-
-        private void BindCheatFactories()
-        {
-            Container.BindFactory<CheatCardsSupplier, CheatCardsSupplier.Factory>()
-                .WhenInjectedInto<CheatsContainer>();
+            Container.BindFactory<ConfirmTurnState, ConfirmTurnState.Factory>()
+                .WhenInjectedInto<TurnStateFactory>();
         }
     }
 }

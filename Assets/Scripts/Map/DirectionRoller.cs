@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Solar2048.Map
 {
-    public sealed class DirectionRoller
+    public sealed class DirectionRoller : IDirectionRoller
     {
         public MoveDirection Roll()
         {

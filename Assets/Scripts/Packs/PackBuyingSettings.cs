@@ -7,8 +7,25 @@ namespace Solar2048.Packs
     public sealed class PackBuyingSettings : ScriptableObject
     {
         [SerializeField]
-        private int _packCost = 1;
+        private int _fistPacksCost = 10;
 
-        public int PackCost => _packCost;
+        [SerializeField]
+        private int _fixedCostPacksCount = 3;
+
+        [SerializeField]
+        private int _a = 10;
+
+        [SerializeField]
+        private int _b = -10;
+
+        public int GetPackCost(int packNumber)
+        {
+            if (packNumber < _fixedCostPacksCount)
+            {
+                return _fistPacksCost;
+            }
+
+            return _a * packNumber + _b;
+        }
     }
 }

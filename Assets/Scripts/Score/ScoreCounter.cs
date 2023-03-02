@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using Solar2048.AssetManagement;
-using Solar2048.Cards;
 using Solar2048.Infrastructure;
 using Solar2048.SaveLoad;
 using Solar2048.StaticData;
@@ -19,10 +18,9 @@ namespace Solar2048.Score
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
         public IReadOnlyReactiveProperty<int> CurrentScore => _currentScore;
 
-        public ScoreCounter(StaticDataProvider staticDataProvider, SaveController saveController)
+        public ScoreCounter(StaticDataProvider staticDataProvider)
         {
             _settings = staticDataProvider.ScoreSettings;
-            saveController.Register(this);
         }
 
         public void AddMergeScore(int resultLevel)
