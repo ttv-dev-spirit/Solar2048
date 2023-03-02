@@ -89,6 +89,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<PackForScoreBuyer>().AsSingle();
             Container.BindInterfacesAndSelfTo<CardPlayer>().AsSingle();
             Container.Bind<DirectionRoller>().AsSingle();
+            Container.Bind<WindDirectionRoller>().AsSingle();
             Container.Bind<LocalizationController>().AsSingle();
             Container.BindInterfacesTo<AssetProvider>().AsSingle();
             Container.BindInterfacesTo<GameQuitter>().AsSingle();
