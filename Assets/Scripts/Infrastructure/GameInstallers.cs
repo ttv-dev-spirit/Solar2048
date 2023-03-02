@@ -6,6 +6,7 @@ using Solar2048.Buildings.Effect;
 using Solar2048.Buildings.UI;
 using Solar2048.Cards;
 using Solar2048.Cheats;
+using Solar2048.Cycles;
 using Solar2048.Input;
 using Solar2048.Localization;
 using Solar2048.Map;
@@ -97,6 +98,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<SaveController>().AsSingle();
             Container.BindInterfacesTo<GameStateReseter>().AsSingle();
             Container.Bind<DataToFileWriter>().AsSingle();
+            Container.Bind(typeof(ICycleCounter), typeof(CycleCounter)).To<CycleCounter>().AsSingle();
         }
 
         private void BindGameObjects()

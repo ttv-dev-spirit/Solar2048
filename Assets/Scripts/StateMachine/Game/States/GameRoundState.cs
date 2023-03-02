@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Solar2048.AssetManagement;
+using Solar2048.Cycles;
 using Solar2048.Map;
 using Solar2048.SaveLoad;
 using Solar2048.StateMachine.Turn;
@@ -23,13 +24,16 @@ namespace Solar2048.StateMachine.Game.States
         private readonly CompositeDisposable _subs = new();
 
         private State? _stateBeforePause;
+        private ICycleCounter _cycleCounter;
 
         public IReadOnlyReactiveProperty<State?> CurrentState => _currentState;
         public IReadOnlyReactiveProperty<int> CardsPlayedCounter => _cardsPlayedCounter;
         public MoveDirection NextDirection => _moveState.NextDirection;
 
-        public GameRoundState(TurnStateFactory turnStateFactory, SaveController saveController)
+        public GameRoundState(TurnStateFactory turnStateFactory, SaveController saveController,
+            ICycleCounter cycleCounter)
         {
+            _cycleCounter = cycleCounter;
             _saveController = saveController;
             _moveState = turnStateFactory.BotMoveState;
             _playCardState = turnStateFactory.PlayCardState;
@@ -86,6 +90,7 @@ namespace Solar2048.StateMachine.Game.States
         {
             _cardsPlayedCounter.Value = 0;
             _moveState.RollNextDirection();
+            _cycleCounter.NextCycle();
             _saveController.SaveGame();
             ChangeState(_playCardState);
         }
