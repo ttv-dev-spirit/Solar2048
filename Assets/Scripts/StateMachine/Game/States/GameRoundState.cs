@@ -20,6 +20,7 @@ namespace Solar2048.StateMachine.Game.States
         private readonly State _playCardState;
         private readonly BotMoveState _moveState;
         private readonly GamePauseState _gamePauseState;
+        private readonly ConfirmTurnState _confirmTurnState;
         private readonly SaveController _saveController;
         private readonly CompositeDisposable _subs = new();
 
@@ -38,6 +39,7 @@ namespace Solar2048.StateMachine.Game.States
             _moveState = turnStateFactory.BotMoveState;
             _playCardState = turnStateFactory.PlayCardState;
             _gamePauseState = turnStateFactory.GamePauseState;
+            _confirmTurnState = turnStateFactory.ConfirmTurnState;
             _saveController.Register(this);
         }
 
@@ -49,12 +51,6 @@ namespace Solar2048.StateMachine.Game.States
             _saveController.SaveGame();
 
             ChangeState(_playCardState);
-        }
-
-        private void SubscribeToStateEvents()
-        {
-            _moveState.OnStateFinished.Subscribe(OnMoveStateFinished).AddTo(_subs);
-            _playCardState.OnStateFinished.Subscribe(OnPlayStateFinished).AddTo(_subs);
         }
 
         protected override void OnExit()
@@ -86,6 +82,13 @@ namespace Solar2048.StateMachine.Game.States
             _moveState.LoadNextDirection(gameData.NextDirection);
         }
 
+        private void SubscribeToStateEvents()
+        {
+            _moveState.OnStateFinished.Subscribe(OnMoveStateFinished).AddTo(_subs);
+            _playCardState.OnStateFinished.Subscribe(OnPlayStateFinished).AddTo(_subs);
+            _confirmTurnState.OnStateFinished.Subscribe(OnConfirmTurnStateFinished).AddTo(_subs);
+        }
+
         private void OnMoveStateFinished(State _)
         {
             _cardsPlayedCounter.Value = 0;
@@ -100,11 +103,16 @@ namespace Solar2048.StateMachine.Game.States
             _cardsPlayedCounter.Value++;
             if (_cardsPlayedCounter.Value >= NUMBER_OF_CARD_PLAYS_BEFORE_MOVE)
             {
-                ChangeState(_moveState);
+                ChangeState(_confirmTurnState);
                 return;
             }
 
             ChangeState(_playCardState);
+        }
+
+        private void OnConfirmTurnStateFinished(State _)
+        {
+            ChangeState(_moveState);
         }
 
         private void ChangeState(State state)

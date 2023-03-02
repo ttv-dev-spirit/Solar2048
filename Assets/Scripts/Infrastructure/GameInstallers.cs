@@ -100,6 +100,7 @@ namespace Solar2048.Infrastructure
             Container.BindInterfacesTo<GameStateReseter>().AsSingle();
             Container.Bind<DataToFileWriter>().AsSingle();
             Container.Bind(typeof(ICycleCounter), typeof(CycleCounter)).To<CycleCounter>().AsSingle();
+            Container.Bind<ConfirmTurnDispatcher>().AsSingle();
         }
 
         private void BindGameObjects()
@@ -136,6 +137,8 @@ namespace Solar2048.Infrastructure
             Container.BindFactory<PlayCardState, PlayCardState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<GamePauseState, GamePauseState.Factory>()
+                .WhenInjectedInto<TurnStateFactory>();
+            Container.BindFactory<ConfirmTurnState, ConfirmTurnState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
         }
 
