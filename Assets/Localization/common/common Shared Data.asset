@@ -63,6 +63,10 @@ MonoBehaviour:
     m_Key: ui.continue
     m_Metadata:
       m_Items: []
+  - m_Id: 4742624591306752
+    m_Key: ui.confirm_cycle
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
