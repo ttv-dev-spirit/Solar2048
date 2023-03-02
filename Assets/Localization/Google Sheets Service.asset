@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Google Sheets Service
   m_EditorClassIdentifier: 
   m_ApiKey: 
-  m_ClientId: 
-  m_ClientSecret: 
-  m_AuthenticationType: 0
-  m_ApplicationName: 
+  m_ClientId: 153804211959-m57otm98kjf5mvpgg88sekijqo6rnneb.apps.googleusercontent.com
+  m_ClientSecret: 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
+  m_AuthenticationType: 1
+  m_ApplicationName: Solar2048
   m_NewSheetProperties:
     m_HeaderForegroundColor: {r: 0.8941177, g: 0.8941177, b: 0.8941177, a: 1}
     m_HeaderBackgroundColor: {r: 0.2196079, g: 0.2196079, b: 0.2196079, a: 1}
