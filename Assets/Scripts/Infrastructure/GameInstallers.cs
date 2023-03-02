@@ -56,7 +56,6 @@ namespace Solar2048.Infrastructure
             BindFactories();
             BindGameStates();
             BindTurnStates();
-            BindCheatFactories();
         }
 
         private void BindFactories()
@@ -140,12 +139,6 @@ namespace Solar2048.Infrastructure
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<ConfirmTurnState, ConfirmTurnState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
-        }
-
-        private void BindCheatFactories()
-        {
-            Container.BindFactory<CheatCardsSupplier, CheatCardsSupplier.Factory>()
-                .WhenInjectedInto<CheatsContainer>();
         }
     }
 }

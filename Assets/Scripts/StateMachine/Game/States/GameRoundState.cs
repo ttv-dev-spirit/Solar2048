@@ -11,6 +11,7 @@ using Zenject;
 
 namespace Solar2048.StateMachine.Game.States
 {
+    // TODO (Stas): Split state machine and round state.
     public sealed class GameRoundState : State, IRoundLifeCycle, IStateMachine, ISavable, ILoadable
     {
         private const int NUMBER_OF_CARD_PLAYS_BEFORE_MOVE = 3;

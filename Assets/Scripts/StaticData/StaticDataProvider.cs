@@ -5,6 +5,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using ModestTree;
 using Solar2048.Buildings;
+using Solar2048.Cards;
 using Solar2048.Packs;
 using Solar2048.Score;
 using Solar2048.UI;
@@ -19,8 +20,11 @@ namespace Solar2048.StaticData
         private const string PACK_GENERATOR_SETTINGS_PATH = "Pack/pack_generator_settings";
         private const string PACK_BUYING_SETTINGS_PATH = "Pack/pack_buying_settings";
         private const string UI_MANAGER_SETTINGS_PATH = "UI/ui_manager_settings";
+        private const string STARTING_HAND_CONFIG_PATH = "Hand/starting_hand_config";
         private const string BUILDINGS_SETTINGS_PATH = "Buildings";
 
+        private readonly StartingHandConfig _startingHandConfig;
+        
         private Dictionary<BuildingType, BuildingSettings> _buildingSettings = new();
 
         public ScoreSettings ScoreSettings { get; }
@@ -35,6 +39,7 @@ namespace Solar2048.StaticData
             PackGeneratorSettings = LoadScriptable<PackGeneratorSettings>(PACK_GENERATOR_SETTINGS_PATH);
             PackBuyingSettings = LoadScriptable<PackBuyingSettings>(PACK_BUYING_SETTINGS_PATH);
             UIManagerSettings = LoadScriptable<UIManagerSettings>(UI_MANAGER_SETTINGS_PATH);
+            _startingHandConfig = LoadScriptable<StartingHandConfig>(STARTING_HAND_CONFIG_PATH);
 
             LoadBuildingsSettings();
         }
@@ -53,6 +58,8 @@ namespace Solar2048.StaticData
                 ? settings
                 : throw new Exception($"No building config found for {buildingType}");
         }
+
+        public IEnumerable<BuildingType> GetStartingHand() => _startingHandConfig.StartingHand;
 
         private T LoadScriptable<T>(string path) where T : ScriptableObject
         {
