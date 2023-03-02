@@ -13,5 +13,6 @@ namespace Solar2048.SaveLoad
         public List<BuildingData> Buildings = new();
         public MoveDirection NextDirection;
         public int Cycle;
+        public int PacksBought;
     }
 }
