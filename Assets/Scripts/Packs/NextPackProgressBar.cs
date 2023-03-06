@@ -19,7 +19,7 @@ namespace Solar2048.Packs
         private TMP_Text _scoreText = null!;
 
         [Inject]
-        private void Construct(ScoreCounter scoreCounter, PackForScoreBuyer packForScoreBuyer)
+        private void Construct(IScoreCounter scoreCounter, PackForScoreBuyer packForScoreBuyer)
         {
             _packForScoreBuyer = packForScoreBuyer;
             scoreCounter.CurrentScore.Subscribe(OnScoreChanged);

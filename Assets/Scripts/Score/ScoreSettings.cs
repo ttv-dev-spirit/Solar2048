@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace Solar2048.Score
 {
-    [CreateAssetMenu(menuName = "Configs/Create ScoreSettings", fileName = "score_settings", order = 0)]
+    [CreateAssetMenu(menuName = "Configs/Score/score_setting", fileName = "score_settings", order = 0)]
     public sealed class ScoreSettings : ScriptableObject
     {
         [SerializeField]
-        private int _mergeScore = 1;
+        private int _mergeBase = 10;
 
-        public int MergeScore => _mergeScore;
+        [SerializeField]
+        private int _perLevelMergeBonus = 10;
+
+        public int GetMergeScore(int mergeResultLevel) => _mergeBase + _perLevelMergeBonus * (mergeResultLevel - 1);
     }
 }

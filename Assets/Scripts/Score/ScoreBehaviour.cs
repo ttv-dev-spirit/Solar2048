@@ -12,7 +12,7 @@ namespace Solar2048.Score
         private TMP_Text _score = null!;
 
         [Inject]
-        private void Construct(ScoreCounter scoreCounter)
+        private void Construct(IScoreCounter scoreCounter)
         {
             scoreCounter.TotalScore.Subscribe(OnScoreChanged);
         }

@@ -11,12 +11,12 @@ namespace Solar2048.Map
         private Subject<Unit> _onMoved = new();
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
-        private readonly ScoreCounter _scoreCounter;
+        private readonly IScoreCounter _scoreCounter;
 
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnMoved => _onMoved;
 
-        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager, ScoreCounter scoreCounter)
+        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager, IScoreCounter scoreCounter)
         {
             _gameMap = gameMap;
             _buildingsManager = buildingsManager;
