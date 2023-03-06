@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: score_settings
   m_EditorClassIdentifier: 
   _mergeBase: 0
-  _perLevelMergeBonus: 10
+  _perLevelMergeBonus: 12
