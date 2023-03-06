@@ -1,19 +1,21 @@
 ﻿#nullable enable
 
+using JetBrains.Annotations;
 using Solar2048.AssetManagement;
 using Solar2048.Infrastructure;
 using Solar2048.SaveLoad;
 using Solar2048.StaticData;
 using UniRx;
-using UnityEngine;
 
 namespace Solar2048.Score
 {
-    public sealed class ScoreCounter : IResetable, ISavable, ILoadable
+    [UsedImplicitly]
+    public sealed class ScoreCounter : IResetable, ISavable, ILoadable, IScoreCounter
     {
+        private readonly ScoreSettings _settings;
+        
         private readonly ReactiveProperty<int> _totalScore = new();
         private readonly ReactiveProperty<int> _currentScore = new();
-        private readonly ScoreSettings _settings;
 
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
         public IReadOnlyReactiveProperty<int> CurrentScore => _currentScore;
@@ -25,7 +27,7 @@ namespace Solar2048.Score
 
         public void AddMergeScore(int resultLevel)
         {
-            int scoreToAdd = _settings.MergeScore * (int)Mathf.Pow(2, resultLevel - 2);
+            int scoreToAdd = _settings.GetMergeScore(resultLevel);
             _totalScore.Value += scoreToAdd;
             _currentScore.Value += scoreToAdd;
         }

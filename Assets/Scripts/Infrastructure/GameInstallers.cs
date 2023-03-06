@@ -81,7 +81,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<BuildingEffectsTrigger>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<InputSystem>().AsSingle();
             Container.Bind<BuildingMover>().AsSingle();
-            Container.Bind<ScoreCounter>().AsSingle();
+            Container.Bind(typeof(IScoreCounter), typeof(ScoreCounter)).To<ScoreCounter>().AsSingle();
             Container.BindInterfacesAndSelfTo<PackGenerator>().AsSingle();
             Container.BindInterfacesAndSelfTo<BuildingsPackProvider>().AsSingle();
             Container.Bind<UIManager>().AsSingle();
