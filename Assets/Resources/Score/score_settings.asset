@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca768bee3074ef2959426ef8818f238, type: 3}
   m_Name: score_settings
   m_EditorClassIdentifier: 
-  _mergeScore: 10
+  _mergeBase: 0
+  _perLevelMergeBonus: 10
