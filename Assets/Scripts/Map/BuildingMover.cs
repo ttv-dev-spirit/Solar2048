@@ -1,17 +1,21 @@
 ﻿#nullable enable
+
 using System;
+using JetBrains.Annotations;
 using Solar2048.Buildings;
 using Solar2048.Score;
 using UniRx;
 
 namespace Solar2048.Map
 {
+    [UsedImplicitly]
     public sealed class BuildingMover : IActivatable
     {
-        private Subject<Unit> _onMoved = new();
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
         private readonly IScoreCounter _scoreCounter;
+        
+        private readonly Subject<Unit> _onMoved = new();
 
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnMoved => _onMoved;
@@ -31,6 +35,7 @@ namespace Solar2048.Map
                 return;
             }
 
+            // TODO (Stas): Clear this (direction swapped).
             switch (direction)
             {
                 case MoveDirection.Left:
@@ -39,11 +44,11 @@ namespace Solar2048.Map
                 case MoveDirection.Right:
                     MoveBuildingsRight();
                     break;
-                case MoveDirection.Up:
-                    MoveBuildingsUp();
-                    break;
                 case MoveDirection.Down:
                     MoveBuildingsDown();
+                    break;
+                case MoveDirection.Up:
+                    MoveBuildingsUp();
                     break;
             }
 
@@ -76,59 +81,37 @@ namespace Solar2048.Map
             }
         }
 
-        private void MoveBuildingsUp()
-        {
-            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
-            {
-                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
-                {
-                    MoveBuildingUpAndMerge(x, y);
-                }
-            }
-        }
-
         private void MoveBuildingsDown()
         {
             for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
-                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
+                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
                 {
                     MoveBuildingDownAndMerge(x, y);
                 }
             }
         }
 
-        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
+        private void MoveBuildingsUp()
         {
-            Field fromField = _gameMap.GetField(xFrom, yFrom);
-            if (fromField.Building == null)
+            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
-                return;
+                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
+                {
+                    MoveBuildingUpAndMerge(x, y);
+                }
             }
-
-            if (MergeDown(fromField, out Field? lastEmpty))
-            {
-                return;
-            }
-
-            if (lastEmpty == null)
-            {
-                return;
-            }
-
-            lastEmpty.AddBuilding(fromField.Building!);
-            fromField.RemoveBuilding();
         }
 
         private void MoveBuildingUpAndMerge(int xFrom, int yFrom)
         {
-            Field fromField = _gameMap.GetField(xFrom, yFrom);
-            if (fromField.Building == null)
+            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
+            if (fromTile.Building == null)
             {
                 return;
             }
 
-            if (MergeUp(fromField, out Field? lastEmpty))
+            if (MergeUp(fromTile, out Tile? lastEmpty))
             {
                 return;
             }
@@ -138,19 +121,41 @@ namespace Solar2048.Map
                 return;
             }
 
-            lastEmpty.AddBuilding(fromField.Building!);
-            fromField.RemoveBuilding();
+            lastEmpty.AddBuilding(fromTile.Building!);
+            fromTile.RemoveBuilding();
+        }
+
+        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
+        {
+            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
+            if (fromTile.Building == null)
+            {
+                return;
+            }
+
+            if (MergeDown(fromTile, out Tile? lastEmpty))
+            {
+                return;
+            }
+
+            if (lastEmpty == null)
+            {
+                return;
+            }
+
+            lastEmpty.AddBuilding(fromTile.Building!);
+            fromTile.RemoveBuilding();
         }
 
         private void MoveBuildingLeftAndMerge(int xFrom, int yFrom)
         {
-            Field fromField = _gameMap.GetField(xFrom, yFrom);
-            if (fromField.Building == null)
+            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
+            if (fromTile.Building == null)
             {
                 return;
             }
 
-            if (MergeLeft(fromField, out Field? lastEmpty))
+            if (MergeLeft(fromTile, out Tile? lastEmpty))
             {
                 return;
             }
@@ -160,19 +165,19 @@ namespace Solar2048.Map
                 return;
             }
 
-            lastEmpty.AddBuilding(fromField.Building!);
-            fromField.RemoveBuilding();
+            lastEmpty.AddBuilding(fromTile.Building!);
+            fromTile.RemoveBuilding();
         }
 
         private void MoveBuildingRightAndMerge(int xFrom, int yFrom)
         {
-            Field fromField = _gameMap.GetField(xFrom, yFrom);
-            if (fromField.Building == null)
+            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
+            if (fromTile.Building == null)
             {
                 return;
             }
 
-            if (MergeRight(fromField, out Field? lastEmpty))
+            if (MergeRight(fromTile, out Tile? lastEmpty))
             {
                 return;
             }
@@ -182,25 +187,25 @@ namespace Solar2048.Map
                 return;
             }
 
-            lastEmpty.AddBuilding(fromField.Building!);
-            fromField.RemoveBuilding();
+            lastEmpty.AddBuilding(fromTile.Building!);
+            fromTile.RemoveBuilding();
         }
 
-        private bool MergeDown(Field fromField, out Field? lastEmpty)
+        private bool MergeUp(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
-            for (int y = fromField.Position.y + 1; y < GameMap.FIELD_SIZE; y++)
+            for (int y = fromTile.Position.y + 1; y < GameMap.FIELD_SIZE; y++)
             {
-                Field toField = _gameMap.GetField(fromField.Position.x, y);
-                if (toField.Building == null)
+                Tile toTile = _gameMap.GetTile(fromTile.Position.x, y);
+                if (toTile.Building == null)
                 {
-                    lastEmpty = toField;
+                    lastEmpty = toTile;
                     continue;
                 }
 
-                if (toField.Building.CanBeMerged(fromField.Building!))
+                if (toTile.Building.CanBeMerged(fromTile.Building!))
                 {
-                    MergeBuilding(fromField, toField);
+                    MergeBuilding(fromTile, toTile);
                     return true;
                 }
 
@@ -210,21 +215,21 @@ namespace Solar2048.Map
             return false;
         }
 
-        private bool MergeUp(Field fromField, out Field? lastEmpty)
+        private bool MergeDown(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
-            for (int y = fromField.Position.y - 1; y >= 0; y--)
+            for (int y = fromTile.Position.y - 1; y >= 0; y--)
             {
-                Field toField = _gameMap.GetField(fromField.Position.x, y);
-                if (toField.Building == null)
+                Tile toTile = _gameMap.GetTile(fromTile.Position.x, y);
+                if (toTile.Building == null)
                 {
-                    lastEmpty = toField;
+                    lastEmpty = toTile;
                     continue;
                 }
 
-                if (toField.Building.CanBeMerged(fromField.Building!))
+                if (toTile.Building.CanBeMerged(fromTile.Building!))
                 {
-                    MergeBuilding(fromField, toField);
+                    MergeBuilding(fromTile, toTile);
                     return true;
                 }
 
@@ -234,21 +239,21 @@ namespace Solar2048.Map
             return false;
         }
 
-        private bool MergeLeft(Field fromField, out Field? lastEmpty)
+        private bool MergeLeft(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
-            for (int x = fromField.Position.x - 1; x >= 0; x--)
+            for (int x = fromTile.Position.x - 1; x >= 0; x--)
             {
-                Field toField = _gameMap.GetField(x, fromField.Position.y);
-                if (toField.Building == null)
+                Tile toTile = _gameMap.GetTile(x, fromTile.Position.y);
+                if (toTile.Building == null)
                 {
-                    lastEmpty = toField;
+                    lastEmpty = toTile;
                     continue;
                 }
 
-                if (toField.Building.CanBeMerged(fromField.Building!))
+                if (toTile.Building.CanBeMerged(fromTile.Building!))
                 {
-                    MergeBuilding(fromField, toField);
+                    MergeBuilding(fromTile, toTile);
                     return true;
                 }
 
@@ -258,21 +263,21 @@ namespace Solar2048.Map
             return false;
         }
 
-        private bool MergeRight(Field fromField, out Field? lastEmpty)
+        private bool MergeRight(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
-            for (int x = fromField.Position.x + 1; x < GameMap.FIELD_SIZE; x++)
+            for (int x = fromTile.Position.x + 1; x < GameMap.FIELD_SIZE; x++)
             {
-                Field toField = _gameMap.GetField(x, fromField.Position.y);
-                if (toField.Building == null)
+                Tile toTile = _gameMap.GetTile(x, fromTile.Position.y);
+                if (toTile.Building == null)
                 {
-                    lastEmpty = toField;
+                    lastEmpty = toTile;
                     continue;
                 }
 
-                if (toField.Building.CanBeMerged(fromField.Building!))
+                if (toTile.Building.CanBeMerged(fromTile.Building!))
                 {
-                    MergeBuilding(fromField, toField);
+                    MergeBuilding(fromTile, toTile);
                     return true;
                 }
 
@@ -282,17 +287,17 @@ namespace Solar2048.Map
             return false;
         }
 
-        private void MergeBuilding(Field fromField, Field toField)
+        private void MergeBuilding(Tile fromTile, Tile toTile)
         {
-            if (!fromField.Building!.CanBeMerged(toField.Building!))
+            if (!fromTile.Building!.CanBeMerged(toTile.Building!))
             {
                 return;
             }
 
-            toField.Building!.UpLevel();
-            _buildingsManager.RemoveBuilding(fromField.Building);
-            fromField.RemoveBuilding();
-            _scoreCounter.AddMergeScore(toField.Building.Level.Value);
+            toTile.Building!.UpLevel();
+            _buildingsManager.RemoveBuilding(fromTile.Building);
+            fromTile.RemoveBuilding();
+            _scoreCounter.AddMergeScore(toTile.Building.Level.Value);
         }
     }
 }

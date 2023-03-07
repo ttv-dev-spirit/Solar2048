@@ -10,11 +10,11 @@ namespace Solar2048.Buildings.UI
 {
     public sealed class BuildingBehaviour : MonoBehaviour
     {
-        private GameFieldBehaviour _gameFieldBehaviour = null!;
         private Building _building = null!;
+        private MapBehaviour _mapBehaviour = null!;
 
         [SerializeField]
-        private SpriteRenderer _image = null!;
+        private QuadImage _quadImage = null!;
 
         [SerializeField]
         private GameObject _conditionsMetBorder = null!;
@@ -23,9 +23,9 @@ namespace Solar2048.Buildings.UI
         private TMP_Text _level = null!;
 
         [Inject]
-        private void Construct(GameFieldBehaviour gameFieldBehaviour)
+        private void Construct(MapBehaviour mapBehaviour)
         {
-            _gameFieldBehaviour = gameFieldBehaviour;
+            _mapBehaviour = mapBehaviour;
         }
 
         public void BindBuilding(Building building)
@@ -38,7 +38,7 @@ namespace Solar2048.Buildings.UI
         }
 
         private void UpdatePosition(Unit _)
-            => transform.position = _gameFieldBehaviour.PositionToWorld(_building.Position);
+            => transform.position = _mapBehaviour.BuildingMapToWorld(_building.Position);
 
         private void OnLevelChanged(int level) => _level.text = level.ToString();
         private void OnConditionsMetChanged(bool areConditionsMet) => _conditionsMetBorder.SetActive(areConditionsMet);
@@ -53,6 +53,6 @@ namespace Solar2048.Buildings.UI
         {
         }
 
-        public void SetImage(Sprite image) => _image.sprite = image;
+        public void SetImage(Sprite image) => _quadImage.SetImage(image);
     }
 }

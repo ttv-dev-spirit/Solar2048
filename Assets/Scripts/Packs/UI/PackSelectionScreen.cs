@@ -9,11 +9,7 @@ using Zenject;
 
 namespace Solar2048.Packs.UI
 {
-    public interface IPackSelectionScreen : IUIScreen
-    {
-    }
-
-    public sealed class PackSelectionScreen : UIScreen, IPackSelectionScreen
+    public sealed class PackSelectionScreen : UIScreen
     {
         private PackGenerator _packGenerator = null!;
         private CardSpawner _cardSpawner = null!;

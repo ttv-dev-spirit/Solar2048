@@ -13,7 +13,7 @@ namespace Tests
         {
             // Arrange.
             var position = new Vector2Int(1, 3);
-            var fieldUnderTest = new Field(position);
+            var fieldUnderTest = new Tile(position);
             var building = new Building(null);
             // Act.
             fieldUnderTest.AddBuilding(building);
@@ -26,7 +26,7 @@ namespace Tests
         {
             // Arrange.
             var position = new Vector2Int(1, 3);
-            var fieldUnderTest = new Field(position);
+            var fieldUnderTest = new Tile(position);
             var building = new Building(null);
             fieldUnderTest.AddBuilding(building);
             // Act.

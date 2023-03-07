@@ -1,36 +1,40 @@
 ﻿#nullable enable
+
 using System;
+using JetBrains.Annotations;
 using Solar2048.Infrastructure;
 using UniRx;
 using UnityEngine;
 
 namespace Solar2048.Map
 {
+    [UsedImplicitly]
     public sealed class GameMap : IResetable
     {
         public const int FIELD_SIZE = 4;
 
+        private readonly MapBehaviour _mapBehaviour;
+        
         private readonly Subject<Vector2Int> _onFieldClicked = new();
         private readonly Subject<Unit> _onTriggerBuildingEffects = new();
-        private readonly Field[,] _map = new Field[FIELD_SIZE, FIELD_SIZE];
+        private readonly Tile[,] _map = new Tile[FIELD_SIZE, FIELD_SIZE];
 
         public IObservable<Vector2Int> OnFieldClicked => _onFieldClicked;
         public IObservable<Unit> OnTriggerBuildingsEffects => _onTriggerBuildingEffects;
 
-        public GameMap()
+        public GameMap(MapBehaviour mapBehaviour)
         {
-            CreateFields();
+            _mapBehaviour = mapBehaviour;
+            CreateTiles();
         }
 
-        public void RegisterFieldBehaviour(FieldBehaviour fieldBehaviour)
+        public void RegisterTileBehaviour(TileBehaviour tileBehaviour)
         {
-            Vector3 position = fieldBehaviour.transform.position;
-            var x = (int)position.x;
-            int y = -(int)position.y;
-            Field field = GetField(x, y);
-            fieldBehaviour.BindField(field);
-            _map[x, y] = field;
-            fieldBehaviour.OnClicked.Subscribe(FieldClickedHandler);
+            Vector2Int position = _mapBehaviour.TileWorldToMap(tileBehaviour.transform.localPosition);
+            Tile tile = GetTile(position);
+            tileBehaviour.BindTile(tile);
+            _map[position.x, position.y] = tile;
+            tileBehaviour.OnClicked.Subscribe(FieldClickedHandler);
         }
 
         public void RecalculateStats()
@@ -39,44 +43,44 @@ namespace Solar2048.Map
             _onTriggerBuildingEffects.OnNext(Unit.Default);
         }
 
-        public Field GetField(Vector2Int position) => _map[position.x, position.y];
-        public Field GetField(int x, int y) => _map[x, y];
+        public Tile GetTile(Vector2Int position) => _map[position.x, position.y];
+        public Tile GetTile(int x, int y) => _map[x, y];
 
         public void Reset()
         {
-            for (int y = 0; y < FIELD_SIZE; y++)
+            for (var y = 0; y < FIELD_SIZE; y++)
             {
-                for (int x = 0; x < FIELD_SIZE; x++)
+                for (var x = 0; x < FIELD_SIZE; x++)
                 {
                     _map[x, y].Reset();
                 }
             }
         }
 
-        private void CreateFields()
+        private void CreateTiles()
         {
-            for (int x = 0; x < FIELD_SIZE; x++)
+            for (var x = 0; x < FIELD_SIZE; x++)
             {
-                for (int y = 0; y < FIELD_SIZE; y++)
+                for (var y = 0; y < FIELD_SIZE; y++)
                 {
-                    _map[x, y] = new Field(new Vector2Int(x, y));
+                    _map[x, y] = new Tile(new Vector2Int(x, y));
                 }
             }
         }
 
         private void ResetStats()
         {
-            for (int y = 0; y < FIELD_SIZE; y++)
+            for (var y = 0; y < FIELD_SIZE; y++)
             {
-                for (int x = 0; x < FIELD_SIZE; x++)
+                for (var x = 0; x < FIELD_SIZE; x++)
                 {
                     _map[x, y].ResetStats();
                 }
             }
         }
 
-        private void FieldClickedHandler(FieldBehaviour fieldBehaviour) =>
-            _onFieldClicked.OnNext(fieldBehaviour.Field.Position);
+        private void FieldClickedHandler(TileBehaviour tileBehaviour) =>
+            _onFieldClicked.OnNext(tileBehaviour.Tile.Position);
 
         private bool IsInsideBounds(Vector2Int position) =>
             position.x is >= 0 and < FIELD_SIZE && position.y is >= 0 and < FIELD_SIZE;

@@ -29,7 +29,7 @@ namespace Solar2048.Localization.UI
 
         private void OnClickedHandler()
         {
-            _uiManager.GetScreen<ILocalizationScreen>().Show();
+            _uiManager.GetScreen<LocalizationScreen>().Show();
         }
 
         private void UpdateButtonStatus(bool isActive)

@@ -7,6 +7,11 @@ namespace Solar2048.UI.TransitionHandlers
     {
         public void OnHide()
         {
+            if (gameObject == null)
+            {
+                return;
+            }
+
             gameObject.SetActive(false);
         }
     }

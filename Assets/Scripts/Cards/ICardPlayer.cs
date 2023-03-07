@@ -5,6 +5,6 @@ namespace Solar2048.Cards
 {
     public interface ICardPlayer
     {
-        public void PlayCardFromHandTo(Card card, Field field);
+        public void PlayCardFromHandTo(Card card, Tile tile);
     }
 }

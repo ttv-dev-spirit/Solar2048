@@ -25,18 +25,18 @@ namespace Solar2048.Buildings
             saveController.Register(this);
         }
 
-        public void AddNewBuilding(BuildingType buildingType, Field field)
+        public void AddNewBuilding(BuildingType buildingType, Tile tile)
         {
             Building building = _buildingsFactory.Create(buildingType);
             _buildings.Add(building);
-            field.AddBuilding(building);
+            tile.AddBuilding(building);
         }
 
         public void AddBuilding(BuildingData buildingData)
         {
-            Field field = _gameMap.GetField(buildingData.Position);
-            AddNewBuilding(buildingData.BuildingType, field);
-            Building building = field.Building!;
+            Tile tile = _gameMap.GetTile(buildingData.Position);
+            AddNewBuilding(buildingData.BuildingType, tile);
+            Building building = tile.Building!;
             building.SetLevel(buildingData.Level);
         }
 

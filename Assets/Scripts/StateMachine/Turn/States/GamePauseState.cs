@@ -8,7 +8,7 @@ namespace Solar2048.StateMachine.Turn.States
     {
         private readonly UIManager _uiManager;
 
-        private IGamePauseScreen _gamePauseScreen = null!;
+        private GamePauseScreen _gamePauseScreen = null!;
 
         public GamePauseState(UIManager uiManager)
         {
@@ -17,7 +17,7 @@ namespace Solar2048.StateMachine.Turn.States
 
         protected override void OnEnter()
         {
-            _gamePauseScreen = _uiManager.GetScreen<IGamePauseScreen>();
+            _gamePauseScreen = _uiManager.GetScreen<GamePauseScreen>();
             _gamePauseScreen.Show();
         }
 

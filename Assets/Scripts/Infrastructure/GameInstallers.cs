@@ -29,7 +29,7 @@ namespace Solar2048.Infrastructure
     public sealed class GameInstallers : MonoInstaller
     {
         [SerializeField]
-        private GameFieldBehaviour _gameFieldBehaviour = null!;
+        private MapBehaviour _mapBehaviour = null!;
 
         [SerializeField]
         private BuildingBehaviour _buildingPrefab = null!;
@@ -45,9 +45,6 @@ namespace Solar2048.Infrastructure
 
         [SerializeField]
         private MouseOverObserver _mouseOverObserver = null!;
-
-        [SerializeField]
-        private MoveController _moveController = null!;
 
         public override void InstallBindings()
         {
@@ -104,9 +101,8 @@ namespace Solar2048.Infrastructure
 
         private void BindGameObjects()
         {
-            Container.Bind<GameFieldBehaviour>().FromInstance(_gameFieldBehaviour);
-            Container.Bind<MoveController>().FromInstance(_moveController);
             Container.Bind<MouseOverObserver>().FromInstance(_mouseOverObserver);
+            Container.Bind<MapBehaviour>().FromInstance(_mapBehaviour);
         }
 
         private void BindGameStates()

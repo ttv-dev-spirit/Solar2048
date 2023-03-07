@@ -30,13 +30,13 @@ namespace Solar2048.Map
                 }
             }
 
-            Field field = _gameMap.GetField(position);
-            if (field.Building != null)
+            Tile tile = _gameMap.GetTile(position);
+            if (tile.Building != null)
             {
                 return;
             }
 
-            _cardPlayer.PlayCardFromHandTo(selectedCard, field);
+            _cardPlayer.PlayCardFromHandTo(selectedCard, tile);
         }
     }
 }

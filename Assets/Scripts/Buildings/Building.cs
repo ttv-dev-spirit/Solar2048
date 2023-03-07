@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Solar2048.Buildings.Effect;
@@ -10,11 +11,11 @@ namespace Solar2048.Buildings
 {
     public sealed class Building
     {
+        private readonly BuildingSettings _buildingSettings;
+        
         private readonly Subject<Unit> _onPositionChanged = new();
         private readonly Subject<Building> _onDestroy = new();
-        private readonly BuildingSettings _buildingSettings;
         private readonly ReactiveProperty<bool> _areConditionsMet = new();
-
         private readonly ReactiveProperty<int> _level = new(1);
 
         public BuildingType BuildingType => _buildingSettings.BuildingType;

@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Solar2048.Localization.UI
 {
-    public sealed class LocalizationScreen : UIScreen, ILocalizationScreen
+    public sealed class LocalizationScreen : UIScreen
     {
         private readonly CompositeDisposable _subs = new();
 
