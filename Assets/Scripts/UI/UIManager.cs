@@ -1,18 +1,21 @@
 #nullable enable
+
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Solar2048.StaticData;
 using UniRx;
 using UnityEngine;
 
 namespace Solar2048.UI
 {
+    [UsedImplicitly]
     public sealed class UIManager
     {
-        private readonly Dictionary<Type, IUIScreen> _screens = new();
-
         private readonly MouseOverObserver _mouseOverObserver;
         private readonly UIManagerSettings _settings;
+        
+        private readonly Dictionary<Type, IUIScreen> _screens = new();
 
         public IReadOnlyReactiveProperty<bool> IsMouseOver => _mouseOverObserver.IsMouseOver;
         public LayerMask LayerMask => _settings.LayerMask;

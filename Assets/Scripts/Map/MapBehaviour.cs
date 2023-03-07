@@ -10,8 +10,10 @@ namespace Solar2048.Map
 
         public Vector3 BuildingMapToWorld(Vector2Int mapPosition)
         {
-            var position = new Vector3(mapPosition.x * _tileSize.x, 0, mapPosition.y * _tileSize.y);
-            return position += transform.position;
+            float x = mapPosition.x * _tileSize.x;
+            float z = mapPosition.y * _tileSize.y;
+            var position = new Vector3(x, 0, z);
+            return position + transform.position;
         }
 
         public Vector2Int TileWorldToMap(Vector3 position)

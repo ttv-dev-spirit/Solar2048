@@ -1,16 +1,18 @@
 ﻿#nullable enable
+
+using JetBrains.Annotations;
 using Solar2048.AssetManagement;
 using Solar2048.Buildings.UI;
 using UnityEngine;
 
 namespace Solar2048.Buildings
 {
-    // TODO (Stas): Rework to DI
+    [UsedImplicitly]
     public sealed class BuildingsFactory
     {
         private readonly IBuildingSettingsProvider _settingsProvider;
         private readonly BuildingBehaviour.Factory _buildingBehaviourFactory;
-        private IAssetProvider _assetProvider;
+        private readonly IAssetProvider _assetProvider;
 
         public BuildingsFactory(IBuildingSettingsProvider buildingSettingsProvider,
             BuildingBehaviour.Factory buildingBehaviourFactory, IAssetProvider assetProvider)

@@ -1,17 +1,21 @@
 ﻿#nullable enable
+
 using System;
+using JetBrains.Annotations;
 using Solar2048.Buildings;
 using Solar2048.Score;
 using UniRx;
 
 namespace Solar2048.Map
 {
+    [UsedImplicitly]
     public sealed class BuildingMover : IActivatable
     {
-        private Subject<Unit> _onMoved = new();
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
         private readonly IScoreCounter _scoreCounter;
+        
+        private readonly Subject<Unit> _onMoved = new();
 
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnMoved => _onMoved;
@@ -41,10 +45,10 @@ namespace Solar2048.Map
                     MoveBuildingsRight();
                     break;
                 case MoveDirection.Down:
-                    MoveBuildingsUp();
+                    MoveBuildingsDown();
                     break;
                 case MoveDirection.Up:
-                    MoveBuildingsDown();
+                    MoveBuildingsUp();
                     break;
             }
 
@@ -77,29 +81,29 @@ namespace Solar2048.Map
             }
         }
 
-        private void MoveBuildingsUp()
-        {
-            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
-            {
-                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
-                {
-                    MoveBuildingUpAndMerge(x, y);
-                }
-            }
-        }
-
         private void MoveBuildingsDown()
         {
             for (var x = 0; x < GameMap.FIELD_SIZE; x++)
             {
-                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
+                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
                 {
                     MoveBuildingDownAndMerge(x, y);
                 }
             }
         }
 
-        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
+        private void MoveBuildingsUp()
+        {
+            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
+            {
+                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
+                {
+                    MoveBuildingUpAndMerge(x, y);
+                }
+            }
+        }
+
+        private void MoveBuildingUpAndMerge(int xFrom, int yFrom)
         {
             Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
             if (fromTile.Building == null)
@@ -107,7 +111,7 @@ namespace Solar2048.Map
                 return;
             }
 
-            if (MergeDown(fromTile, out Tile? lastEmpty))
+            if (MergeUp(fromTile, out Tile? lastEmpty))
             {
                 return;
             }
@@ -121,7 +125,7 @@ namespace Solar2048.Map
             fromTile.RemoveBuilding();
         }
 
-        private void MoveBuildingUpAndMerge(int xFrom, int yFrom)
+        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
         {
             Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
             if (fromTile.Building == null)
@@ -129,7 +133,7 @@ namespace Solar2048.Map
                 return;
             }
 
-            if (MergeUp(fromTile, out Tile? lastEmpty))
+            if (MergeDown(fromTile, out Tile? lastEmpty))
             {
                 return;
             }
@@ -187,7 +191,7 @@ namespace Solar2048.Map
             fromTile.RemoveBuilding();
         }
 
-        private bool MergeDown(Tile fromTile, out Tile? lastEmpty)
+        private bool MergeUp(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
             for (int y = fromTile.Position.y + 1; y < GameMap.FIELD_SIZE; y++)
@@ -211,7 +215,7 @@ namespace Solar2048.Map
             return false;
         }
 
-        private bool MergeUp(Tile fromTile, out Tile? lastEmpty)
+        private bool MergeDown(Tile fromTile, out Tile? lastEmpty)
         {
             lastEmpty = null;
             for (int y = fromTile.Position.y - 1; y >= 0; y--)

@@ -1,19 +1,23 @@
 ﻿#nullable enable
+
 using System;
+using JetBrains.Annotations;
 using Solar2048.Infrastructure;
 using UniRx;
 using UnityEngine;
 
 namespace Solar2048.Map
 {
+    [UsedImplicitly]
     public sealed class GameMap : IResetable
     {
         public const int FIELD_SIZE = 4;
 
+        private readonly MapBehaviour _mapBehaviour;
+        
         private readonly Subject<Vector2Int> _onFieldClicked = new();
         private readonly Subject<Unit> _onTriggerBuildingEffects = new();
         private readonly Tile[,] _map = new Tile[FIELD_SIZE, FIELD_SIZE];
-        private MapBehaviour _mapBehaviour;
 
         public IObservable<Vector2Int> OnFieldClicked => _onFieldClicked;
         public IObservable<Unit> OnTriggerBuildingsEffects => _onTriggerBuildingEffects;
@@ -44,9 +48,9 @@ namespace Solar2048.Map
 
         public void Reset()
         {
-            for (int y = 0; y < FIELD_SIZE; y++)
+            for (var y = 0; y < FIELD_SIZE; y++)
             {
-                for (int x = 0; x < FIELD_SIZE; x++)
+                for (var x = 0; x < FIELD_SIZE; x++)
                 {
                     _map[x, y].Reset();
                 }
@@ -55,9 +59,9 @@ namespace Solar2048.Map
 
         private void CreateTiles()
         {
-            for (int x = 0; x < FIELD_SIZE; x++)
+            for (var x = 0; x < FIELD_SIZE; x++)
             {
-                for (int y = 0; y < FIELD_SIZE; y++)
+                for (var y = 0; y < FIELD_SIZE; y++)
                 {
                     _map[x, y] = new Tile(new Vector2Int(x, y));
                 }
@@ -66,9 +70,9 @@ namespace Solar2048.Map
 
         private void ResetStats()
         {
-            for (int y = 0; y < FIELD_SIZE; y++)
+            for (var y = 0; y < FIELD_SIZE; y++)
             {
-                for (int x = 0; x < FIELD_SIZE; x++)
+                for (var x = 0; x < FIELD_SIZE; x++)
                 {
                     _map[x, y].ResetStats();
                 }
