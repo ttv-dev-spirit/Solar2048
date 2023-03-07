@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using Solar2048.Localization.UI;
 using Solar2048.SaveLoad;
 using Solar2048.StateMachine;
 using UnityEngine;
@@ -8,7 +7,7 @@ using Zenject;
 
 namespace Solar2048.UI
 {
-    public sealed class MainMenuScreen : UIScreen, IMainMenuScreen
+    public sealed class MainMenuScreen : UIScreen
     {
         [SerializeField]
         private Button _continueButton = null!;

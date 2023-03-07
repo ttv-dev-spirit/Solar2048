@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using Solar2048.Localization.UI;
 using Solar2048.UI;
 using Zenject;
 
@@ -10,7 +9,7 @@ namespace Solar2048.StateMachine.Game.States
     {
         private readonly UIManager _uiManager;
 
-        private IMainMenuScreen _mainMenu = null!;
+        private MainMenuScreen _mainMenu = null!;
 
         public MainMenuState(UIManager uiManager)
         {

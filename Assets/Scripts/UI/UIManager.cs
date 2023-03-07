@@ -1,6 +1,6 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Solar2048.StaticData;
 using UniRx;
 using UnityEngine;
@@ -9,7 +9,7 @@ namespace Solar2048.UI
 {
     public sealed class UIManager
     {
-        private readonly List<IUIScreen> _screens = new();
+        private readonly Dictionary<Type, IUIScreen> _screens = new();
 
         private readonly MouseOverObserver _mouseOverObserver;
         private readonly UIManagerSettings _settings;
@@ -25,15 +25,26 @@ namespace Solar2048.UI
 
         public void Register(IUIScreen screen)
         {
-            _screens.Add(screen);
+            if (_screens.TryGetValue(screen.GetType(), out IUIScreen? registered))
+            {
+                var registeredScreen = (MonoBehaviour)registered;
+                var screenToRegister = (MonoBehaviour)screen;
+                Debug.LogError(
+                    $"Trying to register screen {screenToRegister.name} of type {screen.GetType().Name}, but {registeredScreen.name} of same type is already registered",
+                    registeredScreen);
+                return;
+            }
+
+            _screens[screen.GetType()] = screen;
             screen.Hide();
         }
 
-        public T GetScreen<T>() where T : IUIScreen => (T)_screens.First(screen => screen is T);
+        public T GetScreen<T>() where T : class, IUIScreen =>
+            _screens[typeof(T)] as T ?? throw new InvalidOperationException();
 
         public void HideAll()
         {
-            foreach (IUIScreen uiScreen in _screens)
+            foreach (IUIScreen uiScreen in _screens.Values)
             {
                 uiScreen.Hide();
             }

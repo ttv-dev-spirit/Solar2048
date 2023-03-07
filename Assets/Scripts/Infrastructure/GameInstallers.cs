@@ -46,9 +46,6 @@ namespace Solar2048.Infrastructure
         [SerializeField]
         private MouseOverObserver _mouseOverObserver = null!;
 
-        [SerializeField]
-        private MoveController _moveController = null!;
-
         public override void InstallBindings()
         {
             BindSingles();
@@ -104,7 +101,6 @@ namespace Solar2048.Infrastructure
 
         private void BindGameObjects()
         {
-            Container.Bind<MoveController>().FromInstance(_moveController);
             Container.Bind<MouseOverObserver>().FromInstance(_mouseOverObserver);
             Container.Bind<MapBehaviour>().FromInstance(_mapBehaviour);
         }

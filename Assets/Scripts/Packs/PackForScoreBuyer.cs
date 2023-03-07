@@ -36,7 +36,7 @@ namespace Solar2048.Packs
             int packCost = NextPackCost;
             _packsBought++;
             _scoreCounter.SubtractScore(packCost);
-            var packSelectionScreen = _uiManager.GetScreen<IPackSelectionScreen>();
+            var packSelectionScreen = _uiManager.GetScreen<PackSelectionScreen>();
             packSelectionScreen.Show();
         }
 

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Solar2048.UI
 {
-    public sealed class GamePauseScreen : UIScreen, IGamePauseScreen
+    public sealed class GamePauseScreen : UIScreen
     {
         private IGameLifeCycle _gameLifeCycle = null!;
 
@@ -18,7 +18,6 @@ namespace Solar2048.UI
 
         [SerializeField]
         private Button _toMainMenuButton = null!;
-
 
         [Inject]
         private void Construct(IGameLifeCycle gameLifeCycle)
