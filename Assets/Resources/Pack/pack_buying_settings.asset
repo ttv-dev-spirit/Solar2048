@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5886c69420487390d9b38d2ddfb93b, type: 3}
   m_Name: pack_buying_settings
   m_EditorClassIdentifier: 
-  _fistPacksCost: 10
-  _fixedCostPacksCount: 0
   _a: 8
-  _b: 8
+  _b: 0
