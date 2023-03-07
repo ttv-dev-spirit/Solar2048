@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: pack_buying_settings
   m_EditorClassIdentifier: 
   _fistPacksCost: 10
-  _fixedCostPacksCount: 1
-  _a: 10
-  _b: -8
+  _fixedCostPacksCount: 0
+  _a: 8
+  _b: 8
