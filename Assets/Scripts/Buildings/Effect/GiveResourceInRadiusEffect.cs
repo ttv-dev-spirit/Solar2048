@@ -24,12 +24,12 @@ namespace Solar2048.Buildings.Effect
             {
                 for (int x = xMin; x <= xMax; x++)
                 {
-                    Field field = gameMap.GetField(x, y);
-                    GiveResource(field, resourceToGive);
+                    Tile tile = gameMap.GetTile(x, y);
+                    GiveResource(tile, resourceToGive);
                 }
             }
         }
 
-        protected abstract void GiveResource(Field field, int value);
+        protected abstract void GiveResource(Tile tile, int value);
     }
 }

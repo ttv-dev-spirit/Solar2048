@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace Solar2048.Map
 {
-    public sealed class Field
+    public sealed class Tile
     {
         private readonly IReactiveProperty<int> _energy = new ReactiveProperty<int>();
         private readonly IReactiveProperty<int> _water = new ReactiveProperty<int>();
@@ -18,7 +18,7 @@ namespace Solar2048.Map
         public Vector2Int Position { get; }
         public Building? Building { get; private set; }
 
-        public Field(Vector2Int position)
+        public Tile(Vector2Int position)
         {
             Position = position;
         }

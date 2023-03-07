@@ -8,9 +8,9 @@ namespace Solar2048.Buildings.Effect
         order = 0)]
     public sealed class GiveWaterInRadiusEffect : GiveResourceInRadiusEffect
     {
-        protected override void GiveResource(Field field, int value)
+        protected override void GiveResource(Tile tile, int value)
         {
-            field.AddWater(value);
+            tile.AddWater(value);
         }
     }
 }

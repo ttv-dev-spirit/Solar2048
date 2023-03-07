@@ -24,7 +24,7 @@ namespace Solar2048.Cards
             IsActive = false;
         }
 
-        public void PlayCardFromHandTo(Card card, Field field)
+        public void PlayCardFromHandTo(Card card, Tile tile)
         {
             if (!IsActive)
             {
@@ -32,7 +32,7 @@ namespace Solar2048.Cards
             }
             
             _hand.RemoveCard(card);
-            _buildingsManager.AddNewBuilding(card.BuildingType, field);
+            _buildingsManager.AddNewBuilding(card.BuildingType, tile);
             _gameMap.RecalculateStats();
             _onCardPlayed.OnNext(Unit.Default);
         }
