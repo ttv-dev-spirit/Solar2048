@@ -1,4 +1,6 @@
 ﻿#nullable enable
+
+using JetBrains.Annotations;
 using Solar2048.SaveLoad;
 using UnityEngine;
 using Zenject;
@@ -6,10 +8,11 @@ using Zenject;
 namespace Solar2048.StateMachine.Game.States
 {
     // TODO (Stas): Handle failed load.
+    [UsedImplicitly]
     public sealed class LoadGameState : State
     {
         private readonly IGameStateReseter _gameStateReseter;
-        private SaveController _saveController;
+        private readonly SaveController _saveController;
 
         public bool IsLoaded { get; private set; }
 
@@ -35,6 +38,7 @@ namespace Solar2048.StateMachine.Game.States
         {
         }
 
+        [UsedImplicitly]
         public class Factory : PlaceholderFactory<LoadGameState>
         {
         }
