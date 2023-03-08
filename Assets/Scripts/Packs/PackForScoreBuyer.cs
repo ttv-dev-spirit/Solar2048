@@ -1,5 +1,8 @@
 #nullable enable
+
+using JetBrains.Annotations;
 using Solar2048.AssetManagement;
+using Solar2048.Infrastructure;
 using Solar2048.Packs.UI;
 using Solar2048.SaveLoad;
 using Solar2048.Score;
@@ -9,17 +12,20 @@ using UniRx;
 
 namespace Solar2048.Packs
 {
-    public sealed class PackForScoreBuyer : ISavable, ILoadable
+    [UsedImplicitly]
+    public sealed class PackForScoreBuyer : ISavable, ILoadable, IResetable
     {
-        private readonly PackBuyingSettings _packBuyingSettings;
         private readonly ScoreCounter _scoreCounter;
         private readonly UIManager _uiManager;
+        private readonly PackBuyingSettings _packBuyingSettings;
+
         private readonly ReactiveProperty<bool> _isEnoughPointsForPack = new();
+        private readonly ReactiveProperty<int> _nextPackCost = new();
 
         private int _packsBought;
 
         public IReadOnlyReactiveProperty<bool> IsEnoughPointsForPack => _isEnoughPointsForPack;
-        public int NextPackCost => _packBuyingSettings.GetPackCost(_packsBought);
+        public IReadOnlyReactiveProperty<int> NextPackCost => _nextPackCost;
 
         public PackForScoreBuyer(StaticDataProvider staticDataProvider, ScoreCounter scoreCounter, UIManager uiManager,
             SaveController saveController)
@@ -28,22 +34,22 @@ namespace Solar2048.Packs
             _scoreCounter = scoreCounter;
             _uiManager = uiManager;
             _scoreCounter.CurrentScore.Subscribe(ScoreUpdateHandler);
+            _nextPackCost.Subscribe(ScoreUpdateHandler);
             saveController.Register(this);
         }
 
         public void BuyPack()
         {
-            int packCost = NextPackCost;
+            _scoreCounter.SubtractScore(_nextPackCost.Value);
             _packsBought++;
-            _scoreCounter.SubtractScore(packCost);
+            _nextPackCost.Value = _packBuyingSettings.GetPackCost(_packsBought);
             var packSelectionScreen = _uiManager.GetScreen<PackSelectionScreen>();
             packSelectionScreen.Show();
         }
 
-        private void ScoreUpdateHandler(int score)
+        private void ScoreUpdateHandler(int _)
         {
-            int packCost = NextPackCost;
-            _isEnoughPointsForPack.Value = packCost <= _scoreCounter.CurrentScore.Value;
+            _isEnoughPointsForPack.Value = _nextPackCost.Value <= _scoreCounter.CurrentScore.Value;
         }
 
         public void Save(GameData gameData)
@@ -55,7 +61,14 @@ namespace Solar2048.Packs
         public void Load(GameData gameData)
         {
             _packsBought = gameData.PacksBought;
+            _nextPackCost.Value = _packBuyingSettings.GetPackCost(_packsBought);
             _scoreCounter.Load(gameData);
+        }
+
+        public void Reset()
+        {
+            _packsBought = 0;
+            _nextPackCost.Value = _packBuyingSettings.GetPackCost(_packsBought);
         }
     }
 }

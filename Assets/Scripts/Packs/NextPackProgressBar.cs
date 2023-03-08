@@ -11,6 +11,7 @@ namespace Solar2048.Packs
     public sealed class NextPackProgressBar : MonoBehaviour
     {
         private PackForScoreBuyer _packForScoreBuyer = null!;
+        private IScoreCounter _scoreCounter = null!;
 
         [SerializeField]
         private Image _progressBar = null!;
@@ -21,14 +22,16 @@ namespace Solar2048.Packs
         [Inject]
         private void Construct(IScoreCounter scoreCounter, PackForScoreBuyer packForScoreBuyer)
         {
+            _scoreCounter = scoreCounter;
             _packForScoreBuyer = packForScoreBuyer;
-            scoreCounter.CurrentScore.Subscribe(OnScoreChanged);
+            _scoreCounter.CurrentScore.Subscribe(OnScoreChanged);
+            _packForScoreBuyer.NextPackCost.Subscribe(OnScoreChanged);
         }
 
-        private void OnScoreChanged(int score)
+        private void OnScoreChanged(int _)
         {
-            _scoreText.text = $"{score}/{_packForScoreBuyer.NextPackCost}";
-            float packProgress = score / (float)_packForScoreBuyer.NextPackCost;
+            _scoreText.text = $"{_scoreCounter.CurrentScore.Value}/{_packForScoreBuyer.NextPackCost.Value}";
+            float packProgress = _scoreCounter.CurrentScore.Value / (float)_packForScoreBuyer.NextPackCost.Value;
             _progressBar.fillAmount = Mathf.Min(packProgress, 1);
         }
     }
