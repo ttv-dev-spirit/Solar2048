@@ -33,14 +33,13 @@ namespace Solar2048.Packs
             _packBuyingSettings = staticDataProvider.PackBuyingSettings;
             _scoreCounter = scoreCounter;
             _uiManager = uiManager;
-            _scoreCounter.CurrentScore.Subscribe(ScoreUpdateHandler);
+            _scoreCounter.Score.Subscribe(ScoreUpdateHandler);
             _nextPackCost.Subscribe(ScoreUpdateHandler);
             saveController.Register(this);
         }
 
         public void BuyPack()
         {
-            _scoreCounter.SubtractScore(_nextPackCost.Value);
             _packsBought++;
             _nextPackCost.Value = _packBuyingSettings.GetPackCost(_packsBought);
             var packSelectionScreen = _uiManager.GetScreen<PackSelectionScreen>();
@@ -49,7 +48,7 @@ namespace Solar2048.Packs
 
         private void ScoreUpdateHandler(int _)
         {
-            _isEnoughPointsForPack.Value = _nextPackCost.Value <= _scoreCounter.CurrentScore.Value;
+            _isEnoughPointsForPack.Value = _nextPackCost.Value <= _scoreCounter.Score.Value;
         }
 
         public void Save(GameData gameData)
@@ -70,5 +69,7 @@ namespace Solar2048.Packs
             _packsBought = 0;
             _nextPackCost.Value = _packBuyingSettings.GetPackCost(_packsBought);
         }
+
+        public int GetCurrentPackCost() => _packBuyingSettings.GetPackCost(_packsBought - 1);
     }
 }

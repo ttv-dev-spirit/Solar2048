@@ -7,8 +7,7 @@ namespace Solar2048.SaveLoad
 {
     public sealed class GameData
     {
-        public int CurrentScore;
-        public int TotalScore;
+        public int Score;
         public List<BuildingType> Hand = new();
         public List<BuildingData> Buildings = new();
         public MoveDirection NextDirection;
