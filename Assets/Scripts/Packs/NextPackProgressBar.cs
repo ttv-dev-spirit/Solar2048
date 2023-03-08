@@ -1,4 +1,5 @@
 #nullable enable
+
 using Solar2048.Score;
 using TMPro;
 using UniRx;
@@ -16,23 +17,22 @@ namespace Solar2048.Packs
         [SerializeField]
         private Image _progressBar = null!;
 
-        [SerializeField]
-        private TMP_Text _scoreText = null!;
-
         [Inject]
         private void Construct(IScoreCounter scoreCounter, PackForScoreBuyer packForScoreBuyer)
         {
             _scoreCounter = scoreCounter;
             _packForScoreBuyer = packForScoreBuyer;
-            _scoreCounter.CurrentScore.Subscribe(OnScoreChanged);
+            _scoreCounter.Score.Subscribe(OnScoreChanged);
             _packForScoreBuyer.NextPackCost.Subscribe(OnScoreChanged);
         }
 
         private void OnScoreChanged(int _)
         {
-            _scoreText.text = $"{_scoreCounter.CurrentScore.Value}/{_packForScoreBuyer.NextPackCost.Value}";
-            float packProgress = _scoreCounter.CurrentScore.Value / (float)_packForScoreBuyer.NextPackCost.Value;
-            _progressBar.fillAmount = Mathf.Min(packProgress, 1);
+            int currentPackCost = _packForScoreBuyer.GetCurrentPackCost();
+            int nextPackCost = _packForScoreBuyer.NextPackCost.Value;
+            int score = _scoreCounter.Score.Value;
+            float packProgress = (score - currentPackCost) / (float)(nextPackCost - currentPackCost);
+            _progressBar.fillAmount = Mathf.Clamp(packProgress, 0, 1);
         }
     }
 }

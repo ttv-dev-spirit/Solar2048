@@ -14,7 +14,14 @@ namespace Solar2048.Packs
 
         public int GetPackCost(int packNumber)
         {
-            return _a * (packNumber + 1) + _b;
+            if (packNumber < 0)
+            {
+                return 0;
+            }
+
+            packNumber++;
+
+            return _a * (packNumber + packNumber * packNumber) / 2 + _b * packNumber;
         }
     }
 }

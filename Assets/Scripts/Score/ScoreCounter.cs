@@ -13,12 +13,10 @@ namespace Solar2048.Score
     public sealed class ScoreCounter : IResetable, ISavable, ILoadable, IScoreCounter
     {
         private readonly ScoreSettings _settings;
-        
-        private readonly ReactiveProperty<int> _totalScore = new();
-        private readonly ReactiveProperty<int> _currentScore = new();
 
-        public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
-        public IReadOnlyReactiveProperty<int> CurrentScore => _currentScore;
+        private readonly ReactiveProperty<int> _score = new();
+
+        public IReadOnlyReactiveProperty<int> Score => _score;
 
         public ScoreCounter(StaticDataProvider staticDataProvider)
         {
@@ -28,31 +26,22 @@ namespace Solar2048.Score
         public void AddMergeScore(int resultLevel)
         {
             int scoreToAdd = _settings.GetMergeScore(resultLevel);
-            _totalScore.Value += scoreToAdd;
-            _currentScore.Value += scoreToAdd;
-        }
-
-        public void SubtractScore(int value)
-        {
-            _currentScore.Value -= value;
+            _score.Value += scoreToAdd;
         }
 
         public void Reset()
         {
-            _totalScore.Value = 0;
-            _currentScore.Value = 0;
+            _score.Value = 0;
         }
 
         public void Save(GameData gameData)
         {
-            gameData.CurrentScore = _currentScore.Value;
-            gameData.TotalScore = _totalScore.Value;
+            gameData.Score = _score.Value;
         }
 
         public void Load(GameData gameData)
         {
-            _currentScore.Value = gameData.CurrentScore;
-            _totalScore.Value = gameData.TotalScore;
+            _score.Value = gameData.Score;
         }
     }
 }
