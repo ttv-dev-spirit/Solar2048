@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Solar2048.Buildings;
 using Solar2048.Cards;
+using Solar2048.SaveLoad;
 using Solar2048.UI;
 using UniRx;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Solar2048.Packs.UI
     {
         private PackGenerator _packGenerator = null!;
         private CardSpawner _cardSpawner = null!;
+        private SaveController _saveController = null!;
+
         private PackPreview? _selectedPack;
 
         [SerializeField]
@@ -24,9 +27,11 @@ namespace Solar2048.Packs.UI
         [SerializeField]
         private Button _selectButton = null!;
 
+
         [Inject]
-        private void Construct(PackGenerator packGenerator, CardSpawner cardSpawner)
+        private void Construct(PackGenerator packGenerator, CardSpawner cardSpawner, SaveController saveController)
         {
+            _saveController = saveController;
             _packGenerator = packGenerator;
             _cardSpawner = cardSpawner;
         }
@@ -78,6 +83,8 @@ namespace Solar2048.Packs.UI
             {
                 _cardSpawner.AddCardToHand(card);
             }
+
+            _saveController.SaveGame();
             Hide();
         }
     }

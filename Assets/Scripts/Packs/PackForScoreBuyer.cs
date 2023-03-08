@@ -34,6 +34,7 @@ namespace Solar2048.Packs
             _scoreCounter = scoreCounter;
             _uiManager = uiManager;
             _scoreCounter.CurrentScore.Subscribe(ScoreUpdateHandler);
+            _nextPackCost.Subscribe(ScoreUpdateHandler);
             saveController.Register(this);
         }
 
@@ -46,7 +47,7 @@ namespace Solar2048.Packs
             packSelectionScreen.Show();
         }
 
-        private void ScoreUpdateHandler(int score)
+        private void ScoreUpdateHandler(int _)
         {
             _isEnoughPointsForPack.Value = _nextPackCost.Value <= _scoreCounter.CurrentScore.Value;
         }
