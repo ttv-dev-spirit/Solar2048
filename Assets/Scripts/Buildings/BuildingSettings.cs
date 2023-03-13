@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 namespace Solar2048.Buildings
 {
     [CreateAssetMenu(menuName = "Configs/Building Settings", fileName = "BuildingSettings", order = 0)]
-    public sealed class BuildingSettings : ScriptableObject
+    public sealed class BuildingSettings : ScriptableObject, IBuildingSettings
     {
         [SerializeField]
         private BuildingType _buildingType;

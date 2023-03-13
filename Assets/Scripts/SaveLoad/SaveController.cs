@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Solar2048.SaveLoad
 {
-    public sealed class SaveController
+    public sealed class SaveController : ISaveRegister
     {
         private readonly List<ISavable> _savables = new();
         private readonly List<ILoadable> _loadables = new();

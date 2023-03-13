@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Solar2048.Buildings
 {
     [UsedImplicitly]
-    public sealed class BuildingsFactory
+    public sealed class BuildingsFactory : IBuildingsFactory
     {
         private readonly IBuildingSettingsProvider _settingsProvider;
         private readonly BuildingBehaviour.Factory _buildingBehaviourFactory;

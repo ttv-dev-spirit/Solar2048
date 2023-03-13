@@ -11,8 +11,8 @@ namespace Solar2048.Buildings
 {
     public sealed class Building
     {
-        private readonly BuildingSettings _buildingSettings;
-        
+        private readonly IBuildingSettings _buildingSettings;
+
         private readonly Subject<Unit> _onPositionChanged = new();
         private readonly Subject<Building> _onDestroy = new();
         private readonly ReactiveProperty<bool> _areConditionsMet = new();
@@ -28,7 +28,7 @@ namespace Solar2048.Buildings
         public IEnumerable<BuildingEffect> BuildingEffects => _buildingSettings.BuildingEffects;
         public IReadOnlyReactiveProperty<bool> AreConditionsMet => _areConditionsMet;
 
-        public Building(BuildingSettings buildingSettings)
+        public Building(IBuildingSettings buildingSettings)
         {
             _buildingSettings = buildingSettings;
         }

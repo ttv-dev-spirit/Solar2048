@@ -11,18 +11,18 @@ namespace Solar2048.Buildings
 {
     public sealed class BuildingsManager : IResetable, ISavable, ILoadable
     {
-        private readonly BuildingsFactory _buildingsFactory;
+        private readonly IBuildingsFactory _buildingsFactory;
         private readonly GameMap _gameMap;
 
         private readonly List<Building> _buildings = new();
 
         public IReadOnlyList<Building> Buildings => _buildings;
 
-        public BuildingsManager(BuildingsFactory buildingsFactory, GameMap gameMap, SaveController saveController)
+        public BuildingsManager(IBuildingsFactory buildingsFactory, GameMap gameMap, ISaveRegister saveRegister)
         {
             _gameMap = gameMap;
             _buildingsFactory = buildingsFactory;
-            saveController.Register(this);
+            saveRegister.Register(this);
         }
 
         public void AddNewBuilding(BuildingType buildingType, Tile tile)
@@ -42,6 +42,8 @@ namespace Solar2048.Buildings
 
         public void RemoveBuilding(Building building)
         {
+            Tile tile = _gameMap.GetTile(building.Position);
+            tile.RemoveBuilding();
             _buildings.Remove(building);
             building.Destroy();
         }

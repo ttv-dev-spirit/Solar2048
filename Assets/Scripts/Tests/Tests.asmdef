@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Solar2048"
+        "Solar2048",
+        "UniRx"
     ],
     "includePlatforms": [
         "Editor"

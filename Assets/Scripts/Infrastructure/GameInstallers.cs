@@ -71,7 +71,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<GameMap>().AsSingle();
             Container.BindInterfacesAndSelfTo<MessageBroker>().AsSingle();
             Container.Bind<BuildingsManager>().AsSingle();
-            Container.Bind<BuildingsFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<BuildingsFactory>().AsSingle();
             Container.Bind<Hand>().FromInstance(_hand);
             Container.Bind<CardSpawner>().AsSingle();
             Container.Bind<BuildingPlacer>().AsSingle().NonLazy();
@@ -92,7 +92,7 @@ namespace Solar2048.Infrastructure
             Container.Bind<CheatsContainer>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<StaticDataProvider>().AsSingle();
-            Container.Bind<SaveController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SaveController>().AsSingle();
             Container.BindInterfacesTo<GameStateReseter>().AsSingle();
             Container.Bind<DataToFileWriter>().AsSingle();
             Container.Bind(typeof(ICycleCounter), typeof(CycleCounter)).To<CycleCounter>().AsSingle();
