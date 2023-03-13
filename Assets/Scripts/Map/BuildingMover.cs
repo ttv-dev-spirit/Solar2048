@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Solar2048.Buildings;
 using Solar2048.Score;
 using UniRx;
+using UnityEngine;
 
 namespace Solar2048.Map
 {
@@ -14,7 +15,7 @@ namespace Solar2048.Map
         private readonly BuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
         private readonly IScoreCounter _scoreCounter;
-        
+
         private readonly Subject<Unit> _onMoved = new();
 
         public bool IsActive { get; private set; }
@@ -296,8 +297,41 @@ namespace Solar2048.Map
 
             toTile.Building!.UpLevel();
             _buildingsManager.RemoveBuilding(fromTile.Building);
-            fromTile.RemoveBuilding();
             _scoreCounter.AddMergeScore(toTile.Building.Level.Value);
+        }
+
+        public bool HasAnythingToMerge(MoveDirection direction)
+        {
+            var moveInfo = new MoveInfo(GameMap.FIELD_SIZE, GameMap.FIELD_SIZE, direction);
+            for (int x = moveInfo.StartColumn; moveInfo.IsXInBounds(x); x += moveInfo.ColumnStep)
+            {
+                for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
+                {
+                    Tile fromTile = _gameMap.GetTile(x, y);
+                    if (fromTile.Building == null)
+                    {
+                        continue;
+                    }
+
+                    for (Vector2Int toPosition = fromTile.Position + moveInfo.Direction;
+                         moveInfo.IsInBounds(toPosition);
+                         toPosition += moveInfo.Direction)
+                    {
+                        Tile toTile = _gameMap.GetTile(toPosition);
+                        if (toTile.Building == null)
+                        {
+                            continue;
+                        }
+
+                        if (fromTile.Building.CanBeMerged(toTile.Building))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
