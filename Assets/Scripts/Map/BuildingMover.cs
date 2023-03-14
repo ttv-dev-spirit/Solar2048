@@ -43,27 +43,7 @@ namespace Solar2048.Map
             {
                 for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
                 {
-                    Tile fromTile = _gameMap.GetTile(x, y);
-                    if (fromTile.Building == null)
-                    {
-                        continue;
-                    }
-
-                    Tile targetTile = FindTargetTile(fromTile, ref moveInfo);
-                    if (targetTile == fromTile)
-                    {
-                        continue;
-                    }
-
-                    if (targetTile.Building == null)
-                    {
-                        targetTile.AddBuilding(fromTile.Building);
-                        fromTile.RemoveBuilding();
-                    }
-                    else
-                    {
-                        MergeBuilding(fromTile, targetTile);
-                    }
+                    MoveBuilding(x, y, ref moveInfo);
                 }
             }
 
@@ -91,7 +71,36 @@ namespace Solar2048.Map
 
             return false;
         }
-        
+
+        private void MoveBuilding(int x, int y, ref MoveInfo moveInfo)
+        {
+            Tile fromTile = _gameMap.GetTile(x, y);
+            if (fromTile.Building == null)
+            {
+                return;
+            }
+
+            Tile targetTile = FindTargetTile(fromTile, ref moveInfo);
+            if (targetTile == fromTile)
+            {
+                return;
+            }
+
+            if (targetTile.Building == null)
+            {
+                MoveBuilding(fromTile, targetTile);
+                return;
+            }
+
+            MergeBuilding(fromTile, targetTile);
+        }
+
+        private void MoveBuilding(Tile fromTile, Tile toTile)
+        {
+            toTile.AddBuilding(fromTile.Building!);
+            fromTile.RemoveBuilding();
+        }
+
         private void MergeBuilding(Tile fromTile, Tile toTile)
         {
             toTile.Building!.UpLevel();
@@ -140,16 +149,12 @@ namespace Solar2048.Map
                  toPosition += moveInfo.Direction)
             {
                 Tile toTile = _gameMap.GetTile(toPosition);
-                if (toTile.Building == null)
+                if (toTile.Building != null)
                 {
-                    lastPossiblePosition = toTile;
-                    continue;
+                    return CanBeUniquelyMerged(fromTile, toTile) ? toTile : lastPossiblePosition;
                 }
 
-                if (CanBeUniquelyMerged(fromTile, toTile))
-                {
-                    return toTile;
-                }
+                lastPossiblePosition = toTile;
             }
 
             return lastPossiblePosition;

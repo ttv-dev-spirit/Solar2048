@@ -1,12 +1,14 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NSubstitute;
 using NUnit.Framework;
 using Solar2048;
 using Solar2048.Buildings;
 using Solar2048.Map;
+using Solar2048.SaveLoad;
 using Solar2048.Score;
 using UnityEngine;
 
@@ -29,7 +31,7 @@ namespace Tests
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             // Act.
-            AddBuildingsToPositions(gameMap, positions, _ => buildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, _ => buildingType);
             // Assert.
             Assert.IsTrue(buildingsMoverUnderTest.HasAnythingToMerge(moveDirection));
         }
@@ -47,7 +49,7 @@ namespace Tests
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             // Act.
-            AddBuildingsToPositions(gameMap, positions, _ => buildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, _ => buildingType);
             // Assert.
             Assert.IsFalse(buildingsMoverUnderTest.HasAnythingToMerge(moveDirection));
         }
@@ -66,7 +68,7 @@ namespace Tests
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             // Act.
-            AddBuildingsToPositions(gameMap, positions, GetBuildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
             // Assert.
             Assert.IsFalse(buildingsMoverUnderTest.HasAnythingToMerge(moveDirection));
 
@@ -87,7 +89,7 @@ namespace Tests
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             // Act.
-            AddBuildingsToPositions(gameMap, positions, GetBuildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
 
             // Assert.
             Assert.IsFalse(buildingsMoverUnderTest.HasAnythingToMerge(moveDirection));
@@ -109,7 +111,7 @@ namespace Tests
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             // Act.
-            AddBuildingsToPositions(gameMap, positions, GetBuildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
 
             // Assert.
             Assert.IsTrue(buildingsMoverUnderTest.HasAnythingToMerge(moveDirection));
@@ -131,7 +133,7 @@ namespace Tests
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             var activatable = (IActivatable)buildingsMoverUnderTest;
             activatable.Activate();
-            AddBuildingsToPositions(gameMap, positions, GetBuildingType);
+            AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
             // Act.
             buildingsMoverUnderTest.MoveBuildings(moveDirection);
 
@@ -159,12 +161,17 @@ namespace Tests
             const BuildingType buildingType = BuildingType.SolarPanel;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
+            var saveRegister = Substitute.For<ISaveRegister>();
+            var buildingsFactory = Substitute.For<IBuildingsFactory>();
+            var buildingSettings = Substitute.For<IBuildingSettings>();
+            buildingSettings.BuildingType.Returns(buildingType);
+            buildingsFactory.Create(buildingType).Returns(_ => new Building(buildingSettings));
+            var buildingsManager = new BuildingsManager(buildingsFactory, gameMap, saveRegister);
             var scoreCounter = Substitute.For<IScoreCounter>();
             IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
             var activatable = (IActivatable)buildingsMoverUnderTest;
             activatable.Activate();
-            AddBuildingsToPositions(gameMap, positions, _ => buildingType);
+            AddBuildingsToPositions(gameMap, buildingsManager, positions, _ => buildingType);
             // Act.
             buildingsMoverUnderTest.MoveBuildings(moveDirection);
 
@@ -183,7 +190,65 @@ namespace Tests
             }
         }
 
-        private void AddBuildingsToPositions(GameMap gameMap, Vector2Int[] positions,
+        [Test]
+        public void WhenMove_AndNIdenticalAlignedBuildingsOnMap_ThenNHalfMergedBuildingsAreOnMap(
+            [Values] MoveDirection moveDirection, [NUnit.Framework.Range(1, 4)] int numberOfPositions)
+        {
+            // Arrange.
+            const BuildingType buildingType = BuildingType.SolarPanel;
+            Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
+            GameMap gameMap = Create.GameMap();
+            var saveRegister = Substitute.For<ISaveRegister>();
+            var buildingsFactory = Substitute.For<IBuildingsFactory>();
+            var buildingSettings = Substitute.For<IBuildingSettings>();
+            buildingSettings.BuildingType.Returns(buildingType);
+            buildingsFactory.Create(buildingType).Returns(_ => new Building(buildingSettings));
+            var buildingsManager = new BuildingsManager(buildingsFactory, gameMap, saveRegister);
+            var scoreCounter = Substitute.For<IScoreCounter>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var activatable = (IActivatable)buildingsMoverUnderTest;
+            activatable.Activate();
+            AddBuildingsToPositions(gameMap, buildingsManager, positions, _ => buildingType);
+            // Act.
+            buildingsMoverUnderTest.MoveBuildings(moveDirection);
+
+            // Assert.
+            int resultingBuildingsNumber = numberOfPositions % 2 + numberOfPositions / 2;
+
+            var alignedPositions = new List<Vector2Int>();
+            var buildingsNumber = 0;
+            if (moveDirection == MoveDirection.Right || moveDirection == MoveDirection.Left)
+            {
+                int y = positions[0].y;
+                for (var x = 0; x < GameMap.FIELD_SIZE; x++)
+                {
+                    Tile tile = gameMap.GetTile(x, y);
+                    alignedPositions.Add(tile.Position);
+                    if (tile.Building != null)
+                    {
+                        buildingsNumber++;
+                    }
+                }
+            }
+            else
+            {
+                int x = positions[0].x;
+                for (var y = 0; y < GameMap.FIELD_SIZE; y++)
+                {
+                    Tile tile = gameMap.GetTile(x, y);
+                    alignedPositions.Add(tile.Position);
+                    if (tile.Building != null)
+                    {
+                        buildingsNumber++;
+                    }
+                }
+            }
+
+            Assert.IsTrue(buildingsNumber == resultingBuildingsNumber,
+                $"Expected {resultingBuildingsNumber} buildings, but {buildingsNumber} is on the map. \n {Utility.PrintBuildingsAt(gameMap, alignedPositions)}");
+        }
+
+        private void AddBuildingsToPositionsWithoutManager(GameMap gameMap, Vector2Int[] positions,
             Func<int, BuildingType> getBuildingType, bool log = false)
         {
             for (var i = 0; i < positions.Length; i++)
@@ -195,6 +260,22 @@ namespace Tests
                 if (log)
                 {
                     Debug.Log($"{building.BuildingType.ToString()} is added to {tile.Position.ToString()}");
+                }
+            }
+        }
+
+        private void AddBuildingsToPositions(GameMap gameMap, IBuildingsManager buildingsManager,
+            Vector2Int[] positions,
+            Func<int, BuildingType> getBuildingType, bool log = false)
+        {
+            for (var i = 0; i < positions.Length; i++)
+            {
+                Tile tile = gameMap.GetTile(positions[i]);
+                BuildingType buildingType = getBuildingType(i);
+                buildingsManager.AddNewBuilding(buildingType, tile);
+                if (log)
+                {
+                    Debug.Log($"{tile.Building!.BuildingType.ToString()} is added to {tile.Position.ToString()}");
                 }
             }
         }
