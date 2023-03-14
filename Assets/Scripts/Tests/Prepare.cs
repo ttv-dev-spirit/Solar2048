@@ -47,6 +47,65 @@ namespace Tests
             }
         }
 
+        public static Vector2Int[] GetNLastAlignedPositions(MoveDirection direction, int numberOfPositions,
+            Vector2Int position) =>
+            direction switch
+            {
+                MoveDirection.Up => GetNAlignedPositionsFromTheTop(numberOfPositions, position),
+                MoveDirection.Down => GetNAlignedPositionsFromTheBottom(numberOfPositions, position),
+                MoveDirection.Right => GetNAlignedPositionsFromTheRight(numberOfPositions, position),
+                MoveDirection.Left => GetNAlignedPositionsFromTheLeft(numberOfPositions, position),
+                _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+            };
+
+        private static Vector2Int[] GetNAlignedPositionsFromTheLeft(int numberOfPositions, Vector2Int position)
+        {
+            var result = new List<Vector2Int>();
+            int y = position.y;
+            for (var x = 0; x < numberOfPositions; x++)
+            {
+                result.Add(new Vector2Int(x, y));
+            }
+
+            return result.ToArray();
+        }
+
+        private static Vector2Int[] GetNAlignedPositionsFromTheRight(int numberOfPositions, Vector2Int position)
+        {
+            var result = new List<Vector2Int>();
+            int y = position.y;
+            for (int x = GameMap.FIELD_SIZE - numberOfPositions; x < GameMap.FIELD_SIZE; x++)
+            {
+                result.Add(new Vector2Int(x, y));
+            }
+
+            return result.ToArray();
+        }
+
+        private static Vector2Int[] GetNAlignedPositionsFromTheBottom(int numberOfPositions, Vector2Int position)
+        {
+            var result = new List<Vector2Int>();
+            int x = position.x;
+            for (var y = 0; y < numberOfPositions; y++)
+            {
+                result.Add(new Vector2Int(x, y));
+            }
+
+            return result.ToArray();
+        }
+
+        private static Vector2Int[] GetNAlignedPositionsFromTheTop(int numberOfPositions, Vector2Int position)
+        {
+            var result = new List<Vector2Int>();
+            int x = position.x;
+            for (int y = GameMap.FIELD_SIZE - numberOfPositions; y < GameMap.FIELD_SIZE; y++)
+            {
+                result.Add(new Vector2Int(x, y));
+            }
+
+            return result.ToArray();
+        }
+
         private static Vector2Int[] GetNHorizontallyAlignedPositionsOnMap(int numberOfPositions)
         {
             var result = new List<Vector2Int>();
