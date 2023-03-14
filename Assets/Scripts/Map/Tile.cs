@@ -47,12 +47,6 @@ namespace Solar2048.Map
             _food.Value = 0;
         }
 
-        public void Reset()
-        {
-            ResetStats();
-            RemoveBuilding();
-        }
-
         public void AddEnergy(int value) => _energy.Value += value;
         public void AddWater(int value) => _water.Value += value;
         public void AddFood(int value) => _food.Value += value;

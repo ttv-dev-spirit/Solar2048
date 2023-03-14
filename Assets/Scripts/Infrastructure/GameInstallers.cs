@@ -70,7 +70,7 @@ namespace Solar2048.Infrastructure
             Container.Bind(typeof(IGameLifeCycle), typeof(IStateMachine)).To<GameStateMachine>().AsSingle();
             Container.Bind<GameMap>().AsSingle();
             Container.BindInterfacesAndSelfTo<MessageBroker>().AsSingle();
-            Container.Bind<BuildingsManager>().AsSingle();
+            Container.Bind(typeof(IBuildingsManager), typeof(BuildingsManager)).To<BuildingsManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<BuildingsFactory>().AsSingle();
             Container.Bind<Hand>().FromInstance(_hand);
             Container.Bind<CardSpawner>().AsSingle();

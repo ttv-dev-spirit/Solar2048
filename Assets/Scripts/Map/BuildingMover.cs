@@ -10,9 +10,9 @@ using UnityEngine;
 namespace Solar2048.Map
 {
     [UsedImplicitly]
-    public sealed class BuildingMover : IActivatable
+    public sealed class BuildingMover : IActivatable, IBuildingMover
     {
-        private readonly BuildingsManager _buildingsManager;
+        private readonly IBuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
         private readonly IScoreCounter _scoreCounter;
 
@@ -21,7 +21,7 @@ namespace Solar2048.Map
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnMoved => _onMoved;
 
-        public BuildingMover(GameMap gameMap, BuildingsManager buildingsManager, IScoreCounter scoreCounter)
+        public BuildingMover(GameMap gameMap, IBuildingsManager buildingsManager, IScoreCounter scoreCounter)
         {
             _gameMap = gameMap;
             _buildingsManager = buildingsManager;
@@ -36,7 +36,6 @@ namespace Solar2048.Map
                 return;
             }
 
-            // TODO (Stas): Clear this (direction swapped).
             switch (direction)
             {
                 case MoveDirection.Left:
@@ -59,6 +58,24 @@ namespace Solar2048.Map
 
         public void Activate() => IsActive = true;
         public void Deactivate() => IsActive = false;
+
+        public bool HasAnythingToMerge(MoveDirection direction)
+        {
+            var moveInfo = new MoveInfo(GameMap.FIELD_SIZE, GameMap.FIELD_SIZE, direction);
+            for (int x = moveInfo.StartColumn; moveInfo.IsXInBounds(x); x += moveInfo.ColumnStep)
+            {
+                for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
+                {
+                    Tile fromTile = _gameMap.GetTile(x, y);
+                    if (fromTile.Building != null && CanBeMerged(fromTile, moveInfo))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         private void MoveBuildingsLeft()
         {
@@ -300,35 +317,27 @@ namespace Solar2048.Map
             _scoreCounter.AddMergeScore(toTile.Building.Level.Value);
         }
 
-        public bool HasAnythingToMerge(MoveDirection direction)
+
+        private bool CanBeMerged(Tile fromTile, MoveInfo moveInfo)
         {
-            var moveInfo = new MoveInfo(GameMap.FIELD_SIZE, GameMap.FIELD_SIZE, direction);
-            for (int x = moveInfo.StartColumn; moveInfo.IsXInBounds(x); x += moveInfo.ColumnStep)
+            if (fromTile.Building == null)
             {
-                for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
+                Debug.LogError(
+                    $"fromTile at {fromTile.Position.ToString()} without a building should not be checked for merge.");
+                return false;
+            }
+
+            for (Vector2Int toPosition = fromTile.Position + moveInfo.Direction;
+                 moveInfo.IsInBounds(toPosition);
+                 toPosition += moveInfo.Direction)
+            {
+                Tile toTile = _gameMap.GetTile(toPosition);
+                if (toTile.Building == null)
                 {
-                    Tile fromTile = _gameMap.GetTile(x, y);
-                    if (fromTile.Building == null)
-                    {
-                        continue;
-                    }
-
-                    for (Vector2Int toPosition = fromTile.Position + moveInfo.Direction;
-                         moveInfo.IsInBounds(toPosition);
-                         toPosition += moveInfo.Direction)
-                    {
-                        Tile toTile = _gameMap.GetTile(toPosition);
-                        if (toTile.Building == null)
-                        {
-                            continue;
-                        }
-
-                        if (fromTile.Building.CanBeMerged(toTile.Building))
-                        {
-                            return true;
-                        }
-                    }
+                    continue;
                 }
+
+                return fromTile.Building!.CanBeMerged(toTile.Building);
             }
 
             return false;

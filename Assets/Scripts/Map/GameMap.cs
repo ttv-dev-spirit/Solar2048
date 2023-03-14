@@ -52,7 +52,7 @@ namespace Solar2048.Map
             {
                 for (var x = 0; x < FIELD_SIZE; x++)
                 {
-                    _map[x, y].Reset();
+                    _map[x, y].ResetStats();
                 }
             }
         }

@@ -10,13 +10,13 @@ namespace Solar2048.Cards
     {
         private readonly Subject<Unit> _onCardPlayed = new();
         private readonly Hand _hand;
-        private readonly BuildingsManager _buildingsManager;
+        private readonly IBuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
 
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnCardPlayed => _onCardPlayed;
 
-        public CardPlayer(Hand hand, BuildingsManager buildingsManager, GameMap gameMap)
+        public CardPlayer(Hand hand, IBuildingsManager buildingsManager, GameMap gameMap)
         {
             _hand = hand;
             _buildingsManager = buildingsManager;

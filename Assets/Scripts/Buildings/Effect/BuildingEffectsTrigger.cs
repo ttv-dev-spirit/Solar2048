@@ -8,10 +8,10 @@ namespace Solar2048.Buildings.Effect
 {
     public sealed class BuildingEffectsTrigger
     {
-        private readonly BuildingsManager _buildingsManager;
+        private readonly IBuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
 
-        public BuildingEffectsTrigger(BuildingsManager buildingsManager, GameMap gameMap)
+        public BuildingEffectsTrigger(IBuildingsManager buildingsManager, GameMap gameMap)
         {
             _buildingsManager = buildingsManager;
             _gameMap = gameMap;
@@ -20,7 +20,7 @@ namespace Solar2048.Buildings.Effect
 
         private void TriggerBuildingEffects(Unit _)
         {
-            var buildings = _buildingsManager.Buildings;
+            IReadOnlyList<Building>? buildings = _buildingsManager.Buildings;
             var triggeredBuilding = new List<Building>();
             while (buildings.Count != triggeredBuilding.Count
                    && TriggerBuildings(buildings, triggeredBuilding))

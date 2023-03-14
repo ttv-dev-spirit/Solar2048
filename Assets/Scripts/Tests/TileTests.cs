@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿#nullable enable
+
+using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 using Solar2048.Buildings;
 using Solar2048.Map;
 using UnityEngine;
@@ -6,33 +9,36 @@ using UnityEngine;
 namespace Tests
 {
     [TestFixture]
-    public class FieldTests
+    [SuppressMessage("ReSharper", "MethodTooLong")]
+    public class TileTests
     {
         [Test]
-        public void WhenAddBuilding_AndFieldIsEmpty_ThenBuildingHasFieldPosition()
+        public void WhenAddBuilding_AndTileIsEmpty_ThenBuildingHasTilePosition()
         {
             // Arrange.
+            const BuildingType buildingType = BuildingType.SolarPanel;
             var position = new Vector2Int(1, 3);
-            var fieldUnderTest = new Tile(position);
-            var building = new Building(null);
+            var tileUnderTest = new Tile(position);
+            Building building = Create.BuildingWithoutBehaviour(buildingType);
             // Act.
-            fieldUnderTest.AddBuilding(building);
+            tileUnderTest.AddBuilding(building);
             // Assert.
-            Assert.IsTrue(fieldUnderTest.Building != null && fieldUnderTest.Building.Position == position);
+            Assert.IsTrue(tileUnderTest.Building != null && tileUnderTest.Building.Position == position);
         }
 
         [Test]
-        public void WhenRemoveBuilding_AndFieldHadBuilding_ThenFieldIsEmpty()
+        public void WhenRemoveBuilding_AndTileHadBuilding_ThenTileIsEmpty()
         {
             // Arrange.
+            const BuildingType buildingType = BuildingType.SolarPanel;
             var position = new Vector2Int(1, 3);
-            var fieldUnderTest = new Tile(position);
-            var building = new Building(null);
-            fieldUnderTest.AddBuilding(building);
+            var tileUnderTest = new Tile(position);
+            Building building = Create.BuildingWithoutBehaviour(buildingType);
+            tileUnderTest.AddBuilding(building);
             // Act.
-            fieldUnderTest.RemoveBuilding();
+            tileUnderTest.RemoveBuilding();
             // Assert.
-            Assert.IsTrue(fieldUnderTest.Building == null);
+            Assert.IsTrue(tileUnderTest.Building == null);
         }
     }
 }
