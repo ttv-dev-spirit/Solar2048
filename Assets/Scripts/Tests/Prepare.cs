@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using Solar2048.Buildings;
 using Solar2048.Map;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -47,7 +48,7 @@ namespace Tests
             }
         }
 
-        public static Vector2Int[] GetNLastAlignedPositions(MoveDirection direction, int numberOfPositions,
+        public static Vector2Int[] GetNLastAlignedPositionsOnMap(MoveDirection direction, int numberOfPositions,
             Vector2Int position) =>
             direction switch
             {
@@ -57,6 +58,70 @@ namespace Tests
                 MoveDirection.Left => GetNAlignedPositionsFromTheLeft(numberOfPositions, position),
                 _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };
+
+        public static Vector2Int[] GetNRandomPositionsOnMap(int numberOfPositions)
+        {
+            var results = new List<Vector2Int>();
+            for (int i = 0; i < numberOfPositions; i++)
+            {
+                Vector2Int randomPosition = GetRandomPositionOnMap();
+                while (results.Contains(randomPosition))
+                {
+                    randomPosition = GetRandomPositionOnMap();
+                }
+
+                results.Add(randomPosition);
+            }
+
+            return results.ToArray();
+        }
+
+        public static Vector2Int GetRandomPositionOnMap() => new Vector2Int(Random.Range(0, GameMap.FIELD_SIZE),
+            Random.Range(0, GameMap.FIELD_SIZE));
+
+        public static void AddBuildingToPosition(GameMap gameMap, IBuildingsManager buildingsManager,
+            Vector2Int position, BuildingType buildingType, bool log = false)
+        {
+            Tile tile = gameMap.GetTile(position);
+            buildingsManager.AddNewBuilding(buildingType, tile);
+            if (log)
+            {
+                Debug.Log($"{tile.Building!.BuildingType.ToString()} is added to {tile.Position.ToString()}");
+            }
+        }
+
+        public static void AddBuildingsToPositions(GameMap gameMap, IBuildingsManager buildingsManager,
+            Vector2Int[] positions,
+            Func<int, BuildingType> getBuildingType, bool log = false)
+        {
+            for (var i = 0; i < positions.Length; i++)
+            {
+                BuildingType buildingType = getBuildingType(i);
+                AddBuildingToPosition(gameMap, buildingsManager, positions[i], buildingType, log);
+            }
+        }
+
+        public static void AddBuildingToPositionWithoutManager(GameMap gameMap, Vector2Int position,
+            BuildingType buildingType, bool log = false)
+        {
+            Tile tile = gameMap.GetTile(position);
+            Building building = Create.BuildingWithoutBehaviour(buildingType);
+            tile.AddBuilding(building);
+            if (log)
+            {
+                Debug.Log($"{building.BuildingType.ToString()} is added to {tile.Position.ToString()}");
+            }
+        }
+        
+        public static void AddBuildingsToPositionsWithoutManager(GameMap gameMap, Vector2Int[] positions,
+            Func<int, BuildingType> getBuildingType, bool log = false)
+        {
+            for (var i = 0; i < positions.Length; i++)
+            {
+                BuildingType buildingType = getBuildingType(i);
+                AddBuildingToPositionWithoutManager(gameMap, positions[i], buildingType, log);
+            }
+        }
 
         private static Vector2Int[] GetNAlignedPositionsFromTheLeft(int numberOfPositions, Vector2Int position)
         {

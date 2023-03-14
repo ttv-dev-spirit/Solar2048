@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Solar2048.Buildings;
 using Solar2048.Score;
@@ -17,6 +18,8 @@ namespace Solar2048.Map
         private readonly IScoreCounter _scoreCounter;
 
         private readonly bool[,] _mergeMap = new bool[GameMap.FIELD_SIZE, GameMap.FIELD_SIZE];
+        private readonly Building?[,] _moveMap = new Building[GameMap.FIELD_SIZE, GameMap.FIELD_SIZE];
+        private readonly List<ICommand> _commands = new();
         private readonly Subject<Unit> _onMoved = new();
 
         public bool IsActive { get; private set; }
@@ -30,14 +33,16 @@ namespace Solar2048.Map
             IsActive = false;
         }
 
-        public void MoveBuildings(MoveDirection direction)
+        public async void MoveBuildings(MoveDirection direction)
         {
             if (!IsActive)
             {
                 return;
             }
 
-            ResetMergeMap();
+            ResetMaps();
+            _commands.Clear();
+
             var moveInfo = new MoveInfo(GameMap.FIELD_SIZE, GameMap.FIELD_SIZE, direction);
             for (int x = moveInfo.StartColumn; moveInfo.IsXInBounds(x); x += moveInfo.ColumnStep)
             {
@@ -45,6 +50,11 @@ namespace Solar2048.Map
                 {
                     MoveBuilding(x, y, ref moveInfo);
                 }
+            }
+
+            foreach (ICommand command in _commands)
+            {
+                command.Execute();
             }
 
             _gameMap.RecalculateStats();
@@ -80,33 +90,36 @@ namespace Solar2048.Map
                 return;
             }
 
-            Tile targetTile = FindTargetTile(fromTile, ref moveInfo);
-            if (targetTile == fromTile)
+            Vector2Int targetTilePosition = FindTargetTile(fromTile, ref moveInfo);
+            if (fromTile.Position == targetTilePosition)
             {
+                _moveMap[targetTilePosition.x, targetTilePosition.y] = fromTile.Building;
                 return;
             }
 
-            if (targetTile.Building == null)
+            Building? targetTileBuilding = _moveMap[targetTilePosition.x, targetTilePosition.y];
+
+            if (targetTileBuilding == null)
             {
-                MoveBuilding(fromTile, targetTile);
+                MoveBuilding(fromTile, targetTilePosition);
                 return;
             }
 
-            MergeBuilding(fromTile, targetTile);
+            MergeBuilding(fromTile, targetTilePosition);
         }
 
-        private void MoveBuilding(Tile fromTile, Tile toTile)
+        private void MoveBuilding(Tile fromTile, Vector2Int toPosition)
         {
-            toTile.AddBuilding(fromTile.Building!);
-            fromTile.RemoveBuilding();
+            _moveMap[toPosition.x, toPosition.y] = fromTile.Building;
+            Tile toTile = _gameMap.GetTile(toPosition);
+            _commands.Add(new BuildingMoveCommand(fromTile, toTile));
         }
 
-        private void MergeBuilding(Tile fromTile, Tile toTile)
+        private void MergeBuilding(Tile fromTile, Vector2Int toPosition)
         {
-            toTile.Building!.UpLevel();
-            _buildingsManager.RemoveBuilding(fromTile.Building);
-            _scoreCounter.AddMergeScore(toTile.Building.Level.Value);
-            _mergeMap[toTile.Position.x, toTile.Position.y] = true;
+            _mergeMap[toPosition.x, toPosition.y] = true;
+            Tile toTile = _gameMap.GetTile(toPosition);
+            _commands.Add(new BuildingMergeCommand(fromTile, toTile, _buildingsManager, _scoreCounter));
         }
 
         private bool HasAlignedBuildingToMerge(Tile fromTile, ref MoveInfo moveInfo)
@@ -134,38 +147,45 @@ namespace Solar2048.Map
             return false;
         }
 
-        private Tile FindTargetTile(Tile fromTile, ref MoveInfo moveInfo)
+        private Vector2Int FindTargetTile(Tile fromTile, ref MoveInfo moveInfo)
         {
+            Vector2Int lastPossiblePosition = fromTile.Position;
+
             if (fromTile.Building == null)
             {
                 Debug.LogError(
                     $"fromTile at {fromTile.Position.ToString()} without a building should not be checked for merge.");
-                return fromTile;
+                return lastPossiblePosition;
             }
 
-            Tile lastPossiblePosition = fromTile;
             for (Vector2Int toPosition = fromTile.Position + moveInfo.Direction;
                  moveInfo.IsInBounds(toPosition);
                  toPosition += moveInfo.Direction)
             {
-                Tile toTile = _gameMap.GetTile(toPosition);
-                if (toTile.Building != null)
+                if (_moveMap[toPosition.x, toPosition.y] != null)
                 {
-                    return CanBeUniquelyMerged(fromTile, toTile) ? toTile : lastPossiblePosition;
+                    return CanBeUniquelyMerged(fromTile, toPosition) ? toPosition : lastPossiblePosition;
                 }
 
-                lastPossiblePosition = toTile;
+                lastPossiblePosition = toPosition;
             }
 
             return lastPossiblePosition;
         }
 
-        private bool CanBeUniquelyMerged(Tile fromTile, Tile toTile) =>
-            fromTile.Building != null
-            && toTile.Building != null
-            && fromTile.Building.CanBeMerged(toTile.Building)
-            && !_mergeMap[toTile.Position.x, toTile.Position.y];
+        private bool CanBeUniquelyMerged(Tile fromTile, Vector2Int toPosition)
+        {
+            Building? destinationBuilding = _moveMap[toPosition.x, toPosition.y];
+            return fromTile.Building != null
+                   && destinationBuilding != null
+                   && fromTile.Building.CanBeMerged(destinationBuilding)
+                   && !_mergeMap[toPosition.x, toPosition.y];
+        }
 
-        private void ResetMergeMap() => Array.Clear(_mergeMap, 0, _mergeMap.Length);
+        private void ResetMaps()
+        {
+            Array.Clear(_mergeMap, 0, _mergeMap.Length);
+            Array.Clear(_moveMap, 0, _moveMap.Length);
+        }
     }
 }
