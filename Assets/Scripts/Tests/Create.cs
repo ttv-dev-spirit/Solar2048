@@ -4,6 +4,8 @@ using NSubstitute;
 using Solar2048.Buildings;
 using Solar2048.Cards;
 using Solar2048.Map;
+using Solar2048.Map.Commands;
+using Solar2048.Score;
 using UnityEngine;
 
 namespace Tests
@@ -26,6 +28,25 @@ namespace Tests
             buildingSettings.BuildingType.Returns(buildingType);
             var building = new Building(buildingSettings);
             return building;
+        }
+
+        // FIXME: There should be a better way.
+        public class BuildingsCommandFactory : IBuildingCommandsFactory
+        {
+            private readonly IBuildingsManager _buildingsManager;
+            private readonly IScoreCounter _scoreCounter;
+
+            public BuildingsCommandFactory(IBuildingsManager buildingsManager,
+                IScoreCounter scoreCounter)
+            {
+                _scoreCounter = scoreCounter;
+                _buildingsManager = buildingsManager;
+            }
+
+            public ICommand BuildingMerge(Tile fromTile, Tile toTile) =>
+                new BuildingMergeCommand(fromTile, toTile, _buildingsManager, _scoreCounter);
+
+            public ICommand BuildingMove(Tile fromTile, Tile toTile) => new BuildingMoveCommand(fromTile, toTile);
         }
     }
 }

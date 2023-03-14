@@ -1,5 +1,5 @@
 #nullable enable
-namespace Solar2048.Map
+namespace Solar2048.Map.Commands
 {
     public interface ICommand
     {

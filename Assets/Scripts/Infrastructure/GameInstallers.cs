@@ -10,6 +10,7 @@ using Solar2048.Cycles;
 using Solar2048.Input;
 using Solar2048.Localization;
 using Solar2048.Map;
+using Solar2048.Map.Commands;
 using Solar2048.Packs;
 using Solar2048.SaveLoad;
 using Solar2048.Score;
@@ -53,6 +54,7 @@ namespace Solar2048.Infrastructure
             BindFactories();
             BindGameStates();
             BindTurnStates();
+            BindCommandFactory();
         }
 
         private void BindFactories()
@@ -135,6 +137,15 @@ namespace Solar2048.Infrastructure
                 .WhenInjectedInto<TurnStateFactory>();
             Container.BindFactory<ConfirmTurnState, ConfirmTurnState.Factory>()
                 .WhenInjectedInto<TurnStateFactory>();
+        }
+
+        private void BindCommandFactory()
+        {
+            Container.BindInterfacesTo<CommandsFactory>().AsSingle();
+            Container.BindFactory<Tile, Tile, BuildingMoveCommand, BuildingMoveCommand.Factory>()
+                .WhenInjectedInto<CommandsFactory>();
+            Container.BindFactory<Tile, Tile, BuildingMergeCommand, BuildingMergeCommand.Factory>()
+                .WhenInjectedInto<CommandsFactory>();
         }
     }
 }

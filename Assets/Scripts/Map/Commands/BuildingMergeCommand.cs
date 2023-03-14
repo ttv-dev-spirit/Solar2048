@@ -1,9 +1,11 @@
 #nullable enable
+
 using Solar2048.Buildings;
 using Solar2048.Score;
 using UnityEngine;
+using Zenject;
 
-namespace Solar2048.Map
+namespace Solar2048.Map.Commands
 {
     public class BuildingMergeCommand : ICommand
     {
@@ -32,6 +34,10 @@ namespace Solar2048.Map
             _toTile.Building!.UpLevel();
             _buildingsManager.RemoveBuilding(_fromTile.Building);
             _scoreCounter.AddMergeScore(_toTile.Building.Level.Value);
+        }
+
+        public class Factory : PlaceholderFactory<Tile, Tile, BuildingMergeCommand>
+        {
         }
     }
 }

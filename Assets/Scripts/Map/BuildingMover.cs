@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Solar2048.Buildings;
+using Solar2048.Map.Commands;
 using Solar2048.Score;
 using UniRx;
 using UnityEngine;
@@ -13,9 +14,8 @@ namespace Solar2048.Map
     [UsedImplicitly]
     public sealed class BuildingMover : IActivatable, IBuildingMover
     {
-        private readonly IBuildingsManager _buildingsManager;
         private readonly GameMap _gameMap;
-        private readonly IScoreCounter _scoreCounter;
+        private readonly IBuildingCommandsFactory _buildingCommandsFactory;
 
         private readonly bool[,] _mergeMap = new bool[GameMap.FIELD_SIZE, GameMap.FIELD_SIZE];
         private readonly Building?[,] _moveMap = new Building[GameMap.FIELD_SIZE, GameMap.FIELD_SIZE];
@@ -25,11 +25,10 @@ namespace Solar2048.Map
         public bool IsActive { get; private set; }
         public IObservable<Unit> OnMoved => _onMoved;
 
-        public BuildingMover(GameMap gameMap, IBuildingsManager buildingsManager, IScoreCounter scoreCounter)
+        public BuildingMover(GameMap gameMap, IBuildingCommandsFactory buildingCommandsFactory)
         {
+            _buildingCommandsFactory = buildingCommandsFactory;
             _gameMap = gameMap;
-            _buildingsManager = buildingsManager;
-            _scoreCounter = scoreCounter;
             IsActive = false;
         }
 
@@ -112,14 +111,16 @@ namespace Solar2048.Map
         {
             _moveMap[toPosition.x, toPosition.y] = fromTile.Building;
             Tile toTile = _gameMap.GetTile(toPosition);
-            _commands.Add(new BuildingMoveCommand(fromTile, toTile));
+            ICommand command = _buildingCommandsFactory.BuildingMove(fromTile, toTile);
+            _commands.Add(command);
         }
 
         private void MergeBuilding(Tile fromTile, Vector2Int toPosition)
         {
             _mergeMap[toPosition.x, toPosition.y] = true;
             Tile toTile = _gameMap.GetTile(toPosition);
-            _commands.Add(new BuildingMergeCommand(fromTile, toTile, _buildingsManager, _scoreCounter));
+            ICommand command = _buildingCommandsFactory.BuildingMerge(fromTile, toTile);
+            _commands.Add(command);
         }
 
         private bool HasAlignedBuildingToMerge(Tile fromTile, ref MoveInfo moveInfo)

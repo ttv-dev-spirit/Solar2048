@@ -1,8 +1,9 @@
 #nullable enable
-using System.Threading.Tasks;
-using UnityEngine;
 
-namespace Solar2048.Map
+using UnityEngine;
+using Zenject;
+
+namespace Solar2048.Map.Commands
 {
     public class BuildingMoveCommand : ICommand
     {
@@ -24,6 +25,10 @@ namespace Solar2048.Map
 
             _toTile.AddBuilding(_fromTile.Building!);
             _fromTile.RemoveBuilding();
+        }
+
+        public class Factory : PlaceholderFactory<Tile, Tile, BuildingMoveCommand>
+        {
         }
     }
 }

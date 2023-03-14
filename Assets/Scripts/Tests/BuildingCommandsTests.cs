@@ -5,6 +5,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Solar2048.Buildings;
 using Solar2048.Map;
+using Solar2048.Map.Commands;
 using Solar2048.SaveLoad;
 using Solar2048.Score;
 using UnityEngine;

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Solar2048;
 using Solar2048.Buildings;
 using Solar2048.Map;
+using Solar2048.Map.Commands;
 using Solar2048.SaveLoad;
 using Solar2048.Score;
 using UnityEngine;
@@ -26,9 +27,8 @@ namespace Tests
             const int numberOfPositions = 2;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
-            var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingsCommandFactory = Substitute.For<IBuildingCommandsFactory>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsCommandFactory);
             // Act.
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, _ => buildingType);
             // Assert.
@@ -44,9 +44,8 @@ namespace Tests
             const int numberOfPositions = 2;
             Vector2Int[] positions = Prepare.GetNUnalignedPositionsOnMap(numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
-            var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingsCommandFactory = Substitute.For<IBuildingCommandsFactory>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsCommandFactory);
             // Act.
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, _ => buildingType);
             // Assert.
@@ -63,9 +62,8 @@ namespace Tests
             const int numberOfPositions = 2;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
-            var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingsCommandFactory = Substitute.For<IBuildingCommandsFactory>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsCommandFactory);
             // Act.
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
             // Assert.
@@ -84,9 +82,8 @@ namespace Tests
             const int numberOfPositions = 3;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
-            var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingsCommandFactory = Substitute.For<IBuildingCommandsFactory>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsCommandFactory);
             // Act.
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
 
@@ -106,9 +103,8 @@ namespace Tests
             const int numberOfPositions = 3;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
-            var buildingsManager = Substitute.For<IBuildingsManager>();
-            var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingsCommandFactory = Substitute.For<IBuildingCommandsFactory>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsCommandFactory);
             // Act.
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
 
@@ -127,9 +123,11 @@ namespace Tests
             const BuildingType windTurbineType = BuildingType.WindTurbine;
             Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
             GameMap gameMap = Create.GameMap();
+            // HACK (Stas): substitute is used, cause buildingManager is not used when there are no merges. shitty.
             var buildingsManager = Substitute.For<IBuildingsManager>();
             var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingCommandsFactory = new Create.BuildingsCommandFactory(buildingsManager, scoreCounter);
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingCommandsFactory);
             var activatable = (IActivatable)buildingsMoverUnderTest;
             activatable.Activate();
             Prepare.AddBuildingsToPositionsWithoutManager(gameMap, positions, GetBuildingType);
@@ -167,7 +165,8 @@ namespace Tests
             buildingsFactory.Create(buildingType).Returns(_ => new Building(buildingSettings));
             var buildingsManager = new BuildingsManager(buildingsFactory, gameMap, saveRegister);
             var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingCommandsFactory = new Create.BuildingsCommandFactory(buildingsManager, scoreCounter);
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingCommandsFactory);
             var activatable = (IActivatable)buildingsMoverUnderTest;
             activatable.Activate();
             Prepare.AddBuildingsToPositions(gameMap, buildingsManager, positions, _ => buildingType);
@@ -204,7 +203,8 @@ namespace Tests
             buildingsFactory.Create(buildingType).Returns(_ => new Building(buildingSettings));
             var buildingsManager = new BuildingsManager(buildingsFactory, gameMap, saveRegister);
             var scoreCounter = Substitute.For<IScoreCounter>();
-            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var buildingCommandsFactory = new Create.BuildingsCommandFactory(buildingsManager, scoreCounter);
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingCommandsFactory);
             var activatable = (IActivatable)buildingsMoverUnderTest;
             activatable.Activate();
             Prepare.AddBuildingsToPositions(gameMap, buildingsManager, positions, _ => buildingType);
