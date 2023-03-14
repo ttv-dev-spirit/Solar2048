@@ -143,12 +143,44 @@ namespace Tests
                 Tile tile = gameMap.GetTile(resultPositions[i]);
                 BuildingType expectedBuildingType = GetBuildingType(i);
                 Assert.IsTrue(tile.Building != null,
-                    $"tile at {tile.Position.ToString()} does not have a building.");
+                    $"tile at {tile.Position.ToString()} does not have a building. \n {Utility.PrintBuildingsAt(gameMap, resultPositions)}");
                 Assert.IsTrue(tile.Building!.BuildingType == expectedBuildingType,
                     $"tile at {tile.Position.ToString()} is expected to have {expectedBuildingType.ToString()} as building, but has {tile.Building.BuildingType.ToString()}. \n {Utility.PrintBuildingsAt(gameMap, resultPositions)}");
             }
 
             BuildingType GetBuildingType(int i) => i % 2 == 0 ? solarPanelType : windTurbineType;
+        }
+
+        [Test]
+        public void WhenMove_AndNIdenticalAlignedBuildingsOnMap_ThenBuildingsAreMovedAndMerged(
+            [Values] MoveDirection moveDirection, [NUnit.Framework.Range(1, 4)] int numberOfPositions)
+        {
+            // Arrange.
+            const BuildingType buildingType = BuildingType.SolarPanel;
+            Vector2Int[] positions = Prepare.GetNAlignedPositionsOnMap(moveDirection, numberOfPositions);
+            GameMap gameMap = Create.GameMap();
+            var buildingsManager = Substitute.For<IBuildingsManager>();
+            var scoreCounter = Substitute.For<IScoreCounter>();
+            IBuildingMover buildingsMoverUnderTest = new BuildingMover(gameMap, buildingsManager, scoreCounter);
+            var activatable = (IActivatable)buildingsMoverUnderTest;
+            activatable.Activate();
+            AddBuildingsToPositions(gameMap, positions, _ => buildingType);
+            // Act.
+            buildingsMoverUnderTest.MoveBuildings(moveDirection);
+
+            // Assert.
+            int resultingBuildingsNumber = numberOfPositions % 2 + numberOfPositions / 2;
+            Vector2Int[] resultPositions =
+                Prepare.GetNLastAlignedPositions(moveDirection, resultingBuildingsNumber, positions[0]);
+            for (var i = 0; i < resultingBuildingsNumber; i++)
+            {
+                Tile tile = gameMap.GetTile(resultPositions[i]);
+                BuildingType expectedBuildingType = buildingType;
+                Assert.IsTrue(tile.Building != null,
+                    $"tile at {tile.Position.ToString()} does not have a building. \n {Utility.PrintBuildingsAt(gameMap, resultPositions)}");
+                Assert.IsTrue(tile.Building!.BuildingType == expectedBuildingType,
+                    $"tile at {tile.Position.ToString()} is expected to have {expectedBuildingType.ToString()} as building, but has {tile.Building.BuildingType.ToString()}. \n {Utility.PrintBuildingsAt(gameMap, resultPositions)}");
+            }
         }
 
         private void AddBuildingsToPositions(GameMap gameMap, Vector2Int[] positions,

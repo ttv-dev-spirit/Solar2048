@@ -16,6 +16,7 @@ namespace Solar2048.Map
         private readonly GameMap _gameMap;
         private readonly IScoreCounter _scoreCounter;
 
+        private readonly bool[,] _mergeMap = new bool[GameMap.FIELD_SIZE, GameMap.FIELD_SIZE];
         private readonly Subject<Unit> _onMoved = new();
 
         public bool IsActive { get; private set; }
@@ -36,20 +37,34 @@ namespace Solar2048.Map
                 return;
             }
 
-            switch (direction)
+            ResetMergeMap();
+            var moveInfo = new MoveInfo(GameMap.FIELD_SIZE, GameMap.FIELD_SIZE, direction);
+            for (int x = moveInfo.StartColumn; moveInfo.IsXInBounds(x); x += moveInfo.ColumnStep)
             {
-                case MoveDirection.Left:
-                    MoveBuildingsLeft();
-                    break;
-                case MoveDirection.Right:
-                    MoveBuildingsRight();
-                    break;
-                case MoveDirection.Down:
-                    MoveBuildingsDown();
-                    break;
-                case MoveDirection.Up:
-                    MoveBuildingsUp();
-                    break;
+                for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
+                {
+                    Tile fromTile = _gameMap.GetTile(x, y);
+                    if (fromTile.Building == null)
+                    {
+                        continue;
+                    }
+
+                    Tile targetTile = FindTargetTile(fromTile, ref moveInfo);
+                    if (targetTile == fromTile)
+                    {
+                        continue;
+                    }
+
+                    if (targetTile.Building == null)
+                    {
+                        targetTile.AddBuilding(fromTile.Building);
+                        fromTile.RemoveBuilding();
+                    }
+                    else
+                    {
+                        MergeBuilding(fromTile, targetTile);
+                    }
+                }
             }
 
             _gameMap.RecalculateStats();
@@ -67,7 +82,7 @@ namespace Solar2048.Map
                 for (int y = moveInfo.StartRow; moveInfo.IsYInBounds(y); y += moveInfo.RowStep)
                 {
                     Tile fromTile = _gameMap.GetTile(x, y);
-                    if (fromTile.Building != null && CanBeMerged(fromTile, moveInfo))
+                    if (fromTile.Building != null && HasAlignedBuildingToMerge(fromTile, ref moveInfo))
                     {
                         return true;
                     }
@@ -76,249 +91,16 @@ namespace Solar2048.Map
 
             return false;
         }
-
-        private void MoveBuildingsLeft()
-        {
-            for (var y = 0; y < GameMap.FIELD_SIZE; y++)
-            {
-                for (var x = 1; x < GameMap.FIELD_SIZE; x++)
-                {
-                    MoveBuildingLeftAndMerge(x, y);
-                }
-            }
-        }
-
-        private void MoveBuildingsRight()
-        {
-            for (var y = 0; y < GameMap.FIELD_SIZE; y++)
-            {
-                for (int x = GameMap.FIELD_SIZE - 2; x >= 0; x--)
-                {
-                    MoveBuildingRightAndMerge(x, y);
-                }
-            }
-        }
-
-        private void MoveBuildingsDown()
-        {
-            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
-            {
-                for (var y = 1; y < GameMap.FIELD_SIZE; y++)
-                {
-                    MoveBuildingDownAndMerge(x, y);
-                }
-            }
-        }
-
-        private void MoveBuildingsUp()
-        {
-            for (var x = 0; x < GameMap.FIELD_SIZE; x++)
-            {
-                for (int y = GameMap.FIELD_SIZE - 2; y >= 0; y--)
-                {
-                    MoveBuildingUpAndMerge(x, y);
-                }
-            }
-        }
-
-        private void MoveBuildingUpAndMerge(int xFrom, int yFrom)
-        {
-            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
-            if (fromTile.Building == null)
-            {
-                return;
-            }
-
-            if (MergeUp(fromTile, out Tile? lastEmpty))
-            {
-                return;
-            }
-
-            if (lastEmpty == null)
-            {
-                return;
-            }
-
-            lastEmpty.AddBuilding(fromTile.Building!);
-            fromTile.RemoveBuilding();
-        }
-
-        private void MoveBuildingDownAndMerge(int xFrom, int yFrom)
-        {
-            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
-            if (fromTile.Building == null)
-            {
-                return;
-            }
-
-            if (MergeDown(fromTile, out Tile? lastEmpty))
-            {
-                return;
-            }
-
-            if (lastEmpty == null)
-            {
-                return;
-            }
-
-            lastEmpty.AddBuilding(fromTile.Building!);
-            fromTile.RemoveBuilding();
-        }
-
-        private void MoveBuildingLeftAndMerge(int xFrom, int yFrom)
-        {
-            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
-            if (fromTile.Building == null)
-            {
-                return;
-            }
-
-            if (MergeLeft(fromTile, out Tile? lastEmpty))
-            {
-                return;
-            }
-
-            if (lastEmpty == null)
-            {
-                return;
-            }
-
-            lastEmpty.AddBuilding(fromTile.Building!);
-            fromTile.RemoveBuilding();
-        }
-
-        private void MoveBuildingRightAndMerge(int xFrom, int yFrom)
-        {
-            Tile fromTile = _gameMap.GetTile(xFrom, yFrom);
-            if (fromTile.Building == null)
-            {
-                return;
-            }
-
-            if (MergeRight(fromTile, out Tile? lastEmpty))
-            {
-                return;
-            }
-
-            if (lastEmpty == null)
-            {
-                return;
-            }
-
-            lastEmpty.AddBuilding(fromTile.Building!);
-            fromTile.RemoveBuilding();
-        }
-
-        private bool MergeUp(Tile fromTile, out Tile? lastEmpty)
-        {
-            lastEmpty = null;
-            for (int y = fromTile.Position.y + 1; y < GameMap.FIELD_SIZE; y++)
-            {
-                Tile toTile = _gameMap.GetTile(fromTile.Position.x, y);
-                if (toTile.Building == null)
-                {
-                    lastEmpty = toTile;
-                    continue;
-                }
-
-                if (toTile.Building.CanBeMerged(fromTile.Building!))
-                {
-                    MergeBuilding(fromTile, toTile);
-                    return true;
-                }
-
-                break;
-            }
-
-            return false;
-        }
-
-        private bool MergeDown(Tile fromTile, out Tile? lastEmpty)
-        {
-            lastEmpty = null;
-            for (int y = fromTile.Position.y - 1; y >= 0; y--)
-            {
-                Tile toTile = _gameMap.GetTile(fromTile.Position.x, y);
-                if (toTile.Building == null)
-                {
-                    lastEmpty = toTile;
-                    continue;
-                }
-
-                if (toTile.Building.CanBeMerged(fromTile.Building!))
-                {
-                    MergeBuilding(fromTile, toTile);
-                    return true;
-                }
-
-                break;
-            }
-
-            return false;
-        }
-
-        private bool MergeLeft(Tile fromTile, out Tile? lastEmpty)
-        {
-            lastEmpty = null;
-            for (int x = fromTile.Position.x - 1; x >= 0; x--)
-            {
-                Tile toTile = _gameMap.GetTile(x, fromTile.Position.y);
-                if (toTile.Building == null)
-                {
-                    lastEmpty = toTile;
-                    continue;
-                }
-
-                if (toTile.Building.CanBeMerged(fromTile.Building!))
-                {
-                    MergeBuilding(fromTile, toTile);
-                    return true;
-                }
-
-                break;
-            }
-
-            return false;
-        }
-
-        private bool MergeRight(Tile fromTile, out Tile? lastEmpty)
-        {
-            lastEmpty = null;
-            for (int x = fromTile.Position.x + 1; x < GameMap.FIELD_SIZE; x++)
-            {
-                Tile toTile = _gameMap.GetTile(x, fromTile.Position.y);
-                if (toTile.Building == null)
-                {
-                    lastEmpty = toTile;
-                    continue;
-                }
-
-                if (toTile.Building.CanBeMerged(fromTile.Building!))
-                {
-                    MergeBuilding(fromTile, toTile);
-                    return true;
-                }
-
-                break;
-            }
-
-            return false;
-        }
-
+        
         private void MergeBuilding(Tile fromTile, Tile toTile)
         {
-            if (!fromTile.Building!.CanBeMerged(toTile.Building!))
-            {
-                return;
-            }
-
             toTile.Building!.UpLevel();
             _buildingsManager.RemoveBuilding(fromTile.Building);
             _scoreCounter.AddMergeScore(toTile.Building.Level.Value);
+            _mergeMap[toTile.Position.x, toTile.Position.y] = true;
         }
 
-
-        private bool CanBeMerged(Tile fromTile, MoveInfo moveInfo)
+        private bool HasAlignedBuildingToMerge(Tile fromTile, ref MoveInfo moveInfo)
         {
             if (fromTile.Building == null)
             {
@@ -342,5 +124,43 @@ namespace Solar2048.Map
 
             return false;
         }
+
+        private Tile FindTargetTile(Tile fromTile, ref MoveInfo moveInfo)
+        {
+            if (fromTile.Building == null)
+            {
+                Debug.LogError(
+                    $"fromTile at {fromTile.Position.ToString()} without a building should not be checked for merge.");
+                return fromTile;
+            }
+
+            Tile lastPossiblePosition = fromTile;
+            for (Vector2Int toPosition = fromTile.Position + moveInfo.Direction;
+                 moveInfo.IsInBounds(toPosition);
+                 toPosition += moveInfo.Direction)
+            {
+                Tile toTile = _gameMap.GetTile(toPosition);
+                if (toTile.Building == null)
+                {
+                    lastPossiblePosition = toTile;
+                    continue;
+                }
+
+                if (CanBeUniquelyMerged(fromTile, toTile))
+                {
+                    return toTile;
+                }
+            }
+
+            return lastPossiblePosition;
+        }
+
+        private bool CanBeUniquelyMerged(Tile fromTile, Tile toTile) =>
+            fromTile.Building != null
+            && toTile.Building != null
+            && fromTile.Building.CanBeMerged(toTile.Building)
+            && !_mergeMap[toTile.Position.x, toTile.Position.y];
+
+        private void ResetMergeMap() => Array.Clear(_mergeMap, 0, _mergeMap.Length);
     }
 }
